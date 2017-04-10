@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class QuestionDAO implements QDAO {
@@ -24,9 +23,9 @@ public class QuestionDAO implements QDAO {
 
     private Connection getConnection() throws SQLException, ParserConfigurationException, SAXException, IOException {
         DBAccess dba = new DBAccess();
-        Map<String, String> DBData = dba.getAccessData();
-        return DriverManager.getConnection("jdbc:mysql://" + DBData.get("address") + "?useSSL=false", DBData.get("username"),
-                DBData.get("password"));
+//        Map<String, String> DBData = dba.getAccessData();
+        return DriverManager.getConnection("jdbc:mysql://mysql0.mydevil.net/m14873_testsim?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "m14873_md",
+                "#x4ndAkir4");
     }
 
     private void closeConnection(Connection connection) {
@@ -90,6 +89,7 @@ public class QuestionDAO implements QDAO {
         }
         return result;
     }
+
 
     public List<Question> generateQuestionsList(int[] id) {
         List<Question> result = new ArrayList<>();
