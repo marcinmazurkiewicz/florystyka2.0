@@ -1,4 +1,4 @@
-package io.dudek.florystyka.model;
+package io.dudek.florystyka.domain;
 
 public class Answers {
     private Answer answerA;

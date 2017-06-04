@@ -13,7 +13,7 @@
 <title>Testy zawodowe technik florysta</title>
 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="resources/css/test_style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="http://egzamin-florystyka.pl/r26_css/test_style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 
 <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 </head>

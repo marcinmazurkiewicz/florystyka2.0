@@ -13,7 +13,7 @@
 <title>Testy zawodowe technik florysta</title>
 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="resources/css/test_style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="http://egzamin-florystyka.pl/r26_css/test_style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 
 <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
@@ -94,32 +94,32 @@ ${i.count}. ${questions.get(i.index).content}
 
 </div>
 
-<form:radiobutton class="radio" id="${questions.get(i.index).id}${questions.get(i.index).getAnswerType(0)}"
-	path="answers[${i.index}].answer" value="${questions.get(i.index).getAnswerType(0)}" />
+<form:radiobutton class="radio" id="${questions.get(i.index).id}A"
+	path="answers[${i.index}].answer" value="A" />
 
-<label class="answer" for="${questions.get(i.index).id}${questions.get(i.index).getAnswerType(0)}">
-	A. ${questions.get(i.index).getAnswerContent(0)}
+<label class="answer" for="${questions.get(i.index).id}A">
+	A. ${questions.get(i.index).getAnswerA()}
 </label>
 
-<form:radiobutton class="radio" id="${questions.get(i.index).id}${questions.get(i.index).getAnswerType(1)}"
-	path="answers[${i.index}].answer" value="${questions.get(i.index).getAnswerType(1)}" />
+<form:radiobutton class="radio" id="${questions.get(i.index).id}B"
+	path="answers[${i.index}].answer" value="B" />
 
-<label class="answer" for="${questions.get(i.index).id}${questions.get(i.index).getAnswerType(1)}">
-	B. ${questions.get(i.index).getAnswerContent(1)}
+<label class="answer" for="${questions.get(i.index).id}B">
+	B. ${questions.get(i.index).answerB}
 </label>
 
-<form:radiobutton class="radio" id="${questions.get(i.index).id}${questions.get(i.index).getAnswerType(2)}"
-	path="answers[${i.index}].answer" value="${questions.get(i.index).getAnswerType(2)}" />
+<form:radiobutton class="radio" id="${questions.get(i.index).id}C"
+	path="answers[${i.index}].answer" value="C" />
 
-<label class="answer" for="${questions.get(i.index).id}${questions.get(i.index).getAnswerType(2)}">
-	C. ${questions.get(i.index).getAnswerContent(2)}
+<label class="answer" for="${questions.get(i.index).id}C">
+	C. ${questions.get(i.index).answerC}
 </label>
 
-<form:radiobutton class="radio" id="${questions.get(i.index).id}${questions.get(i.index).getAnswerType(3)}"
-	path="answers[${i.index}].answer" value="${questions.get(i.index).getAnswerType(3)}" />
+<form:radiobutton class="radio" id="${questions.get(i.index).id}D"
+	path="answers[${i.index}].answer" value="D" />
 
-<label class="answer" for="${questions.get(i.index).id}${questions.get(i.index).getAnswerType(3)}">
-	D. ${questions.get(i.index).getAnswerContent(3)}
+<label class="answer" for="${questions.get(i.index).id}D">
+	D. ${questions.get(i.index).getAnswerD()}
 </label>
 
 

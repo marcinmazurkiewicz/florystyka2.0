@@ -1,4 +1,4 @@
-package io.dudek.florystyka.model;
+package io.dudek.florystyka.domain;
 
 import java.util.ArrayList;
 import java.util.List;
