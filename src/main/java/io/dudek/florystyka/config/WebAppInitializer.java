@@ -8,7 +8,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[] { RootConfig.class };
+        return new Class<?>[] { RootConfig.class, WebConfig.class, WebFlowConfig.class, SecurityConfig.class };
     }
 
     @Override
@@ -20,6 +20,8 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     protected String[] getServletMappings() {
         return new String[] { "/" };
     }
+
+
 
 //    ToDo addTestForm with images upload
 //    @Override

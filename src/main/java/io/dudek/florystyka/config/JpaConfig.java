@@ -9,16 +9,19 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Configuration
 @PropertySource("classpath:database.properties")
-@EnableJpaRepositories(basePackages = "io.dudek.florystyka.db")
+@EnableJpaRepositories(basePackages = "io.dudek.florystyka.repository")
 public class JpaConfig {
 
     @Autowired
@@ -59,6 +62,13 @@ public class JpaConfig {
         adapter.setGenerateDdl(false);
         adapter.setDatabasePlatform("org.hibernate.dialect.MySQL5Dialect");
         return adapter;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+        JpaTransactionManager manager = new JpaTransactionManager();
+        manager.setEntityManagerFactory(emf);
+        return manager;
     }
 
     @Bean

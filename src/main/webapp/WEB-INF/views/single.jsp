@@ -36,24 +36,24 @@ ${question.content}
 
 </div>
 
-<form:radiobutton class="radio" id="${question.id}A" name="answer" path="answer" value="A" />
-<label class="answer" for="${question.id}A">
-	A. ${question.answerA}
+<form:radiobutton class="radio" id="${question.id}${question.getAnswerType(0)}" name="answer" path="answer" value="${question.getAnswerType(0)}" />
+<label class="answer" for="${question.id}${question.getAnswerType(0)}">
+	A. ${question.getAnswerContent(0)}
 </label>
 
-<form:radiobutton class="radio" id="${question.id}B" name="answer" path="answer" value="B" />
-<label class="answer" for="${question.id}B">
-	B. ${question.answerB}
+<form:radiobutton class="radio" id="${question.id}${question.getAnswerType(1)}" name="answer" path="answer" value="${question.getAnswerType(1)}" />
+<label class="answer" for="${question.id}${question.getAnswerType(1)}">
+	B. ${question.getAnswerContent(1)}
 </label>
 
-<form:radiobutton class="radio" id="${question.id}C" name="answer" path="answer" value="C" />
-<label class="answer" for="${question.id}C">
-	C. ${question.answerC}
+<form:radiobutton class="radio" id="${question.id}${question.getAnswerType(2)}" name="answer" path="answer" value="${question.getAnswerType(2)}" />
+<label class="answer" for="${question.id}${question.getAnswerType(2)}">
+	C. ${question.getAnswerContent(2)}
 </label>
 
-<form:radiobutton class="radio" id="${question.id}D" name="answer" path="answer" value="D" />
-<label class="answer" for="${question.id}D">
-	D. ${question.answerD}
+<form:radiobutton class="radio" id="${question.id}${question.getAnswerType(3)}" name="answer" path="answer" value="${question.getAnswerType(3)}" />
+<label class="answer" for="${question.id}${question.getAnswerType(3)}">
+	D. ${question.getAnswerContent(3)}
 </label>
 <input type="hidden" name="questionID"  value="${question.id}" />
 

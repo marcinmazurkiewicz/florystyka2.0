@@ -2,8 +2,8 @@ package io.dudek.florystyka.domain;
 
 public class SolutionDTO {
 
-    private AnswerType answer;
     private Integer questionID;
+    private AnswerType answer;
 
     public SolutionDTO() {}
 
@@ -28,7 +28,5 @@ public class SolutionDTO {
     public String toString() {
         return "SolutionDTO [answer=" + answer + ", questionID=" + questionID + "]";
     }
-
-
 }
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.3.xsd">
+
+    <var name="solutions" class="io.dudek.florystyka.domain.SolutionDTO"/>
+
+    <view-state id="questions" view="test" model="solutions" >
+        <transition to="checkTest"/>
+    </view-state>
+
+    <action-state id="checkTest">
+        <evaluate expression="questionController.checkTest(solutions)" />
+        <transition to="testSolved" />
+    </action-state>
+
+    <end-state id="testSolved" view="test_result"/>
+</flow>

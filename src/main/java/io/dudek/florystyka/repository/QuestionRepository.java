@@ -1,4 +1,4 @@
-package io.dudek.florystyka.db;
+package io.dudek.florystyka.repository;
 
 import io.dudek.florystyka.domain.Question;
 import org.springframework.data.jpa.repository.JpaRepository;

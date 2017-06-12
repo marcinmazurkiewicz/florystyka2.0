@@ -94,32 +94,32 @@ ${i.count}. ${questions.get(i.index).content}
 
 </div>
 
-<form:radiobutton class="radio" id="${questions.get(i.index).id}A"
-	path="answers[${i.index}].answer" value="A" />
+<form:radiobutton class="radio" id="${questions.get(i.index).id}${questions.get(i.index).getAnswerType(0)}"
+	path="answers[${i.index}].answer" value="${questions.get(i.index).getAnswerType(0)}" />
 
-<label class="answer" for="${questions.get(i.index).id}A">
-	A. ${questions.get(i.index).getAnswerA()}
+<label class="answer" for="${questions.get(i.index).id}${questions.get(i.index).getAnswerType(0)}">
+	A. ${questions.get(i.index).getAnswerContent(0)}
 </label>
 
-<form:radiobutton class="radio" id="${questions.get(i.index).id}B"
-	path="answers[${i.index}].answer" value="B" />
+<form:radiobutton class="radio" id="${questions.get(i.index).id}${questions.get(i.index).getAnswerType(1)}"
+	path="answers[${i.index}].answer" value="${questions.get(i.index).getAnswerType(1)}" />
 
-<label class="answer" for="${questions.get(i.index).id}B">
-	B. ${questions.get(i.index).answerB}
+<label class="answer" for="${questions.get(i.index).id}${questions.get(i.index).getAnswerType(1)}">
+	B. ${questions.get(i.index).getAnswerContent(1)}
 </label>
 
-<form:radiobutton class="radio" id="${questions.get(i.index).id}C"
-	path="answers[${i.index}].answer" value="C" />
+<form:radiobutton class="radio" id="${questions.get(i.index).id}${questions.get(i.index).getAnswerType(2)}"
+	path="answers[${i.index}].answer" value="${questions.get(i.index).getAnswerType(2)}" />
 
-<label class="answer" for="${questions.get(i.index).id}C">
-	C. ${questions.get(i.index).answerC}
+<label class="answer" for="${questions.get(i.index).id}${questions.get(i.index).getAnswerType(2)}">
+	C. ${questions.get(i.index).getAnswerContent(2)}
 </label>
 
-<form:radiobutton class="radio" id="${questions.get(i.index).id}D"
-	path="answers[${i.index}].answer" value="D" />
+<form:radiobutton class="radio" id="${questions.get(i.index).id}${questions.get(i.index).getAnswerType(3)}"
+	path="answers[${i.index}].answer" value="${questions.get(i.index).getAnswerType(3)}" />
 
-<label class="answer" for="${questions.get(i.index).id}D">
-	D. ${questions.get(i.index).getAnswerD()}
+<label class="answer" for="${questions.get(i.index).id}${questions.get(i.index).getAnswerType(3)}">
+	D. ${questions.get(i.index).getAnswerContent(3)}
 </label>
 
 

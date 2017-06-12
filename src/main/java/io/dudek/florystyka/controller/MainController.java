@@ -1,6 +1,6 @@
 package io.dudek.florystyka.controller;
 
-import io.dudek.florystyka.db.QuestionRepository;
+import io.dudek.florystyka.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,20 +11,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/")
 public class MainController {
 
+    private QuestionRepository repository;
 
     @Autowired
-    private QuestionRepository repository;
+    public MainController(QuestionRepository repository) {
+        this.repository = repository;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public String viewHome(Model model) {
-//        model.addAttribute("how_many", questDAO.getMaxId());
+        Integer max = repository.countQuestionByIdIsGreaterThanEqual(0);
+        model.addAttribute("how_many", max);
         model.addAttribute("how_many", 100);
         return "home";
     }
 
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     public String viewInfo(Model model) {
-//        model.addAttribute("how_many", questDAO.getMaxId());
+        Integer max = repository.countQuestionByIdIsGreaterThanEqual(0);
+        model.addAttribute("how_many", max);
         model.addAttribute("how_many", 100);
         return "info";
     }
