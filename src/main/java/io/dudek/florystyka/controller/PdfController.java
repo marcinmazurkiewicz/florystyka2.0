@@ -170,7 +170,7 @@ public class PdfController {
     private JSONArray generateAnswersTable(List<Question> questions) {
         JSONArray result = new JSONArray();
         JSONObject header = new JSONObject();
-        header.put("text", "Klucz wszystkich poprawnych odpowiedzi");
+        header.put("text", "Klucz poprawnych odpowiedzi");
         header.put("fontSize", 14);
         JSONArray margin = new JSONArray();
         margin.add(0);
