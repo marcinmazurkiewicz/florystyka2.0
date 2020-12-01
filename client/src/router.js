@@ -1,5 +1,6 @@
 import {createWebHistory, createRouter} from "vue-router";
 import Home from "@/components/Home.vue";
+import SingleQuestion from "@/components/questions/SingleQuestion"
 
 const routes = [
     {
@@ -7,6 +8,26 @@ const routes = [
         name: "Home",
         component: Home,
     },
+    {
+        path: "/single",
+        name: "SingleQuestion",
+        component: SingleQuestion
+    },
+    {
+        path: "/info",
+        name: "Info",
+        component: SingleQuestion
+    },
+    {
+        path: "/test",
+        name: "Test",
+        component: SingleQuestion
+    },
+    {
+        path: "/pdf",
+        name: "Pdf",
+        component: SingleQuestion
+    }
 ];
 
 const router = createRouter({
