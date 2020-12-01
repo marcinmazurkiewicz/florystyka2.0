@@ -1,8 +1,5 @@
 package dev.mazurkiewicz.florystyka.controller;
 
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import dev.mazurkiewicz.florystyka.model.Question;
 import dev.mazurkiewicz.florystyka.repository.QuestionRepository;
 import dev.mazurkiewicz.florystyka.utils.QuestionDrawer;
@@ -28,9 +25,10 @@ public class ApiController {
     String getTest() {
         Integer max = repository.countQuestionByIdIsGreaterThanEqual(0);
         List<Question> result = repository.findTestQuestions(QuestionDrawer.drawQuestions(max, 40));
-        Gson gson = new GsonBuilder().create();
-        String json = gson.toJson(result);
-        return json;
+//        Gson gson = new GsonBuilder().create();
+//        String json = gson.toJson(result);
+//        return json;
+        return"";
     }
 
     @RequestMapping(value = "/single", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
@@ -41,9 +39,11 @@ public class ApiController {
         Integer max = repository.countQuestionByIdIsGreaterThanEqual(0);
         int id = random.nextInt(max) + 1;
         Question result = repository.findQuestionById(id);
-        Gson gson = new GsonBuilder().create();
-        String json = gson.toJson(result);
-        return json;
+//        Gson gson = new GsonBuilder().create();
+//        String json = gson.toJson(result);
+//        return json;
+        return"";
+
     }
 
 
