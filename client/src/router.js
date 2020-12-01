@@ -1,5 +1,5 @@
-import { createWebHistory, createRouter } from "vue-router";
-import Home from "@/components/HelloWorld.vue";
+import {createWebHistory, createRouter} from "vue-router";
+import Home from "@/components/Home.vue";
 
 const routes = [
     {
@@ -7,7 +7,6 @@ const routes = [
         name: "Home",
         component: Home,
     },
-
 ];
 
 const router = createRouter({
