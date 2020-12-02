@@ -5,35 +5,36 @@
       <p class="text-sm text-center">Poćwicz pojedyncze pytania. Od razu poznasz prawidłową idpowiedź, co pozwoli na jej
         łatwiejsze zapamiętanie.</p>
     </header>
-    <section>
-      <p class="py-4 px-5 mt-5 mb-1 bg-dark-gray font-bold">Zasuszone metodą zielnikową liście Ginkgo biloba należy
-        przechowywać w pomieszczeniu:</p>
-      <answer-radio value="A" id="answerA" name="answer" v-model="answer">A. suchym, przewiewnym i w kartonach
-      </answer-radio>
-      <answer-radio value="B" id="answerB" name="answer" v-model="answer">B. lekko wilgotnym i w workach foliowych
-      </answer-radio>
-      <answer-radio value="C" id="answerC" name="answer" v-model="answer">C. chłodnym i wyłącznie na stojąco
-      </answer-radio>
-      <answer-radio value="D" id="answerD" name="answer" v-model="answer">D. ciemnym, wilgotnym i zawieszone
-      </answer-radio>
-      <span class="block py-2 px-5 mb-1 bg-dark-gray text-xs text-right ">Pyt. 439</span>
-    </section>
-    <button
-        class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-green rounded hover:bg-green hover:text-white">
+    <question v-model="question"></question>
+    <button @click="submitAnswer"
+            class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-green rounded hover:bg-green hover:text-white">
       Sprawdź
     </button>
   </div>
 </template>
 <script>
-import AnswerRadio from "@/components/visual/AnswerRadio";
+import Question from "@/components/visual/Question";
 
 export default {
   components: {
-    AnswerRadio
+    Question,
   },
   data() {
     return {
-      answer: ''
+      question: {
+        id: 439,
+        content: 'Zasuszone metodą zielnikową liście Ginkgo biloba należy przechowywać w pomieszczeniu:',
+        answerA: 'A. suchym, przewiewnym i w kartonach',
+        answerB: 'B. lekko wilgotnym i w workach foliowych',
+        answerC: 'C. chłodnym i wyłącznie na stojąco',
+        answerD: 'D. ciemnym, wilgotnym i zawieszone',
+        selectedAnswer: ''
+      }
+    }
+  },
+  methods: {
+    submitAnswer() {
+      console.log(this.question);
     }
   }
 }
