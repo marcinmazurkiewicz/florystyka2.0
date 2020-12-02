@@ -1,6 +1,7 @@
 package dev.mazurkiewicz.florystyka.question;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,11 +20,10 @@ public class QuestionController {
         return service.getRandomQuestion();
     }
 
-//    @GetMapping("/{id}")
-//    public String viewQuestionByID(@PathVariable("id") Integer id) {
-//        Question dev.mazurkiewicz.florystyka.question = repository.findQuestionById(id);
-//        return "single";
-//    }
+    @GetMapping("/{id}")
+    public QuestionResponse getQuestionById(@PathVariable("id") Integer id) {
+        return service.getQuestionById(id);
+    }
 //
 //    //Generate 40 unique questions and start test (with count down time)
 //    @RequestMapping(value = "/test", method = RequestMethod.GET)

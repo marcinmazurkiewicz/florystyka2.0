@@ -1,5 +1,6 @@
 package dev.mazurkiewicz.florystyka.question;
 
+import dev.mazurkiewicz.florystyka.exception.ResourceNotFoundException;
 import dev.mazurkiewicz.florystyka.repository.QuestionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,5 +26,12 @@ public class QuestionService {
         Page<Question> questions = repository.findAll(pageRequest);
         Question question = questions.getContent().get(0);
         return mapper.mapEntityToResponse(question);
+    }
+
+    public QuestionResponse getQuestionById(Integer id) {
+        return repository
+                .findById(id)
+                .map(mapper::mapEntityToResponse)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Question with id %d doesn't exist", id)));
     }
 }
