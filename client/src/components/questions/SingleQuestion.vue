@@ -13,7 +13,7 @@
   </div>
 </template>
 <script>
-import Question from "@/components/visual/Question";
+import Question from "@/components/questions/visual/Question";
 
 export default {
   components: {

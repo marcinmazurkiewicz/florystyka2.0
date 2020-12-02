@@ -21,7 +21,7 @@
   </section>
 </template>
 <script>
-import AnswerRadio from "@/components/visual/AnswerRadio";
+import AnswerRadio from "@/components/questions/visual/AnswerRadio";
 
 export default {
   components: {
