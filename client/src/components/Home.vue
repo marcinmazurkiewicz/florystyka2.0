@@ -13,8 +13,8 @@
         </header>
 
         <p class="text-justify tracking-wide leading-loose">W bazie znajdują się pytania z arkuszy egzaminacyjnych
-          z lat <span class="text-red">2010 - 2016</span>. Łączna liczba pytań w bazie to
-          obecnie <span class="text-red">550</span>. Najnowsze pytania pochodzą z
+          z lat <span class="text-red">2010 - 2017</span>. Łączna liczba pytań w bazie to
+          obecnie <span class="text-red">640</span>. Najnowsze pytania pochodzą z
           egzaminu z <span class="text-red">czerwca 2016 roku</span>. Testy możesz
           rozwiązywać na trzy sposoby:
         </p>
