@@ -1,8 +1,8 @@
-package dev.mazurkiewicz.florystyka.model;
+package dev.mazurkiewicz.florystyka.question;
+
+import dev.mazurkiewicz.florystyka.model.AnswerType;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "questions")
@@ -16,15 +16,14 @@ public class Question {
     private String answerB;
     private String answerC;
     private String answerD;
-    @Transient
-    private List<Answer> answers;
     @Column(name = "ok")
     @Enumerated(EnumType.STRING)
     private AnswerType correct;
     private String img;
 
 
-    public Question() {}
+    public Question() {
+    }
 
     public Question(int id, String content, String answerA, String answerB, String answerC, String answerD, AnswerType correct) {
         this.id = id;
@@ -34,7 +33,6 @@ public class Question {
         this.answerC = answerC;
         this.answerD = answerD;
         this.correct = correct;
-        generateAnswers();
     }
 
 
@@ -94,31 +92,6 @@ public class Question {
         this.correct = correct;
     }
 
-    public List<Answer> getAnswers() {
-        if (answers == null) {
-            generateAnswers();
-        }
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answer) {
-       this.answers = answer;
-    }
-
-    public String getAnswerContent(int index) {
-        if (answers == null) {
-            generateAnswers();
-        }
-       return this.answers.get(index).getContent();
-    }
-
-    public AnswerType getAnswerType(int index) {
-        if (answers == null) {
-            generateAnswers();
-        }
-        return this.answers.get(index).getValue();
-    }
-
     public String getImg() {
         return img;
     }
@@ -130,16 +103,8 @@ public class Question {
     @Override
     public String toString() {
         return "Question [id=" + id + ", content=" + content + ", answers=" + answerA + ", " + answerB + ", " + answerC
-                +", " + answerD + ", correct=" + correct
+                + ", " + answerD + ", correct=" + correct
                 + ", img=" + img + "]";
-    }
-
-    private void generateAnswers() {
-        answers = new ArrayList<>();
-        answers.add(new Answer(AnswerType.A, answerA));
-        answers.add(new Answer(AnswerType.B, answerB));
-        answers.add(new Answer(AnswerType.C, answerC));
-        answers.add(new Answer(AnswerType.D, answerD));
     }
 
 
