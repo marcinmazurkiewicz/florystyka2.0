@@ -2,8 +2,8 @@
   <div class="w-full max-w-screen-lg mx-auto text-white">
     <header>
       <h1 class="text-center text-3xl py-6 text-red">Szybkie pytanie</h1>
-      <p class="text-sm text-center">Poćwicz pojedyncze pytania. Od razu poznasz prawidłową idpowiedź, co pozwoli na jej
-        łatwiejsze zapamiętanie.</p>
+      <p class="text-sm text-center pb-8">Poćwicz pojedyncze pytania. Od razu poznasz prawidłową idpowiedź,
+        co pozwoli na jej łatwiejsze zapamiętanie.</p>
     </header>
     <question v-model="question"></question>
     <button @click="submitAnswer"
@@ -16,6 +16,7 @@
 import Question from "@/components/questions/visual/Question";
 
 export default {
+  name: 'SingleQuestion',
   components: {
     Question,
   },

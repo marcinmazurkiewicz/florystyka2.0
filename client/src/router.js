@@ -2,6 +2,7 @@ import {createWebHistory, createRouter} from "vue-router";
 import Home from "@/components/Home.vue";
 import Info from "@/components/Info.vue";
 import SingleQuestion from "@/components/questions/SingleQuestion"
+import Test from "@/components/questions/Test";
 
 const routes = [
     {
@@ -22,7 +23,7 @@ const routes = [
     {
         path: "/test",
         name: "Test",
-        component: SingleQuestion
+        component: Test
     },
     // {
     //     path: "/pdf",

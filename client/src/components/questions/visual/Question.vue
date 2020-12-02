@@ -1,19 +1,24 @@
 <template>
   <section>
-    <p class="py-4 px-5 mt-5 mb-1 bg-dark-gray font-bold">{{ localQuestion.content }}</p>
-    <answer-radio value="A" id="answerA" name="answer" v-model="localQuestion.selectedAnswer">{{
+    <p :id="localQuestion.id" class="py-4 px-5 mt-5 mb-1 bg-dark-gray font-bold">{{ number + 1 }}.
+      {{ localQuestion.content }}</p>
+    <answer-radio value="A" :id='localQuestion.id +"_answerA"' :name='localQuestion.id+"_answer"'
+                  v-model="localQuestion.selectedAnswer">{{
         localQuestion.answerA
       }}
     </answer-radio>
-    <answer-radio value="B" id="answerB" name="answer" v-model="localQuestion.selectedAnswer">{{
+    <answer-radio value="B" :id='localQuestion.id+"_answerB"' :name='localQuestion.id+"_answer"'
+                  v-model="localQuestion.selectedAnswer">{{
         localQuestion.answerB
       }}
     </answer-radio>
-    <answer-radio value="C" id="answerC" name="answer" v-model="localQuestion.selectedAnswer">{{
+    <answer-radio value="C" ::id='localQuestion.id+"_answerC"' :name='localQuestion.id+"_answer"'
+                  v-model="localQuestion.selectedAnswer">{{
         localQuestion.answerC
       }}
     </answer-radio>
-    <answer-radio value="D" id="answerD" name="answer" v-model="localQuestion.selectedAnswer">{{
+    <answer-radio value="D" :id='localQuestion.id+"_answerD"' :name='localQuestion.id+"_answer"'
+                  v-model="localQuestion.selectedAnswer">{{
         localQuestion.answerD
       }}
     </answer-radio>
@@ -24,10 +29,21 @@
 import AnswerRadio from "@/components/questions/visual/AnswerRadio";
 
 export default {
+  name: 'Question',
   components: {
     AnswerRadio
   },
-  props: ['modelValue'],
+  props: {
+    modelValue: {
+      type: Object,
+      required: true
+    },
+    number: {
+      type: Number,
+      required: false,
+      default: 0
+    }
+  },
   computed: {
     localQuestion: {
       get() {
