@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full max-w-screen-lg mx-auto text-white">
+  <div class="w-full max-w-screen-lg mx-auto text-white p-4">
     <teleport to="#countdown">
       <div> Czas do końca: {{ timer.minutes }} min {{ timer.seconds }} sek</div>
     </teleport>
@@ -13,7 +13,8 @@
     <question v-for="(question, index) in questions" :key="question.id" v-model="questions[index]"
               :number="index"></question>
     <button @click="submitAnswer"
-            class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-green rounded hover:bg-green hover:text-white">
+            class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-green
+            rounded hover:bg-green hover:text-white">
       Sprawdź
     </button>
   </div>

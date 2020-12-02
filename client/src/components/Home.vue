@@ -1,25 +1,20 @@
 <template>
   <div>
-    <header class="w-full bg-start-img bg-cover" style="background-position: 50% 40%;">
-      <div class="w-full h-full bg-black-05">
-        <h1 class="text-center text-white font-bold text-6xl pt-36">Kwalifikacja R.26</h1>
-        <h5 class="text-center text-white text-3xl pt-8 pb-36">Wykonywanie kompozycji florystycznych</h5>
-      </div>
-    </header>
+    <banner/>
     <main class="w-full max-w-screen-lg m-auto text-white">
       <section>
-        <header class="text-center text-4xl pt-16 pb-8 px-6 tracking-wider leading-relaxed">
+        <header class="text-center text-4xl text-red pt-16 pb-8 px-3 md:px-6 tracking-wider leading-relaxed">
           Przygotowujesz się do egzaminu kwalifikacyjnego z florystyki? Poćwicz testy!
         </header>
 
-        <p class="text-justify tracking-wide leading-loose">W bazie znajdują się pytania z arkuszy egzaminacyjnych
+        <p class="text-justify tracking-wide leading-loose px-6">W bazie znajdują się pytania z arkuszy egzaminacyjnych
           z lat <span class="text-red">2010 - 2017</span>. Łączna liczba pytań w bazie to
           obecnie <span class="text-red">640</span>. Najnowsze pytania pochodzą z
           egzaminu z <span class="text-red">czerwca 2016 roku</span>. Testy możesz
           rozwiązywać na trzy sposoby:
         </p>
 
-        <div class="py-6 w-full grid grid-cols-3">
+        <div class="py-6 w-full grid grid-col-1 md:grid-cols-3">
           <div class="text-center p-6">
             <h5 class="text-red text-2xl">Symulacja testu</h5>
             <i class="material-icons text-7xl text-light-green py-6">receipt</i>
@@ -40,7 +35,7 @@
           </div>
         </div>
 
-        <p class="text-justify tracking-wide leading-loose pb-8">
+        <p class="text-justify tracking-wide leading-loose pb-8 px-6">
           Jeżeli znajdziesz na stronie jakiś błąd, będę wdzięczny, jeżeli zgłosisz do mailowo na adres
           <a class="text-red" href="mailto:marcin@mazurkiewicz.dev">marcin@mazurkiewicz.dev</a>. Przy
           opisie błędu podaj numer pytania, który znajduje się w szarym pasku pod każdym pytaniem. Pomoże
@@ -50,3 +45,12 @@
     </main>
   </div>
 </template>
+<script>
+import Banner from "@/components/visual/Banner";
+
+export default {
+  components: {
+    Banner
+  }
+}
+</script>
