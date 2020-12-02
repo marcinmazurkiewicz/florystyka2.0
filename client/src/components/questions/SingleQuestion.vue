@@ -8,10 +8,14 @@
     <section>
       <p class="py-4 px-5 mt-5 mb-1 bg-dark-gray font-bold">Zasuszone metodą zielnikową liście Ginkgo biloba należy
         przechowywać w pomieszczeniu:</p>
-      <span class="block py-3 px-5 mb-1 bg-gray border border-dark-gray hover:text-azure hover:border-azure">A. suchym, przewiewnym i w kartonach</span>
-      <span class="block py-3 px-5 mb-1 bg-gray border border-dark-gray hover:text-azure hover:border-azure">B. lekko wilgotnym i w workach foliowych</span>
-      <span class="block py-3 px-5 mb-1 bg-gray border border-dark-gray hover:text-azure hover:border-azure">C. chłodnym i wyłącznie na stojąco</span>
-      <span class="block py-3 px-5 mb-1 bg-gray border border-dark-gray hover:text-azure hover:border-azure">D. ciemnym, wilgotnym i zawieszone</span>
+      <answer-radio value="A" id="answerA" name="answer" v-model="answer">A. suchym, przewiewnym i w kartonach
+      </answer-radio>
+      <answer-radio value="B" id="answerB" name="answer" v-model="answer">B. lekko wilgotnym i w workach foliowych
+      </answer-radio>
+      <answer-radio value="C" id="answerC" name="answer" v-model="answer">C. chłodnym i wyłącznie na stojąco
+      </answer-radio>
+      <answer-radio value="D" id="answerD" name="answer" v-model="answer">D. ciemnym, wilgotnym i zawieszone
+      </answer-radio>
       <span class="block py-2 px-5 mb-1 bg-dark-gray text-xs text-right ">Pyt. 439</span>
     </section>
     <button
@@ -20,3 +24,17 @@
     </button>
   </div>
 </template>
+<script>
+import AnswerRadio from "@/components/visual/AnswerRadio";
+
+export default {
+  components: {
+    AnswerRadio
+  },
+  data() {
+    return {
+      answer: ''
+    }
+  }
+}
+</script>
