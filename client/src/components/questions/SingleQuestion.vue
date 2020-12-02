@@ -5,7 +5,7 @@
       <p class="text-sm text-center pb-8">Poćwicz pojedyncze pytania. Od razu poznasz prawidłową idpowiedź,
         co pozwoli na jej łatwiejsze zapamiętanie.</p>
     </header>
-    <question v-model="question"></question>
+    <question :question="question" v-model="selectedAnswer"></question>
     <button @click="submitAnswer"
             class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-green
             rounded hover:bg-green hover:text-white">
@@ -15,6 +15,7 @@
 </template>
 <script>
 import Question from "@/components/questions/visual/Question";
+import {HTTP} from '@/http';
 
 export default {
   name: 'SingleQuestion',
@@ -23,21 +24,20 @@ export default {
   },
   data() {
     return {
-      question: {
-        id: 439,
-        content: 'Zasuszone metodą zielnikową liście Ginkgo biloba należy przechowywać w pomieszczeniu:',
-        answerA: 'A. suchym, przewiewnym i w kartonach',
-        answerB: 'B. lekko wilgotnym i w workach foliowych',
-        answerC: 'C. chłodnym i wyłącznie na stojąco',
-        answerD: 'D. ciemnym, wilgotnym i zawieszone',
-        selectedAnswer: ''
-      }
+      question: {},
+      selectedAnswer: ''
     }
   },
   methods: {
     submitAnswer() {
-      console.log(this.question);
+      console.log(this.selectedAnswer);
     }
+  },
+  mounted() {
+    HTTP.get('api/v3/questions/random')
+        .then((response) => {
+          this.question = response.data;
+        });
   }
 }
 </script>
