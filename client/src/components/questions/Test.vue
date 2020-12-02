@@ -1,5 +1,8 @@
 <template>
   <div class="w-full max-w-screen-lg mx-auto text-white">
+    <teleport to="#countdown">
+      <div> Czas do końca: {{ timer.minutes }} min {{ timer.seconds }} sek</div>
+    </teleport>
     <header>
       <h1 class="text-center text-3xl py-6 text-red">Symulacja - test 40 pytań</h1>
       <p class="text-sm text-center pb-6">Sprawdź się w dokładnie takim samym trybie, jaki obowiązuje podczas
@@ -25,26 +28,10 @@ export default {
   },
   data() {
     return {
-      q1:
-          {
-            id: 539,
-            content: 'Zasuszone metodą zielnikową liście Ginkgo biloba należy przechowywać w pomieszczeniu:',
-            answerA: 'A. suchym, przewiewnym i w kartonach',
-            answerB: 'B. lekko wilgotnym i w workach foliowych',
-            answerC: 'C. chłodnym i wyłącznie na stojąco',
-            answerD: 'D. ciemnym, wilgotnym i zawieszone',
-            selectedAnswer: ''
-          },
-      q2:
-          {
-            id: 540,
-            content: 'Zasuszone metodą zielnikową liście Ginkgo biloba należy przechowywać w pomieszczeniu:',
-            answerA: 'A. suchym, przewiewnym i w kartonach',
-            answerB: 'B. lekko wilgotnym i w workach foliowych',
-            answerC: 'C. chłodnym i wyłącznie na stojąco',
-            answerD: 'D. ciemnym, wilgotnym i zawieszone',
-            selectedAnswer: ''
-          },
+      timer: {
+        minutes: 60,
+        seconds: 1
+      },
       questions: [
         {
           id: 439,
@@ -97,7 +84,27 @@ export default {
   methods: {
     submitAnswer() {
       console.log(this.questions);
+    },
+    countdown() {
+      if (this.timer.minutes <= 0 && this.timer.seconds <= 0) {
+        this.submitAnswer();
+        return;
+      }
+
+      if (--this.timer.seconds < 0) {
+        this.timer.seconds = 59;
+        this.timer.minutes--;
+      }
+
+      if (this.timer.minutes >= 0 && this.timer.seconds >= 0) {
+        setTimeout(() => {
+          this.countdown();
+        }, 1000);
+      }
     }
+  },
+  mounted() {
+    this.countdown();
   }
 }
 </script>
