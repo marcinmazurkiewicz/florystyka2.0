@@ -24,11 +24,11 @@ const routes = [
         name: "Test",
         component: SingleQuestion
     },
-    {
-        path: "/pdf",
-        name: "Pdf",
-        component: SingleQuestion
-    }
+    // {
+    //     path: "/pdf",
+    //     name: "Pdf",
+    //     component: SingleQuestion
+    // }
 ];
 
 const router = createRouter({
