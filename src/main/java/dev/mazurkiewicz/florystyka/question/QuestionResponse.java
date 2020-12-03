@@ -1,6 +1,6 @@
 package dev.mazurkiewicz.florystyka.question;
 
-import dev.mazurkiewicz.florystyka.model.Answer;
+import dev.mazurkiewicz.florystyka.answer.Answer;
 
 import java.util.List;
 
