@@ -27,7 +27,6 @@ public class QuestionController {
         return service.getQuestionById(id);
     }
 
-    //Generate 40 unique questions and start test (with count down time)
     @GetMapping("/test")
     public List<QuestionResponse> getQuestionToTest() {
         return service.getQuestionsToTest();

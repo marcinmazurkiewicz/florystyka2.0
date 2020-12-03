@@ -2,6 +2,7 @@ package dev.mazurkiewicz.florystyka.question;
 
 import dev.mazurkiewicz.florystyka.exception.ResourceNotFoundException;
 import dev.mazurkiewicz.florystyka.repository.QuestionRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +13,9 @@ public class QuestionService {
 
     private final QuestionRepository repository;
     private final QuestionMapper mapper;
+
+    @Value("${dev.mazurkiewicz.florystyka.testQuestionsNumber}")
+    private int questionToTest;
 
     public QuestionService(QuestionRepository repository, QuestionMapper mapper) {
         this.repository = repository;
@@ -31,7 +35,7 @@ public class QuestionService {
     }
 
     public List<QuestionResponse> getQuestionsToTest() {
-        return repository.getRandomQuestions(40)
+        return repository.getRandomQuestions(questionToTest)
                 .stream()
                 .map(mapper::mapEntityToResponse)
                 .collect(Collectors.toList());
