@@ -3,6 +3,9 @@ package dev.mazurkiewicz.florystyka.solution;
 import dev.mazurkiewicz.florystyka.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class SolutionService {
 
@@ -22,5 +25,9 @@ public class SolutionService {
                         String.format("Question with id %d doesn't exist", solution.getQuestionId())));
         response.setSelected(solution.getSelectedAnswer());
         return response;
+    }
+
+    public List<SolutionResponse> checkTest(List<SolutionRequest> solutions) {
+        return solutions.stream().map(this::checkSingleAnswer).collect(Collectors.toList());
     }
 }
