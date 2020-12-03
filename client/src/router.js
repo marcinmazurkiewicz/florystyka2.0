@@ -16,6 +16,7 @@ const routes = [
         path: "/single",
         name: "RandomQuestion",
         component: RandomQuestion
+
     },
     {
         path: "/question/:questionId",

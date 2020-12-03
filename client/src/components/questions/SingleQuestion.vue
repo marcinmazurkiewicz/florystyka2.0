@@ -1,47 +1,41 @@
 <template>
   <div class="w-full max-w-screen-lg mx-auto text-white p-4">
     <header>
-      <h1 class="text-center text-3xl py-6 text-red">Sprawdź pytanie</h1>
-      <p class="text-sm text-center pb-8">Podgląd konkretnego pytania, do zastosowań serwisowych.</p>
+      <h1 class="text-center text-3xl py-6 text-red">Szybkie pytanie</h1>
+      <p class="text-sm text-center pb-8">Poćwicz pojedyncze pytania. Od razu poznasz prawidłową idpowiedź,
+        co pozwoli na jej łatwiejsze zapamiętanie.</p>
     </header>
-    <question :question="question" v-model="selectedAnswer"></question>
-    <button @click="submitAnswer"
-            class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-dark-green
-            rounded hover:bg-dark-green hover:text-white">
-      Sprawdź
-    </button>
+    <single-question-wrapper :question="question"></single-question-wrapper>
   </div>
 </template>
 <script>
-import Question from "@/components/questions/visual/Question";
+import SingleQuestionWrapper from "@/components/questions/SingleQuestionWrapper";
 import {HTTP} from '@/http';
-import {useRoute} from 'vue-router'
+import {useRoute} from "vue-router";
 
 export default {
-  name: 'SingleQuestion',
+  name: 'RandomQuestion',
   components: {
-    Question,
+    SingleQuestionWrapper,
   },
   data() {
     return {
       question: {},
-      selectedAnswer: ''
     }
   },
   methods: {
-    submitAnswer() {
-      console.log(this.selectedAnswer);
+    getQuestion(id) {
+      HTTP.get(`api/v3/questions/${id}`)
+          .then((response) => {
+            this.question = response.data;
+          });
     }
   },
   mounted() {
     const {
       params: {questionId}
     } = useRoute();
-    console.log(questionId);
-    HTTP.get(`api/v3/questions/${questionId}`)
-        .then((response) => {
-          this.question = response.data;
-        });
+    this.getQuestion(questionId);
   }
 }
 </script>

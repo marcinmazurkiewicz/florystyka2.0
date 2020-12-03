@@ -10,9 +10,9 @@
       <p class="text-sm text-center pb-8">Na rozwiązanie całej części pisemnej otrzymujesz maksymalnie 60 minut.
         To całkiem sporo czasu, więc zachowaj spokój :)</p>
     </header>
-    <question v-for="(question, index) in questions" :key="question.id" :question="question"
-              v-model="selectedAnswers[question.id]"
-              :number="index"></question>
+    <question-view v-for="(question, index) in questions" :key="question.id" :question="question" :solution="solution"
+                   v-model="selectedAnswers[question.id]"
+                   :number="index"></question-view>
     <button @click="submitAnswer"
             class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-dark-green
             rounded hover:bg-dark-green hover:text-white">
@@ -21,13 +21,13 @@
   </div>
 </template>
 <script>
-import Question from "@/components/questions/visual/Question";
+import QuestionView from "@/components/questions/visual/QuestionView";
 import {HTTP} from "@/http";
 
 export default {
   name: 'Test',
   components: {
-    Question,
+    QuestionView,
   },
   data() {
     return {
@@ -36,7 +36,8 @@ export default {
         seconds: 1
       },
       questions: [],
-      selectedAnswers: {}
+      selectedAnswers: {},
+      solution: {}
     }
   },
   methods: {

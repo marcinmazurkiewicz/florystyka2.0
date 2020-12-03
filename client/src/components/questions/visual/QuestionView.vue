@@ -22,7 +22,7 @@ import AnswerRadio from "@/components/questions/visual/AnswerRadio";
 import AnswerSpan from "@/components/questions/visual/AnswerSpan";
 
 export default {
-  name: 'Question',
+  name: 'QuestionView',
   components: {
     AnswerSpan,
     AnswerRadio
