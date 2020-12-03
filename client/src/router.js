@@ -1,8 +1,10 @@
 import {createWebHistory, createRouter} from "vue-router";
-import Home from "@/components/Home.vue";
-import Info from "@/components/Info.vue";
-import SingleQuestion from "@/components/questions/SingleQuestion"
-import Test from "@/components/questions/Test";
+
+const Home = import("@/components/Home.vue");
+const Info = import("@/components/Info.vue");
+const SingleQuestion = import("@/components/questions/SingleQuestion");
+const RandomQuestion = import("@/components/questions/RandomQuestion");
+const Test = import("@/components/questions/Test");
 
 const routes = [
     {
@@ -12,6 +14,11 @@ const routes = [
     },
     {
         path: "/single",
+        name: "RandomQuestion",
+        component: RandomQuestion
+    },
+    {
+        path: "/question/:questionId",
         name: "SingleQuestion",
         component: SingleQuestion
     },
