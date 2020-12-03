@@ -1,8 +1,9 @@
 <template>
   <div class="w-full max-w-screen-lg mx-auto text-white p-4">
     <header>
-      <h1 class="text-center text-3xl py-6 text-red">Sprawdź pytanie</h1>
-      <p class="text-sm text-center pb-8">Podgląd konkretnego pytania, do zastosowań serwisowych.</p>
+      <h1 class="text-center text-3xl py-6 text-red">Szybkie pytanie</h1>
+      <p class="text-sm text-center pb-8">Poćwicz pojedyncze pytania. Od razu poznasz prawidłową idpowiedź,
+        co pozwoli na jej łatwiejsze zapamiętanie.</p>
     </header>
     <question :question="question" v-model="selectedAnswer"></question>
     <button @click="submitAnswer"
@@ -15,10 +16,9 @@
 <script>
 import Question from "@/components/questions/visual/Question";
 import {HTTP} from '@/http';
-import {useRoute} from 'vue-router'
 
 export default {
-  name: 'SingleQuestion',
+  name: 'RandomQuestion',
   components: {
     Question,
   },
@@ -34,11 +34,7 @@ export default {
     }
   },
   mounted() {
-    const {
-      params: {questionId}
-    } = useRoute();
-    console.log(questionId);
-    HTTP.get(`api/v3/questions/${questionId}`)
+    HTTP.get('api/v3/questions/random')
         .then((response) => {
           this.question = response.data;
         });

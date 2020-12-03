@@ -10,17 +10,19 @@
       <p class="text-sm text-center pb-8">Na rozwiązanie całej części pisemnej otrzymujesz maksymalnie 60 minut.
         To całkiem sporo czasu, więc zachowaj spokój :)</p>
     </header>
-    <question v-for="(question, index) in questions" :key="question.id" v-model="questions[index]"
+    <question v-for="(question, index) in questions" :key="question.id" :question="question"
+              v-model="selectedAnswers[question.id]"
               :number="index"></question>
     <button @click="submitAnswer"
-            class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-green
-            rounded hover:bg-green hover:text-white">
+            class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-dark-green
+            rounded hover:bg-dark-green hover:text-white">
       Sprawdź
     </button>
   </div>
 </template>
 <script>
 import Question from "@/components/questions/visual/Question";
+import {HTTP} from "@/http";
 
 export default {
   name: 'Test',
@@ -33,58 +35,13 @@ export default {
         minutes: 60,
         seconds: 1
       },
-      questions: [
-        {
-          id: 439,
-          content: 'Zasuszone metodą zielnikową liście Ginkgo biloba należy przechowywać w pomieszczeniu:',
-          answerA: 'A. suchym, przewiewnym i w kartonach',
-          answerB: 'B. lekko wilgotnym i w workach foliowych',
-          answerC: 'C. chłodnym i wyłącznie na stojąco',
-          answerD: 'D. ciemnym, wilgotnym i zawieszone',
-          selectedAnswer: ''
-        },
-        {
-          id: 440,
-          content: 'Zasuszone metodą zielnikową liście Ginkgo biloba należy przechowywać w pomieszczeniu:',
-          answerA: 'A. suchym, przewiewnym i w kartonach',
-          answerB: 'B. lekko wilgotnym i w workach foliowych',
-          answerC: 'C. chłodnym i wyłącznie na stojąco',
-          answerD: 'D. ciemnym, wilgotnym i zawieszone',
-          selectedAnswer: ''
-        },
-        {
-          id: 441,
-          content: 'Zasuszone metodą zielnikową liście Ginkgo biloba należy przechowywać w pomieszczeniu:',
-          answerA: 'A. suchym, przewiewnym i w kartonach',
-          answerB: 'B. lekko wilgotnym i w workach foliowych',
-          answerC: 'C. chłodnym i wyłącznie na stojąco',
-          answerD: 'D. ciemnym, wilgotnym i zawieszone',
-          selectedAnswer: ''
-        },
-        {
-          id: 442,
-          content: 'Zasuszone metodą zielnikową liście Ginkgo biloba należy przechowywać w pomieszczeniu:',
-          answerA: 'A. suchym, przewiewnym i w kartonach',
-          answerB: 'B. lekko wilgotnym i w workach foliowych',
-          answerC: 'C. chłodnym i wyłącznie na stojąco',
-          answerD: 'D. ciemnym, wilgotnym i zawieszone',
-          selectedAnswer: ''
-        },
-        {
-          id: 443,
-          content: 'Zasuszone metodą zielnikową liście Ginkgo biloba należy przechowywać w pomieszczeniu:',
-          answerA: 'A. suchym, przewiewnym i w kartonach',
-          answerB: 'B. lekko wilgotnym i w workach foliowych',
-          answerC: 'C. chłodnym i wyłącznie na stojąco',
-          answerD: 'D. ciemnym, wilgotnym i zawieszone',
-          selectedAnswer: ''
-        }
-      ]
+      questions: [],
+      selectedAnswers: {}
     }
   },
   methods: {
     submitAnswer() {
-      console.log(this.questions);
+      console.log(this.selectedAnswers);
     },
     countdown() {
       if (this.timer.minutes <= 0 && this.timer.seconds <= 0) {
@@ -102,10 +59,20 @@ export default {
           this.countdown();
         }, 1000);
       }
+    },
+    prepareAnswersMap() {
+      this.questions.forEach(question => {
+        this.selectedAnswers[question.id] = '';
+      })
     }
   },
   mounted() {
-    this.countdown();
+    HTTP.get('api/v3/questions/test')
+        .then((response) => {
+          this.questions = response.data;
+          this.prepareAnswersMap();
+          this.countdown();
+        });
   }
 }
 </script>
