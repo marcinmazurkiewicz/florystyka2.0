@@ -5,13 +5,13 @@ module.exports = {
         extend: {
             colors: {
                 'light-green': '#8bc34a',
-                'green': '#71a436',
+                'dark-green': '#71a436',
                 'deep-cyan': '#161B20',
                 'black-01': 'rgba(0,0,0,0.1)',
                 'black-05': 'rgba(0,0,0,0.5)',
                 'red': '#ff5252',
                 'dark-gray': '#20282f',
-                'gray': '#2b353e',
+                'light-gray': '#2b353e',
                 'azure': '#31b3dd'
             },
             fontFamily: {
