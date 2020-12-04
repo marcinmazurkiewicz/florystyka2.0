@@ -1,5 +1,5 @@
 <template>
-  <div class="w-screen h-full bg-deep-cyan font-lato overflow-y-auto">
+  <div class="w-full h-full bg-deep-cyan font-lato overflow-y-auto">
     <Topbar/>
     <router-view class="min-h-4/5"/>
     <footer class="w-full bg-deep-cyan text-white text-right text-sm px-6 mt-6 mx-0 py-4">
