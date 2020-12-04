@@ -1,11 +1,9 @@
 package dev.mazurkiewicz.florystyka.solution;
 
-import dev.mazurkiewicz.florystyka.answer.AnswerType;
-
 public class SolutionRequest {
 
     private int questionId;
-    private AnswerType selectedAnswer;
+    private String selectedAnswer;
 
     public int getQuestionId() {
         return questionId;
@@ -15,11 +13,11 @@ public class SolutionRequest {
         this.questionId = questionId;
     }
 
-    public AnswerType getSelectedAnswer() {
+    public String getSelectedAnswer() {
         return selectedAnswer;
     }
 
-    public void setSelectedAnswer(AnswerType selectedAnswer) {
+    public void setSelectedAnswer(String selectedAnswer) {
         this.selectedAnswer = selectedAnswer;
     }
 }

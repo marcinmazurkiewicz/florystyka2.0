@@ -1,7 +1,9 @@
 package dev.mazurkiewicz.florystyka.solution;
 
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ public class SolutionController {
     }
 
     @PostMapping("/test")
-    public List<SolutionResponse> checkTest(@RequestBody List<SolutionRequest> solutions) {
+    public TestSolutionResponse checkTest(@RequestBody List<SolutionRequest> solutions) {
         return service.checkTest(solutions);
     }
 
