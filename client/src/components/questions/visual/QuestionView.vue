@@ -58,7 +58,7 @@ export default {
       return require(`@/assets/quest_img/${this.question.img}`);
     },
     solved() {
-      return this.solution.correct != null;
+      return this.solution != null && this.solution.correct != null;
     }
   },
   methods: {

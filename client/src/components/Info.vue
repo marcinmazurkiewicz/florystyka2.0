@@ -1,7 +1,7 @@
 <template>
   <div>
     <banner/>
-    <main class="w-full max-w-screen-lg m-auto text-white">
+    <main class="w-full max-w-screen-lg mx-0 text-white">
       <section>
         <header class="text-center text-4xl text-red pt-16 pb-8 px-3 md:px-6 tracking-wider leading-relaxed">
           Co to za strona?

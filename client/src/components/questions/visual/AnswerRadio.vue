@@ -29,7 +29,7 @@ export default {
       const checked = 'text-azure border-azure';
       const correct = 'text-light-green border-light-green';
       const incorrect = 'text-red border-red';
-      if (this.solution.correct != null) {
+      if (this.solution != null && this.solution.correct != null) {
         if (this.isCorrect) {
           return correct;
         } else if (this.isChecked) {

@@ -41,11 +41,11 @@ export default {
   },
   methods: {
     submitAnswer() {
-      const request = {
+      const data = {
         questionId: this.question.id,
         selectedAnswer: this.selectedAnswer
       }
-      HTTP.post(`api/v3/solutions/single`, request)
+      HTTP.post(`api/v3/solutions/single`, data)
           .then((response) => {
             this.solution = response.data;
             this.$emit('solved', true);

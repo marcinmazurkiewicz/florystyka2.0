@@ -10,10 +10,18 @@
       <p class="text-sm text-center pb-8">Na rozwiązanie całej części pisemnej otrzymujesz maksymalnie 60 minut.
         To całkiem sporo czasu, więc zachowaj spokój :)</p>
     </header>
-    <question-view v-for="(question, index) in questions" :key="question.id" :question="question" :solution="solution"
+    <span v-if="solved"
+          :class="[passed ? 'bg-dark-green' : 'bg-red']"
+          class="block w-full mt-8 p-3 text-dark-gray text-lg text-center font-semibold">
+      <span v-if="passed">Test zaliczony! </span>
+      <span v-else>Test niezaliczony :( </span>
+      Uzyskałeś {{ points }}/{{ total }} punktów ({{ percentScore }}%)
+    </span>
+    <question-view v-for="(question, index) in questions" :key="question.id" :question="question"
+                   :solution="solutions[question.id]"
                    v-model="selectedAnswers[question.id]"
                    :number="index"></question-view>
-    <button @click="submitAnswer"
+    <button v-if="!solved" @click="submitAnswer"
             class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-dark-green
             rounded hover:bg-dark-green hover:text-white">
       Sprawdź
@@ -37,12 +45,44 @@ export default {
       },
       questions: [],
       selectedAnswers: {},
-      solution: {}
+      points: 0,
+      total: 0,
+      solved: false,
+      solutions: {}
+    }
+  },
+  computed: {
+    percentScore() {
+      return (this.points / this.total) * 100;
+    },
+    passed() {
+      return this.percentScore >= 70;
     }
   },
   methods: {
     submitAnswer() {
-      console.log(this.selectedAnswers);
+      HTTP.post(`api/v3/solutions/test`, this.prepareData())
+          .then((response) => {
+            this.solved = true;
+            this.points = response.data.points;
+            this.total = response.data.total;
+            this.solutions = response.data.solutions;
+          })
+          .catch((e) => {
+            this.errors = e.response.data.errors;
+          });
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    },
+    prepareData() {
+      const results = [];
+      for (const [key, value] of Object.entries(this.selectedAnswers)) {
+        const answerRow = {
+          questionId: key,
+          selectedAnswer: value
+        }
+        results.push(answerRow);
+      }
+      return results;
     },
     countdown() {
       if (this.timer.minutes <= 0 && this.timer.seconds <= 0) {
