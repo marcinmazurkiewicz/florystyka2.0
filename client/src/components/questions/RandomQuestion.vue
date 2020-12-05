@@ -5,39 +5,45 @@
       <p class="text-sm text-center pb-8">Poćwicz pojedyncze pytania. Od razu poznasz prawidłową idpowiedź,
         co pozwoli na jej łatwiejsze zapamiętanie.</p>
     </header>
-    <question :question="question" v-model="selectedAnswer"></question>
-    <button @click="submitAnswer"
+    <single-question-wrapper :question="question" @solved="setSolved"></single-question-wrapper>
+    <button v-if="solved" @click="newQuestion"
             class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-dark-green
-            rounded hover:bg-dark-green hover:text-white">
-      Sprawdź
+            rounded-xl hover:bg-dark-green hover:text-white">
+      Następne pytanie
     </button>
   </div>
 </template>
 <script>
-import Question from "@/components/questions/visual/Question";
+import SingleQuestionWrapper from "@/components/questions/SingleQuestionWrapper";
 import {HTTP} from '@/http';
 
 export default {
   name: 'RandomQuestion',
   components: {
-    Question,
+    SingleQuestionWrapper,
   },
   data() {
     return {
       question: {},
-      selectedAnswer: ''
+      solved: false
     }
   },
   methods: {
-    submitAnswer() {
-      console.log(this.selectedAnswer);
+    newQuestion() {
+      HTTP.get('api/v3/questions/random')
+          .then((response) => {
+            this.solution = {};
+            this.selectedAnswer = '';
+            this.solved = false;
+            this.question = response.data;
+          });
+    },
+    setSolved(status) {
+      this.solved = status;
     }
   },
   mounted() {
-    HTTP.get('api/v3/questions/random')
-        .then((response) => {
-          this.question = response.data;
-        });
+    this.newQuestion();
   }
 }
 </script>

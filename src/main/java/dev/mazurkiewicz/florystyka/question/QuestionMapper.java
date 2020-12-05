@@ -1,7 +1,7 @@
 package dev.mazurkiewicz.florystyka.question;
 
-import dev.mazurkiewicz.florystyka.model.Answer;
-import dev.mazurkiewicz.florystyka.model.AnswerType;
+import dev.mazurkiewicz.florystyka.answer.Answer;
+import dev.mazurkiewicz.florystyka.answer.AnswerType;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package dev.mazurkiewicz.florystyka.question;
 
-import dev.mazurkiewicz.florystyka.model.AnswerType;
+import dev.mazurkiewicz.florystyka.answer.AnswerType;
 
 import javax.persistence.*;
 
@@ -16,10 +16,11 @@ public class Question {
     private String answerB;
     private String answerC;
     private String answerD;
-    @Column(name = "ok")
     @Enumerated(EnumType.STRING)
     private AnswerType correct;
     private String img;
+    private int year;
+    private int month;
 
 
     public Question() {

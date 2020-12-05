@@ -1,6 +1,5 @@
-package dev.mazurkiewicz.florystyka.repository;
+package dev.mazurkiewicz.florystyka.question;
 
-import dev.mazurkiewicz.florystyka.question.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,7 +14,7 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
      * to get random results because database is small and and there is little chance of its grow
      * that much to changing the performance of this solution
      * */
-    @Query(value = "SELECT * FROM questions ORDER BY RAND() LIMIT :howMany", nativeQuery = true)
+    @Query(value = "SELECT * FROM questions ORDER BY RANDOM() LIMIT :howMany", nativeQuery = true)
     List<Question> getRandomQuestions(int howMany);
 
 }

@@ -5,8 +5,13 @@
       <img v-if="question.img" :src="imgUrl" class="pt-4 mx-auto" alt="obrazek do pytania"/>
     </p>
     <div v-for="answer in question.answers" :key="answer.value">
-      <answer-radio :value="answer.value" :id='question.id +"_"+answer.value' :name='question.id+"_answer"'
-                    v-model="localSelectedAnswer"><span v-html="answer.content"></span>
+      <answer-span v-if="solved" :value="answer.value" :id='question.id +"_"+answer.value' :solution="solution"
+                   :checked="isChecked(answer.value)">
+        <span v-html="answer.content"></span>
+      </answer-span>
+      <answer-radio v-else :value="answer.value" :id='question.id +"_"+answer.value' :name='question.id+"_answer"'
+                    :solution="solution" v-model="localSelectedAnswer">
+        <span v-html="answer.content"></span>
       </answer-radio>
     </div>
     <span class="block py-2 px-5 mb-1 bg-dark-gray text-xs text-right ">Pyt. {{ question.id }}</span>
@@ -14,10 +19,12 @@
 </template>
 <script>
 import AnswerRadio from "@/components/questions/visual/AnswerRadio";
+import AnswerSpan from "@/components/questions/visual/AnswerSpan";
 
 export default {
-  name: 'Question',
+  name: 'QuestionView',
   components: {
+    AnswerSpan,
     AnswerRadio
   },
   props: {
@@ -33,6 +40,9 @@ export default {
     question: {
       type: Object,
       required: true
+    },
+    solution: {
+      type: Object
     }
   },
   computed: {
@@ -46,6 +56,14 @@ export default {
     },
     imgUrl() {
       return require(`@/assets/quest_img/${this.question.img}`);
+    },
+    solved() {
+      return this.solution != null && this.solution.correct != null;
+    }
+  },
+  methods: {
+    isChecked(value) {
+      return this.localSelectedAnswer === value;
     }
   }
 }

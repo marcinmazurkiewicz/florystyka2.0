@@ -1,10 +1,10 @@
 import {createWebHistory, createRouter} from "vue-router";
 
-const Home = import("@/components/Home.vue");
-const Info = import("@/components/Info.vue");
-const SingleQuestion = import("@/components/questions/SingleQuestion");
-const RandomQuestion = import("@/components/questions/RandomQuestion");
-const Test = import("@/components/questions/Test");
+const Home = () => import("@/components/Home.vue");
+const Info = () => import("@/components/Info.vue");
+const SingleQuestion = () => import("@/components/questions/SingleQuestion");
+const RandomQuestion = () => import("@/components/questions/RandomQuestion");
+const Test = () => import("@/components/questions/Test");
 
 const routes = [
     {
@@ -16,6 +16,7 @@ const routes = [
         path: "/single",
         name: "RandomQuestion",
         component: RandomQuestion
+
     },
     {
         path: "/question/:questionId",

@@ -1,4 +1,4 @@
-package dev.mazurkiewicz.florystyka.model;
+package dev.mazurkiewicz.florystyka.answer;
 
 import javax.validation.constraints.NotEmpty;
 
