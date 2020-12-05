@@ -19,8 +19,8 @@ public class Question {
     @Enumerated(EnumType.STRING)
     private AnswerType correct;
     private String img;
-    private int year;
-    private int month;
+    private Integer year;
+    private Integer month;
 
 
     public Question() {
@@ -99,6 +99,22 @@ public class Question {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
     }
 
     @Override

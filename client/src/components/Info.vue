@@ -8,15 +8,15 @@
         </header>
 
         <p class="text-justify tracking-wide leading-loose pb-8 px-6">Projekt powstał jako odpowiedź na brak dobrej i
-          darmowej
-          bazy testów dla technika florysty, jakie istnieją dla innych zawodów. Strona została napisana w 2015 roku
-          jako projekt "po godzinach" dla starogardzkich florstek, przygotowujących się do testu R26 :)
+          darmowej bazy testów dla technika florysty, jakie istnieją dla innych zawodów. Strona została napisana
+          w 2015 roku jako projekt "po godzinach" dla starogardzkich florstek, przygotowujących się do testu R26 :)
         </p>
 
         <p class="text-justify tracking-wide leading-loose pb-8 px-6">Szkoda, aby praca włożona w stworzenie strony
           została zmarnowana, dlatego postanowiłem udostępnić ją innym osobom, które przygotowują się do egzaminu.
-          W bazie znajdują się pytania z arkuszy egzaminacyjnych z lat 2010 - 2017. Co roku w okresie przygotowań
-          do egzaminów zawodowych korzystają z niej setki osób dziennie.
+          W bazie znajdują się pytania z arkuszy egzaminacyjnych z lat {{ earliestQuestionYear }} -
+          {{ latestQuestionYear }}. Co roku w okresie przygotowań do egzaminów zawodowych korzystają z niej setki osób
+          dziennie.
         </p>
 
         <p class="text-justify tracking-wide leading-loose pb-8 px-6">
@@ -32,11 +32,25 @@
 </template>
 <script>
 import Banner from '@/components/visual/Banner'
+import {HTTP} from "@/http";
 
 export default {
   name: 'Info',
   components: {
     Banner
+  },
+  data() {
+    return {
+      latestQuestionYear: 0,
+      earliestQuestionYear: 0
+    }
+  },
+  mounted() {
+    HTTP.get('api/v3/questions/info')
+        .then((response) => {
+          this.earliestQuestionYear = response.data.earliestQuestionYear;
+          this.latestQuestionYear = response.data.latestQuestionYear;
+        });
   }
 }
 </script>

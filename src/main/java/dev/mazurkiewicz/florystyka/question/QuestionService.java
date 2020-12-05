@@ -39,4 +39,11 @@ public class QuestionService {
                 .map(mapper::mapEntityToResponse)
                 .collect(Collectors.toList());
     }
+
+    public QuestionNumberResponse countQuestions() {
+        long questionNumber = repository.count();
+        int earliestQuestionYear = repository.getEarliestYear();
+        int latestQuestionYear = repository.getLatestYear();
+        return new QuestionNumberResponse(questionNumber, earliestQuestionYear, latestQuestionYear);
+    }
 }

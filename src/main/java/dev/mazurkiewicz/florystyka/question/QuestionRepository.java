@@ -17,4 +17,9 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
     @Query(value = "SELECT * FROM questions ORDER BY RANDOM() LIMIT :howMany", nativeQuery = true)
     List<Question> getRandomQuestions(int howMany);
 
+    @Query(value = "SELECT MIN(q.year) FROM Question AS q")
+    int getEarliestYear();
+
+    @Query(value = "SELECT MAX(q.year) FROM Question AS q")
+    int getLatestYear();
 }

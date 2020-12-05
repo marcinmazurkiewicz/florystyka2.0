@@ -31,5 +31,10 @@ public class QuestionController {
     public List<QuestionResponse> getQuestionToTest() {
         return service.getQuestionsToTest();
     }
+
+    @GetMapping("/info")
+    public QuestionNumberResponse getQuestionNumber() {
+        return service.countQuestions();
+    }
 }
 
