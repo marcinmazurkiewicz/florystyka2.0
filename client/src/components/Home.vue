@@ -8,9 +8,9 @@
         </header>
 
         <p class="text-justify tracking-wide leading-loose px-6">W bazie znajdują się pytania z arkuszy egzaminacyjnych
-          z lat <span class="text-red">2010 - 2017</span>. Łączna liczba pytań w bazie to
-          obecnie <span class="text-red">640</span>. Najnowsze pytania pochodzą z
-          egzaminu z <span class="text-red">czerwca 2016 roku</span>. Testy możesz
+          z lat <span class="text-red">{{ earliestQuestionYear }} - {{ latestQuestionYear }}</span>. Łączna liczba pytań
+          w bazie to
+          obecnie <span class="text-red">{{ questionNumber }}</span>. Testy możesz
           rozwiązywać na trzy sposoby:
         </p>
 
@@ -47,10 +47,26 @@
 </template>
 <script>
 import Banner from "@/components/visual/Banner";
+import {HTTP} from "@/http";
 
 export default {
   components: {
     Banner
+  },
+  data() {
+    return {
+      questionNumber: 0,
+      earliestQuestionYear: 0,
+      latestQuestionYear: 0
+    }
+  },
+  mounted() {
+    HTTP.get('api/v3/questions/info')
+        .then((response) => {
+          this.questionNumber = response.data.questionNumber;
+          this.earliestQuestionYear = response.data.earliestQuestionYear;
+          this.latestQuestionYear = response.data.latestQuestionYear;
+        });
   }
 }
 </script>
