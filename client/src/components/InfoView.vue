@@ -35,7 +35,7 @@ import Banner from '@/components/visual/Banner'
 import {HTTP} from "@/http";
 
 export default {
-  name: 'Info',
+  name: 'InfoView',
   components: {
     Banner
   },
