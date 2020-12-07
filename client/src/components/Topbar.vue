@@ -26,13 +26,13 @@
             <span class="block self-center">Szybko</span>
           </router-link>
         </li>
-        <!--        <li class="inline-block h-full">-->
-        <!--          <router-link :to="{name: 'Pdf'}"-->
-        <!--                       class="block p-4 hover:bg-black-01 cursor-pointer h-full flex items-stretch content-center"-->
-        <!--                       exact-active-class="bg-dark-green">-->
-        <!--            <span class="block self-center">Pdf</span>-->
-        <!--          </router-link>-->
-        <!--        </li>-->
+        <li class="inline-block h-full">
+          <router-link :to="{name: 'Pdf'}"
+                       class="block p-4 hover:bg-black-01 cursor-pointer h-full flex items-stretch content-center"
+                       exact-active-class="bg-dark-green">
+            <span class="block self-center">Pdf</span>
+          </router-link>
+        </li>
         <li class="inline-block h-full">
           <router-link :to="{name: 'Info'}"
                        class="block p-4 hover:bg-black-01 cursor-pointer h-full flex items-stretch content-center"

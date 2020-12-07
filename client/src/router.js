@@ -1,7 +1,8 @@
 import {createWebHistory, createRouter} from "vue-router";
 
-const Home = () => import("@/components/Home.vue");
-const Info = () => import("@/components/Info.vue");
+const Home = () => import("@/components/HomeView.vue");
+const Info = () => import("@/components/InfoView.vue");
+const Pdf = () => import("@/components/PdfView.vue");
 const SingleQuestion = () => import("@/components/questions/SingleQuestion");
 const RandomQuestion = () => import("@/components/questions/RandomQuestion");
 const Test = () => import("@/components/questions/Test");
@@ -33,11 +34,11 @@ const routes = [
         name: "Test",
         component: Test
     },
-    // {
-    //     path: "/pdf",
-    //     name: "Pdf",
-    //     component: SingleQuestion
-    // }
+    {
+        path: "/pdf",
+        name: "Pdf",
+        component: Pdf
+    }
 ];
 
 const router = createRouter({
