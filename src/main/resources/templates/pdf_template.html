@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <style>
+        table {
+            width: 100%;
+            display: table;
+            padding: 16px;
+            margin-top: 16px;
+            border-collapse: collapse;
+        }
+
+        td, th {
+            display: table-cell;
+            padding: 10px;
+            border: 1px solid #000;
+            font-size: 14px;
+            page-break-inside: avoid;
+        }
+    </style>
+</head>
+<body style="font-family: 'Arial', sans-serif;">
+<header>
+    <span style="display: block; font-size:10px; text-align: right">
+        https://egzamin-florystyka.pl
+    </span>
+    <h1 style="display: block; font-size: 24px; text-align: center; font-weight: bold; padding-top: 60px; margin-bottom: 16px">Kwalifikacja zawodowa R.26</h1>
+    <h2 style="font-size: 14px; text-align: center; font-weight: bold">Wykonywanie kompozycji florystycznych (test próbny)</h2>
+    <div th:each="question: ${questions}" style="margin-top: 32px; line-height: 1.5">
+        <p style="font-weight: bold;">
+            <span th:utext="${question.content}" />
+            <img th:if="${question.img != null}" class="image" th:src="@{question.img}" />
+        </p>
+        <p th:each="answer: ${question.answers}">
+            <span th:text="${answer.value}"></span>.
+            <span th:utext="${answer.content}"></span>
+        </p>
+    </div>
+</header>
+</body>
+</html>
