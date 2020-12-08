@@ -45,19 +45,33 @@ export default {
   },
   methods: {
     generatePdf() {
-      HTTP.get(`api/v3/questions/test/pdf`)
+      HTTP.get(`api/v3/questions/test/pdf`, {responseType: "blob"})
           .then((response) => {
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            const filename = this.getFilenameFromHeader(response.headers['content-disposition']) ?? `test.pdf`;
-            link.setAttribute('download', filename);
-            document.body.appendChild(link);
-            link.click();
+            this.downloadFile(response);
           })
           .catch((e) => {
             console.log(e);
           });
+    },
+    downloadFile(response) {
+      const filename = this.getFilenameFromHeader(response.headers['content-disposition']) ?? `test.pdf`;
+
+      const file = new Blob([response.data], {type: response.headers['content-type']});
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(file);
+        return;
+      }
+
+      const data = window.URL.createObjectURL(file);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      setTimeout(function () {
+        window.URL.revokeObjectURL(data)
+      }, 100)
     },
     getFilenameFromHeader(header) {
       const filenameRegex = /filename[^;\n]*=(UTF-\d['"]*)?((['"]).*?[.]$\2|[^;\n]*)?/;
