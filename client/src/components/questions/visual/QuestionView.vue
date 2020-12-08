@@ -55,7 +55,7 @@ export default {
       }
     },
     imgUrl() {
-      return `${process.env.VUE_APP_API_URL}/resources/img/${this.question.img}`;
+      return `${process.env.VUE_APP_API_URL}${this.question.img}`;
     },
     solved() {
       return this.solution != null && this.solution.correct != null;
