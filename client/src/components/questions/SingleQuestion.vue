@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     getQuestion(id) {
-      HTTP.get(`api/v3/questions/${id}`)
+      HTTP.get(`/api/v3/questions/${id}`)
           .then((response) => {
             this.question = response.data;
           });

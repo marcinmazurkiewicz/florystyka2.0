@@ -46,7 +46,7 @@ export default {
     }
   },
   mounted() {
-    HTTP.get('api/v3/questions/info')
+    HTTP.get('/api/v3/questions/info')
         .then((response) => {
           this.earliestQuestionYear = response.data.earliestQuestionYear;
           this.latestQuestionYear = response.data.latestQuestionYear;
