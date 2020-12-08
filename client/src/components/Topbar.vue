@@ -7,35 +7,35 @@
       <ul class="uppercase h-full">
         <li class="inline-block h-full">
           <router-link :to="{name: 'Home'}"
-                       class="block p-4 hover:bg-black-01 cursor-pointer h-full flex items-stretch content-center"
+                       class="block py-3 px-2 md:px-4 md:py-4 md:py4hover:bg-black-01 cursor-pointer h-full flex items-stretch content-center"
                        exact-active-class="bg-dark-green">
             <span class="block self-center">Start</span>
           </router-link>
         </li>
         <li class="inline-block h-full">
           <router-link :to="{name: 'Test'}"
-                       class="block p-4 hover:bg-black-01 cursor-pointer h-full flex items-stretch content-center"
+                       class="block py-3 px-2 md:px-4 md:py-4 hover:bg-black-01 cursor-pointer h-full flex items-stretch content-center"
                        exact-active-class="bg-dark-green">
             <span class="block self-center">Test</span>
           </router-link>
         </li>
         <li class="inline-block h-full">
           <router-link :to="{name: 'RandomQuestion'}"
-                       class="block p-4 hover:bg-black-01 cursor-pointer h-full flex items-stretch content-center"
+                       class="block py-3 px-2 md:px-4 md:py-4 hover:bg-black-01 cursor-pointer h-full flex items-stretch content-center"
                        exact-active-class="bg-dark-green">
             <span class="block self-center">Szybko</span>
           </router-link>
         </li>
         <li class="inline-block h-full">
           <router-link :to="{name: 'Pdf'}"
-                       class="block p-4 hover:bg-black-01 cursor-pointer h-full flex items-stretch content-center"
+                       class="block py-3 px-2 md:px-4 md:py-4 hover:bg-black-01 cursor-pointer h-full flex items-stretch content-center"
                        exact-active-class="bg-dark-green">
             <span class="block self-center">Pdf</span>
           </router-link>
         </li>
         <li class="inline-block h-full">
           <router-link :to="{name: 'Info'}"
-                       class="block p-4 hover:bg-black-01 cursor-pointer h-full flex items-stretch content-center"
+                       class="block py-3 px-2 md:px-4 md:py-4 hover:bg-black-01 cursor-pointer h-full flex items-stretch content-center"
                        exact-active-class="bg-dark-green">
             <span class="block self-center">Info</span>
           </router-link>
