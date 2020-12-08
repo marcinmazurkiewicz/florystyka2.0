@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     generatePdf() {
-      HTTP.get(`api/v3/questions/test/pdf`, {responseType: "blob"})
+      HTTP.get(`/api/v3/questions/test/pdf`, {responseType: "blob"})
           .then((response) => {
             this.downloadFile(response);
           })

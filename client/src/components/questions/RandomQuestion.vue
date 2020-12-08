@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     newQuestion() {
-      HTTP.get('api/v3/questions/random')
+      HTTP.get('/api/v3/questions/random')
           .then((response) => {
             this.solution = {};
             this.selectedAnswer = '';

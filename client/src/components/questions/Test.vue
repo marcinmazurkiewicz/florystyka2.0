@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     submitAnswer() {
-      HTTP.post(`api/v3/solutions/test`, this.prepareData())
+      HTTP.post(`/api/v3/solutions/test`, this.prepareData())
           .then((response) => {
             this.solved = true;
             this.points = response.data.points;
@@ -108,7 +108,7 @@ export default {
     }
   },
   mounted() {
-    HTTP.get('api/v3/questions/test')
+    HTTP.get('/api/v3/questions/test')
         .then((response) => {
           this.questions = response.data;
           this.prepareAnswersMap();
