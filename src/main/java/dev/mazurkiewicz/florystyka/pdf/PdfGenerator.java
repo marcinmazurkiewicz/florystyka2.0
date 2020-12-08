@@ -3,7 +3,7 @@ package dev.mazurkiewicz.florystyka.pdf;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
 import dev.mazurkiewicz.florystyka.exception.PdfRenderException;
-import dev.mazurkiewicz.florystyka.question.QuestionResponse;
+import dev.mazurkiewicz.florystyka.question.Question;
 import dev.mazurkiewicz.florystyka.resource.ResourceService;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -28,7 +28,7 @@ public class PdfGenerator {
         this.resourceService = resourceService;
     }
 
-    private String parseThymeleafTemplate(List<QuestionResponse> questions) {
+    private String parseThymeleafTemplate(List<Question> questions) {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
@@ -63,7 +63,7 @@ public class PdfGenerator {
         }
     }
 
-    public byte[] generateTest(List<QuestionResponse> questions) {
+    public byte[] generateTest(List<Question> questions) {
         String html = parseThymeleafTemplate(questions);
         return generatePdfFromHtml(html);
     }
