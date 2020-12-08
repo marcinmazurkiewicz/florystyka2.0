@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+
         table {
             width: 100%;
             display: table;
@@ -11,27 +15,69 @@
             border-collapse: collapse;
         }
 
+        tr {
+            page-break-inside: avoid;
+        }
+
         td, th {
             display: table-cell;
             padding: 10px;
             border: 1px solid #000;
             font-size: 14px;
+            text-align: center;
             page-break-inside: avoid;
+        }
+
+        .image {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            page-break-inside: avoid;
+        }
+
+        .question-wrapper {
+            margin-top: 32px;
+            page-break-inside: avoid;
+        }
+
+        .question {
+            font-weight: bold;
+        }
+
+        .site-info {
+            display: block;
+            font-size: 10px;
+            text-align: right
+        }
+
+        .doc-title {
+            display: block;
+            font-size: 24px;
+            text-align: center;
+            font-weight: bold;
+            padding-top: 60px;
+            margin-bottom: 16px;
+        }
+
+        .doc-subtitle {
+            font-size: 14px;
+            text-align: center;
+            font-weight: bold;
         }
     </style>
 </head>
-<body style="font-family: 'Arial', sans-serif;">
+<body>
 <header>
-    <span style="display: block; font-size:10px; text-align: right">
-        https://egzamin-florystyka.pl
-    </span>
-    <h1 style="display: block; font-size: 24px; text-align: center; font-weight: bold; padding-top: 60px; margin-bottom: 16px">Kwalifikacja zawodowa R.26</h1>
-    <h2 style="font-size: 14px; text-align: center; font-weight: bold">Wykonywanie kompozycji florystycznych (test próbny)</h2>
-    <div th:each="question: ${questions}" style="margin-top: 32px; line-height: 1.5">
-        <p style="font-weight: bold;">
-            <span th:utext="${question.content}" />
-            <img th:if="${question.img != null}" class="image" th:src="@{question.img}" />
+    <span class="site-info">https://egzamin-florystyka.pl</span>
+    <h1 class="doc-title">Kwalifikacja zawodowa R.26</h1>
+    <h2 class="doc-subtitle">Wykonywanie kompozycji florystycznych (test próbny)</h2>
+    <div th:each="question, iter: ${questions}" class="question-wrapper">
+        <p class="question">
+            <span th:text="${iter.index+1}"/>.
+            <span th:utext="${question.content}"/>
         </p>
+        <img th:if="${question.img != null}" class="image" th:src="@{${question.img}}"/>
         <p th:each="answer: ${question.answers}">
             <span th:text="${answer.value}"></span>.
             <span th:utext="${answer.content}"></span>

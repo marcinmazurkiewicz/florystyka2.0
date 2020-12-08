@@ -1,6 +1,8 @@
 package dev.mazurkiewicz.florystyka.question;
 
+
 import dev.mazurkiewicz.florystyka.exception.ResourceNotFoundException;
+import dev.mazurkiewicz.florystyka.pdf.PdfGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -12,13 +14,15 @@ public class QuestionService {
 
     private final QuestionRepository repository;
     private final QuestionMapper mapper;
+    private final PdfGenerator pdfGenerator;
 
     @Value("${dev.mazurkiewicz.florystyka.testQuestionsNumber}")
     private int questionToTest;
 
-    public QuestionService(QuestionRepository repository, QuestionMapper mapper) {
+    public QuestionService(QuestionRepository repository, QuestionMapper mapper, PdfGenerator pdfGenerator) {
         this.repository = repository;
         this.mapper = mapper;
+        this.pdfGenerator = pdfGenerator;
     }
 
     public QuestionResponse getRandomQuestion() {
@@ -46,4 +50,11 @@ public class QuestionService {
         int latestQuestionYear = repository.getLatestYear();
         return new QuestionNumberResponse(questionNumber, earliestQuestionYear, latestQuestionYear);
     }
+
+    public byte[] getPdfTest() {
+        List<QuestionResponse> questions = getQuestionsToTest();
+        return pdfGenerator.generateTest(questions);
+    }
+
+
 }
