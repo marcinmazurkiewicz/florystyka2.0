@@ -50,6 +50,7 @@ import Banner from "@/components/visual/Banner";
 import {HTTP} from "@/http";
 
 export default {
+  name: 'HomeView',
   components: {
     Banner
   },
