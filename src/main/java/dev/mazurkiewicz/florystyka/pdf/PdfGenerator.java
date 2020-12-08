@@ -4,6 +4,7 @@ import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
 import dev.mazurkiewicz.florystyka.exception.PdfRenderException;
 import dev.mazurkiewicz.florystyka.question.QuestionResponse;
+import dev.mazurkiewicz.florystyka.resource.ResourceService;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,12 @@ import java.util.List;
 
 @Component
 public class PdfGenerator {
+
+    private final ResourceService resourceService;
+
+    public PdfGenerator(ResourceService resourceService) {
+        this.resourceService = resourceService;
+    }
 
     private String parseThymeleafTemplate(List<QuestionResponse> questions) {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
@@ -39,7 +46,7 @@ public class PdfGenerator {
         ITextRenderer renderer = new ITextRenderer();
         ITextFontResolver resolver = renderer.getFontResolver();
         renderer.getSharedContext().setReplacedElementFactory(
-                new ImageReplacedElementFactory(renderer.getSharedContext().getReplacedElementFactory()));
+                new ImageReplacedElementFactory(renderer.getSharedContext().getReplacedElementFactory(), resourceService));
         try {
             resolver.addFont(fontResource.getURL().getPath(), BaseFont.IDENTITY_H, true);
         } catch (DocumentException | IOException e) {

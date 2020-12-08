@@ -2,8 +2,7 @@ package dev.mazurkiewicz.florystyka.pdf;
 
 import com.lowagie.text.Image;
 import dev.mazurkiewicz.florystyka.exception.PdfRenderException;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
+import dev.mazurkiewicz.florystyka.resource.ResourceService;
 import org.w3c.dom.Element;
 import org.xhtmlrenderer.extend.FSImage;
 import org.xhtmlrenderer.extend.ReplacedElement;
@@ -15,15 +14,14 @@ import org.xhtmlrenderer.pdf.ITextImageElement;
 import org.xhtmlrenderer.render.BlockBox;
 import org.xhtmlrenderer.simple.extend.FormSubmissionListener;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-
 public class ImageReplacedElementFactory implements ReplacedElementFactory {
 
     private final ReplacedElementFactory superFactory;
+    private final ResourceService resourceService;
 
-    public ImageReplacedElementFactory(ReplacedElementFactory superFactory) {
+    public ImageReplacedElementFactory(ReplacedElementFactory superFactory, ResourceService resourceService) {
         this.superFactory = superFactory;
+        this.resourceService = resourceService;
     }
 
     @Override
@@ -38,10 +36,8 @@ public class ImageReplacedElementFactory implements ReplacedElementFactory {
             if (!element.hasAttribute("src")) {
                 throw new PdfRenderException("Image has missing a `src` attribute.");
             }
-
-            Resource fontResource = new ClassPathResource("quest_img/" + element.getAttribute("src"));
-            try (InputStream input = new FileInputStream(fontResource.getFile())) {
-                final byte[] bytes = input.readAllBytes();
+            try {
+                final byte[] bytes = resourceService.getImage(element.getAttribute("src"));
                 final Image image = Image.getInstance(bytes);
                 final FSImage fsImage = new ITextFSImage(image);
                 if ((cssWidth != -1) || (cssHeight != -1)) {
