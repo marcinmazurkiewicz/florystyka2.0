@@ -14,7 +14,7 @@ public class QuestionMapper {
         QuestionResponse response = new QuestionResponse();
         response.setId(entity.getId());
         response.setContent(entity.getContent());
-        response.setImg(entity.getImg());
+        response.setImg(String.format("/resources/img/%s", entity.getImg()));
         List<Answer> answers = new ArrayList<>();
         answers.add(new Answer(AnswerType.A, entity.getAnswerA()));
         answers.add(new Answer(AnswerType.B, entity.getAnswerB()));
