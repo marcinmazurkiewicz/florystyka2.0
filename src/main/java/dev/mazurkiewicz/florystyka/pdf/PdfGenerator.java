@@ -17,7 +17,10 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class PdfGenerator {
@@ -63,8 +66,9 @@ public class PdfGenerator {
         }
     }
 
-    public byte[] generateTest(List<Question> questions) {
-        String html = parseThymeleafTemplate(questions);
+    public byte[] generateTest(Set<Question> questions) {
+        ArrayList<Question> questionArrayList = new ArrayList<>(questions);
+        String html = parseThymeleafTemplate(questionArrayList);
         return generatePdfFromHtml(html);
     }
 }

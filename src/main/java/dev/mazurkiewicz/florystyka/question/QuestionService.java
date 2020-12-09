@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +26,7 @@ public class QuestionService {
     }
 
     public QuestionResponse getRandomQuestion() {
-        Question question = repository.getRandomQuestions(1).get(0);
+        Question question = repository.getRandomQuestions(1).iterator().next();
         return mapper.mapEntityToResponse(question);
     }
 
@@ -45,13 +46,13 @@ public class QuestionService {
 
     public QuestionNumberResponse countQuestions() {
         long questionNumber = repository.count();
-        int earliestQuestionYear = repository.getEarliestYear();
-        int latestQuestionYear = repository.getLatestYear();
+        Integer earliestQuestionYear = repository.getEarliestYear();
+        Integer latestQuestionYear = repository.getLatestYear();
         return new QuestionNumberResponse(questionNumber, earliestQuestionYear, latestQuestionYear);
     }
 
     public byte[] getPdfTest() {
-        List<Question> questions = repository.getRandomQuestions(questionToTest);
+        Set<Question> questions = repository.getRandomQuestions(questionToTest);
         return pdfGenerator.generateTest(questions);
     }
 

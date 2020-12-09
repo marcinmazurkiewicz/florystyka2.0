@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Integer> {
@@ -15,11 +15,11 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
      * that much to changing the performance of this solution
      * */
     @Query(value = "SELECT * FROM questions ORDER BY RANDOM() LIMIT :howMany", nativeQuery = true)
-    List<Question> getRandomQuestions(int howMany);
+    Set<Question> getRandomQuestions(int howMany);
 
     @Query(value = "SELECT MIN(q.year) FROM Question AS q")
-    int getEarliestYear();
+    Integer getEarliestYear();
 
     @Query(value = "SELECT MAX(q.year) FROM Question AS q")
-    int getLatestYear();
+    Integer getLatestYear();
 }
