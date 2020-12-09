@@ -13,27 +13,25 @@ import java.util.stream.Collectors;
 public class SolutionService {
 
     private final SolutionRepository repository;
-    private final SolutionMapper mapper;
 
-    public SolutionService(SolutionRepository repository, SolutionMapper mapper) {
+    public SolutionService(SolutionRepository repository) {
         this.repository = repository;
-        this.mapper = mapper;
     }
 
     public SolutionResponse checkSingleAnswer(SolutionRequest solution) {
-        SolutionResponse response = repository
-                .findById(solution.getQuestionId())
-                .map(mapper::mapEntityToResponse)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        String.format("Question with id %d doesn't exist", solution.getQuestionId())));
         AnswerType selectedAnswer;
         try {
             selectedAnswer = AnswerType.valueOf(solution.getSelectedAnswer().toUpperCase());
         } catch (IllegalArgumentException e) {
             selectedAnswer = AnswerType.EMPTY;
         }
-        response.setSelected(selectedAnswer);
-        return response;
+        AnswerType finalSelectedAnswer = selectedAnswer;
+        return repository
+                .findById(solution.getQuestionId())
+                .map(s -> new SolutionResponse(s.getId(), s.getCorrect(), finalSelectedAnswer))
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        String.format("Question with id %d doesn't exist", solution.getQuestionId())));
+
     }
 
     public TestSolutionResponse checkTest(List<SolutionRequest> solutions) {
