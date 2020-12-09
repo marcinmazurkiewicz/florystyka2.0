@@ -1,23 +1,11 @@
 package dev.mazurkiewicz.florystyka.solution;
 
+import lombok.Value;
+
+@Value
 public class SolutionRequest {
 
-    private int questionId;
-    private String selectedAnswer;
+    int questionId;
+    String selectedAnswer;
 
-    public int getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
-    }
-
-    public String getSelectedAnswer() {
-        return selectedAnswer;
-    }
-
-    public void setSelectedAnswer(String selectedAnswer) {
-        this.selectedAnswer = selectedAnswer;
-    }
 }

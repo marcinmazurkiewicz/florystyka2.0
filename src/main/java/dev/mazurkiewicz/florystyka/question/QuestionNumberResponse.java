@@ -1,27 +1,12 @@
 package dev.mazurkiewicz.florystyka.question;
 
+import lombok.Value;
+
+@Value
 public class QuestionNumberResponse {
 
-    private final long questionNumber;
-    private final int earliestQuestionYear;
-    private final int latestQuestionYear;
+    long questionNumber;
+    int earliestQuestionYear;
+    int latestQuestionYear;
 
-
-    public QuestionNumberResponse(long questionNumber, int earliestQuestionYear, int latestQuestionYear) {
-        this.questionNumber = questionNumber;
-        this.earliestQuestionYear = earliestQuestionYear;
-        this.latestQuestionYear = latestQuestionYear;
-    }
-
-    public long getQuestionNumber() {
-        return questionNumber;
-    }
-
-    public int getEarliestQuestionYear() {
-        return earliestQuestionYear;
-    }
-
-    public int getLatestQuestionYear() {
-        return latestQuestionYear;
-    }
 }

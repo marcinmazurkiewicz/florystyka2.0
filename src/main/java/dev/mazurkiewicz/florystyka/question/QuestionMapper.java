@@ -11,17 +11,16 @@ import java.util.List;
 public class QuestionMapper {
 
     public QuestionResponse mapEntityToResponse(Question entity) {
-        QuestionResponse response = new QuestionResponse();
-        response.setId(entity.getId());
-        response.setContent(entity.getContent());
-        response.setImg(String.format("/resources/img/%s", entity.getImg()));
         List<Answer> answers = new ArrayList<>();
         answers.add(new Answer(AnswerType.A, entity.getAnswerA()));
         answers.add(new Answer(AnswerType.B, entity.getAnswerB()));
         answers.add(new Answer(AnswerType.C, entity.getAnswerC()));
         answers.add(new Answer(AnswerType.D, entity.getAnswerD()));
-        response.setAnswers(answers);
-        return response;
+        String img = null;
+        if (entity.getImg() != null) {
+            img = String.format("/resources/img/%s", entity.getImg());
+        }
+        return new QuestionResponse(entity.getId(), entity.getContent(), answers, img);
     }
 }
 
