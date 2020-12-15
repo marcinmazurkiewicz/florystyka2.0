@@ -3,6 +3,8 @@ package dev.mazurkiewicz.florystyka.question;
 import dev.mazurkiewicz.florystyka.exception.ResourceNotFoundException;
 import dev.mazurkiewicz.florystyka.pdf.PdfGenerator;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,18 +17,22 @@ public class QuestionService {
     private final QuestionRepository repository;
     private final QuestionMapper mapper;
     private final PdfGenerator pdfGenerator;
+    private final int questionToTest;
 
-    @Value("${dev.mazurkiewicz.florystyka.testQuestionsNumber}")
-    private int questionToTest;
-
-    public QuestionService(QuestionRepository repository, QuestionMapper mapper, PdfGenerator pdfGenerator) {
+    public QuestionService(QuestionRepository repository, QuestionMapper mapper, PdfGenerator pdfGenerator,
+                           @Value("${dev.mazurkiewicz.florystyka.testQuestionsNumber}") int questionToTest) {
         this.repository = repository;
         this.mapper = mapper;
         this.pdfGenerator = pdfGenerator;
+        this.questionToTest = questionToTest;
     }
 
     public QuestionResponse getRandomQuestion() {
-        Question question = repository.getRandomQuestions(1).iterator().next();
+        Set<Question> questionSet = repository.getRandomQuestions(1);
+        if (questionSet.isEmpty())
+            throw new EmptyResultDataAccessException("It looks like there is no questions in the database", 1);
+
+        Question question = questionSet.iterator().next();
         return mapper.mapEntityToResponse(question);
     }
 
@@ -38,8 +44,10 @@ public class QuestionService {
     }
 
     public List<QuestionResponse> getQuestionsToTest() {
-        return repository.getRandomQuestions(questionToTest)
-                .stream()
+        Set<Question> result = repository.getRandomQuestions(questionToTest);
+        if (result.size() != questionToTest)
+            throw new IncorrectResultSizeDataAccessException("Incorrect questions number", questionToTest);
+        return result.stream()
                 .map(mapper::mapEntityToResponse)
                 .collect(Collectors.toList());
     }
