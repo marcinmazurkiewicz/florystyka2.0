@@ -14,7 +14,7 @@ public class Question {
 
     @Id
     @GeneratedValue
-    private int id;
+    private Integer id;
     private String content;
     private String answerA;
     private String answerB;

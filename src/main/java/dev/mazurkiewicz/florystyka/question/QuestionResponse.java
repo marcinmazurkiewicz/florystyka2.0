@@ -8,7 +8,7 @@ import java.util.List;
 @Value
 public class QuestionResponse {
 
-    int id;
+    Integer id;
     String content;
     List<Answer> answers;
     String img;
