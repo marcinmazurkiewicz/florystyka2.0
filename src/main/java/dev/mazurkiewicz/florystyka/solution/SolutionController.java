@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,12 +19,12 @@ public class SolutionController {
     }
 
     @PostMapping("/single")
-    public SolutionResponse checkAnswer(@RequestBody SolutionRequest solution) {
+    public SolutionResponse checkAnswer(@Valid @RequestBody SolutionRequest solution) {
         return service.checkSingleAnswer(solution);
     }
 
     @PostMapping("/test")
-    public TestSolutionResponse checkTest(@RequestBody List<SolutionRequest> solutions) {
+    public TestSolutionResponse checkTest(@Valid @RequestBody List<SolutionRequest> solutions) {
         return service.checkTest(solutions);
     }
 
