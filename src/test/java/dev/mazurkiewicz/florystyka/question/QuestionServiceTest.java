@@ -2,6 +2,7 @@ package dev.mazurkiewicz.florystyka.question;
 
 import dev.mazurkiewicz.florystyka.answer.Answer;
 import dev.mazurkiewicz.florystyka.answer.AnswerType;
+import dev.mazurkiewicz.florystyka.exception.PdfRenderException;
 import dev.mazurkiewicz.florystyka.exception.ResourceNotFoundException;
 import dev.mazurkiewicz.florystyka.pdf.PdfGenerator;
 import org.junit.jupiter.api.BeforeEach;
@@ -171,7 +172,7 @@ class QuestionServiceTest {
     }
 
     @Test
-    void shouldReturnByteArrayWhenGetPdfTest() {
+    void shouldReturnByteArrayWhenGetPdfTest() throws PdfRenderException {
         Set<Question> questions = new HashSet<>();
         for (int i = 1; i < questionToTest + 1; i++) {
             questions.add(prepareQuestion(i));

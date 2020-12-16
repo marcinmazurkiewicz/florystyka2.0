@@ -36,7 +36,6 @@ class QuestionRepositoryTest {
         entityManager.clear();
     }
 
-
     private Question prepareQuestion(int questionNumber) {
         Question question = new Question();
         question.setAnswerA(String.format("answer A for question %d", questionNumber));
@@ -148,7 +147,7 @@ class QuestionRepositoryTest {
     @Test
     void shouldReturnNullAsLatestYearWhenDbIsEmpty() {
         //given
-       entityManager.clear();
+        entityManager.clear();
 
         //when
         Integer earliestYear = repository.getLatestYear();

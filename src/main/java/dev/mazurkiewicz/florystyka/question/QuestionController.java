@@ -1,11 +1,15 @@
 package dev.mazurkiewicz.florystyka.question;
 
+import dev.mazurkiewicz.florystyka.exception.PdfRenderException;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -22,7 +26,11 @@ public class QuestionController {
 
     @GetMapping("/random")
     public QuestionResponse getRandomQuestion() {
-        return service.getRandomQuestion();
+        try {
+            return service.getRandomQuestion();
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
@@ -32,7 +40,11 @@ public class QuestionController {
 
     @GetMapping("/test")
     public List<QuestionResponse> getQuestionToTest() {
-        return service.getQuestionsToTest();
+        try {
+            return service.getQuestionsToTest();
+        } catch (IncorrectResultSizeDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
+        }
     }
 
     @GetMapping("/info")
@@ -43,7 +55,13 @@ public class QuestionController {
     @GetMapping("/test/pdf")
     public ResponseEntity<ByteArrayResource> generatePdf() {
         String filename = "r26.pdf";
-        ByteArrayResource resource = new ByteArrayResource(service.getPdfTest());
+        byte[] pdfBytes;
+        try {
+            pdfBytes = service.getPdfTest();
+        } catch (PdfRenderException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        ByteArrayResource resource = new ByteArrayResource(pdfBytes);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(
                 ContentDisposition

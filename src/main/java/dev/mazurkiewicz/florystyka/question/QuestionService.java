@@ -1,5 +1,6 @@
 package dev.mazurkiewicz.florystyka.question;
 
+import dev.mazurkiewicz.florystyka.exception.PdfRenderException;
 import dev.mazurkiewicz.florystyka.exception.ResourceNotFoundException;
 import dev.mazurkiewicz.florystyka.pdf.PdfGenerator;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,7 +60,7 @@ public class QuestionService {
         return new QuestionNumberResponse(questionNumber, earliestQuestionYear, latestQuestionYear);
     }
 
-    public byte[] getPdfTest() {
+    public byte[] getPdfTest() throws PdfRenderException {
         Set<Question> questions = repository.getRandomQuestions(questionToTest);
         return pdfGenerator.generateTest(questions);
     }
