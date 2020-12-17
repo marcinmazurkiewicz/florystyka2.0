@@ -58,11 +58,8 @@ class QuestionControllerTest {
 
     @Test
     void shouldReturnRandomQuestionResponseWithImgWhenCallGetRandomQuestion() throws Exception {
-        //given
         when(service.getRandomQuestion()).thenReturn(questionResponses.get(1));
 
-        //when
-        //then
         mvc.perform(get("/api/v3/questions/random"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(2)))
@@ -81,11 +78,8 @@ class QuestionControllerTest {
 
     @Test
     void shouldReturnRandomQuestionResponseWithoutImgPropertyWhenRandomQuestionImgIsNull() throws Exception {
-        //given
         when(service.getRandomQuestion()).thenReturn(questionResponses.get(0));
 
-        //when
-        //then
         mvc.perform(get("/api/v3/questions/random"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
@@ -104,22 +98,16 @@ class QuestionControllerTest {
 
     @Test
     void shouldReturnStatus503WhenServiceThrowEmptyResultException() throws Exception {
-        //given
         when(service.getRandomQuestion()).thenThrow(EmptyResultDataAccessException.class);
 
-        //when
-        //then
         mvc.perform(get("/api/v3/questions/random"))
                 .andExpect(status().isServiceUnavailable());
     }
 
     @Test
     void shouldReturnQuestionResponseWhenCallGetQuestionById() throws Exception {
-        //given
         when(service.getQuestionById(2)).thenReturn(questionResponses.get(1));
 
-        //when
-        //then
         mvc.perform(get("/api/v3/questions/2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(2)))
@@ -138,11 +126,8 @@ class QuestionControllerTest {
 
     @Test
     void shouldReturnQuestionResponseWithoutImgPropertyWhenQuestionImgIsNull() throws Exception {
-        //given
         when(service.getQuestionById(1)).thenReturn(questionResponses.get(0));
 
-        //when
-        //then
         mvc.perform(get("/api/v3/questions/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
@@ -161,23 +146,17 @@ class QuestionControllerTest {
 
     @Test
     void shouldReturnStatus404WhenServiceThrowResourceNotFoundException() throws Exception {
-        //given
         when(service.getQuestionById(anyInt())).thenThrow(ResourceNotFoundException.class);
 
-        //when
-        //then
         mvc.perform(get("/api/v3/questions/11"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void shouldReturnQuestionNumberResponse() throws Exception {
-        //given
         when(service.countQuestions())
                 .thenReturn(new QuestionNumberResponse(100L, 2010, 2020));
 
-        //when
-        //then
         mvc.perform(get("/api/v3/questions/info"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.questionNumber", is(100)))
@@ -187,12 +166,9 @@ class QuestionControllerTest {
 
     @Test
     void shouldReturnQuestionNumberResponseWhenYearAreNulls() throws Exception {
-        //given
         when(service.countQuestions())
                 .thenReturn(new QuestionNumberResponse(0, null, null));
 
-        //when
-        //then
         mvc.perform(get("/api/v3/questions/info"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.questionNumber", is(0)))
@@ -203,11 +179,8 @@ class QuestionControllerTest {
 
     @Test
     void shouldReturnListOfQuestionResponseWhenCallGetQuestionToTest() throws Exception {
-        //given
         when(service.getQuestionsToTest()).thenReturn(questionResponses);
 
-        //when
-        //then
         mvc.perform(get("/api/v3/questions/test"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(10)))
@@ -238,23 +211,17 @@ class QuestionControllerTest {
 
     @Test
     void shouldReturnStatus503WhenServiceThrowIncorrectResultSizeException() throws Exception {
-        //given
         when(service.getQuestionsToTest()).thenThrow(IncorrectResultSizeDataAccessException.class);
 
-        //when
-        //then
         mvc.perform(get("/api/v3/questions/test"))
                 .andExpect(status().isServiceUnavailable());
     }
 
     @Test
     void shouldReturnByteArrayWhenCallGetPdfTest() throws Exception {
-        //given
         byte[] returnedBytesArray = "mock content".getBytes();
         when(service.getPdfTest()).thenReturn(returnedBytesArray);
 
-        //when
-        //then
         mvc.perform(get("/api/v3/questions/test/pdf"))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Content-Type", MediaType.APPLICATION_PDF_VALUE))
@@ -265,11 +232,8 @@ class QuestionControllerTest {
 
     @Test
     void shouldReturnStatus503WhenServiceThrownPdfRenderException() throws Exception {
-        //given
         when(service.getPdfTest()).thenThrow(PdfRenderException.class);
 
-        //when
-        //then
         mvc.perform(get("/api/v3/questions/test/pdf"))
                 .andExpect(status().isInternalServerError());
     }

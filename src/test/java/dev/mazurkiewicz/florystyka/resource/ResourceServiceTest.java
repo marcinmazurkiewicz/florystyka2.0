@@ -18,11 +18,14 @@ class ResourceServiceTest {
     private ResourceService service = new ResourceService("src/test/resources", "/img");
 
     @BeforeAll
-    private static void prepareExpectedImages() throws IOException {
-        FileInputStream jpg = new FileInputStream("src/test/resources/img/test_img.jpg");
-        expectedJpgFileByteArray = jpg.readAllBytes();
-        FileInputStream png = new FileInputStream("src/test/resources/img/test_img.png");
-        expectedPngFileByteArray = png.readAllBytes();
+    private static void prepareExpectedImages() {
+        try(FileInputStream jpg = new FileInputStream("src/test/resources/img/test_img.jpg");
+            FileInputStream png = new FileInputStream("src/test/resources/img/test_img.png")) {
+            expectedJpgFileByteArray = jpg.readAllBytes();
+            expectedPngFileByteArray = png.readAllBytes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -59,18 +62,5 @@ class ResourceServiceTest {
 
         //then
         assertThat(exception.getMessage()).isEqualTo("Image not_exist.png doesn't exist");
-    }
-
-    @Test
-    void shouldThrowResourceNotFoundExceptionWhenCallGetImageWithNotPermissionToImg() {
-        //given
-        //file with chmod = 600 and own to another user
-        String filename = "not_readable.png";
-
-        //when
-        Exception exception = assertThrows(ResourceNotFoundException.class, () -> service.getImage(filename));
-
-        //then
-        assertThat(exception.getMessage()).startsWith("Cannot open image not_readable.png");
     }
 }

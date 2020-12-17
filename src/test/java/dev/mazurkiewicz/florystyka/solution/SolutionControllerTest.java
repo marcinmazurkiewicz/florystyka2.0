@@ -40,11 +40,9 @@ class SolutionControllerTest {
 
     @Test
     void shouldReturnSolutionResponseWhenCallCheckAnswer() throws Exception {
-        //given
         SolutionRequest request = new SolutionRequest(1, "C");
         when(service.checkSingleAnswer(request)).thenReturn(new SolutionResponse(1, AnswerType.B, AnswerType.C));
-        //when
-        //then
+
         mvc.perform(post("/api/v3/solutions/single")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))
@@ -56,11 +54,9 @@ class SolutionControllerTest {
 
     @Test
     void shouldReturnSolutionResponseWhenCallCheckAnswerWithEmptySelectedAnswer() throws Exception {
-        //given
         SolutionRequest request = new SolutionRequest(1, "");
         when(service.checkSingleAnswer(request)).thenReturn(new SolutionResponse(1, AnswerType.B, AnswerType.EMPTY));
-        //when
-        //then
+
         mvc.perform(post("/api/v3/solutions/single")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))
@@ -72,11 +68,9 @@ class SolutionControllerTest {
 
     @Test
     void shouldReturnStatus400WhenCallCheckAnswerWithIllegalRequestBody() throws Exception {
-        //given
         SolutionRequest request = new SolutionRequest(1, "C");
         when(service.checkSingleAnswer(request)).thenReturn(new SolutionResponse(1, AnswerType.B, AnswerType.C));
-        //when
-        //then
+
         mvc.perform(post("/api/v3/solutions/single")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("\"selectedAnswer\":\"C\""))
@@ -85,11 +79,9 @@ class SolutionControllerTest {
 
     @Test
     void shouldReturnStatus404WhenCallCheckAnswerWithNonExistQuestionId() throws Exception {
-        //given
         SolutionRequest request = new SolutionRequest(11, "C");
         when(service.checkSingleAnswer(request)).thenThrow(ResourceNotFoundException.class);
-        //when
-        //then
+
         mvc.perform(post("/api/v3/solutions/single")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))
@@ -98,7 +90,6 @@ class SolutionControllerTest {
 
     @Test
     void shouldReturnTestQuestionResponseWhenCallCheckTestWithValidBodyRequest() throws Exception {
-        //given
         List<SolutionRequest> request = Arrays.asList(
                 new SolutionRequest(1, "A"),
                 new SolutionRequest(2, "B"),
@@ -114,8 +105,6 @@ class SolutionControllerTest {
         responseSolutions.put(5, new SolutionResponse(5, AnswerType.B, AnswerType.EMPTY));
         when(service.checkTest(request)).thenReturn(new TestSolutionResponse(1, 5, responseSolutions));
 
-        //when
-        //then
         mvc.perform(post("/api/v3/solutions/test")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))
@@ -141,11 +130,9 @@ class SolutionControllerTest {
 
     @Test
     void shouldReturnStatus400WhenCallCheckTestWithIllegalRequestBody() throws Exception {
-        //given
         SolutionRequest request = new SolutionRequest(1, "C");
         when(service.checkSingleAnswer(request)).thenReturn(new SolutionResponse(1, AnswerType.B, AnswerType.C));
-        //when
-        //then
+
         mvc.perform(post("/api/v3/solutions/test")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("[{\"selectedAnswer\":\"C\"},{\\questionId\": 1, \"selectedAnswer\":\"B\"}]"))
@@ -154,7 +141,6 @@ class SolutionControllerTest {
 
     @Test
     void shouldReturnStatus404WhenCallCheckAnswerWithNonExistQuestionId2() throws Exception {
-        //given
         List<SolutionRequest> request = Arrays.asList(
                 new SolutionRequest(1, "A"),
                 new SolutionRequest(2, "B"),
@@ -163,8 +149,7 @@ class SolutionControllerTest {
                 new SolutionRequest(5, "")
         );
         when(service.checkTest(request)).thenThrow(ResourceNotFoundException.class);
-        //when
-        //then
+
         mvc.perform(post("/api/v3/solutions/test")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(request)))
