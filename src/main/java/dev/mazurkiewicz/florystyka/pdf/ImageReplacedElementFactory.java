@@ -3,6 +3,7 @@ package dev.mazurkiewicz.florystyka.pdf;
 import com.lowagie.text.Image;
 import dev.mazurkiewicz.florystyka.exception.PdfRenderException;
 import dev.mazurkiewicz.florystyka.resource.ResourceService;
+import lombok.SneakyThrows;
 import org.w3c.dom.Element;
 import org.xhtmlrenderer.extend.FSImage;
 import org.xhtmlrenderer.extend.ReplacedElement;
@@ -24,6 +25,7 @@ public class ImageReplacedElementFactory implements ReplacedElementFactory {
         this.resourceService = resourceService;
     }
 
+    @SneakyThrows
     @Override
     public ReplacedElement createReplacedElement(LayoutContext layoutContext, BlockBox blockBox,
                                                  UserAgentCallback userAgentCallback, int cssWidth, int cssHeight) {

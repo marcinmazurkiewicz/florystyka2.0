@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 public class PdfGenerator {
@@ -31,7 +30,7 @@ public class PdfGenerator {
         this.resourceService = resourceService;
     }
 
-    private String parseThymeleafTemplate(List<Question> questions) {
+    protected String parseThymeleafTemplate(List<Question> questions) {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
@@ -40,10 +39,18 @@ public class PdfGenerator {
         templateEngine.setTemplateResolver(templateResolver);
         Context context = new Context();
         context.setVariable("questions", questions);
+        boolean isQuestionNumberEven = questions.size() % 2 == 0;
+        int answerTableOffset = questions.size() / 2;
+        if (!isQuestionNumberEven) {
+            answerTableOffset++;
+        }
+        int answerTableRows = answerTableOffset;
+        context.setVariable("answerOffset", answerTableOffset);
+        context.setVariable("answersTableRows", answerTableRows);
         return templateEngine.process("templates/pdf_template", context);
     }
 
-    public byte[] generatePdfFromHtml(String html) {
+    public byte[] generatePdfFromHtml(String html) throws PdfRenderException {
 
         Resource fontResource = new ClassPathResource("fonts/arial.ttf");
         ITextRenderer renderer = new ITextRenderer();
@@ -66,7 +73,7 @@ public class PdfGenerator {
         }
     }
 
-    public byte[] generateTest(Set<Question> questions) {
+    public byte[] generateTest(Set<Question> questions) throws PdfRenderException {
         ArrayList<Question> questionArrayList = new ArrayList<>(questions);
         String html = parseThymeleafTemplate(questionArrayList);
         return generatePdfFromHtml(html);
