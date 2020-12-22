@@ -2,6 +2,7 @@ package dev.mazurkiewicz.florystyka.question;
 
 import dev.mazurkiewicz.florystyka.answer.AnswerType;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +24,35 @@ class QuestionRepositoryTest {
     @Autowired
     private QuestionRepository repository;
 
+    @BeforeEach
+    public void prepareEntityManager() {
+        for (int i = 1; i < 11; i++) {
+            entityManager.persist(prepareQuestion(i));
+        }
+    }
+
     @AfterEach
     public void clearEntityManager() {
         entityManager.clear();
     }
 
-    @Test
-    void whenGetRandomQuestions_thenReturnQuestionSet() {
-        //given
-        for (int i = 1; i < 11; i++) {
-            entityManager.persist(prepareQuestion(i));
-        }
+    private Question prepareQuestion(int questionNumber) {
+        Question question = new Question();
+        question.setAnswerA(String.format("answer A for question %d", questionNumber));
+        question.setAnswerB(String.format("answer B for question %d", questionNumber));
+        question.setAnswerC(String.format("answer C for question %d", questionNumber));
+        question.setAnswerD(String.format("answer D for question %d", questionNumber));
+        question.setContent(String.format("Question %d content", questionNumber));
+        question.setCorrect(AnswerType.A);
+        question.setImg(String.format("img_%d.png", questionNumber));
+        question.setMonth((questionNumber % 12) + 1);
+        question.setYear(2010 + questionNumber);
+        return question;
+    }
 
+    @Test
+    void shouldReturnQuestionSetWhenCallGetRandomQuestion() {
+        //given
         //when
         Set<Question> result = repository.getRandomQuestions(5);
 
@@ -43,101 +61,98 @@ class QuestionRepositoryTest {
     }
 
     @Test
-    void whenGetEarliestYear_ThenReturnIntValue() {
+    void shouldReturnAllQuestionWhenNotEnoughQuestionsInDb() {
         //given
-        for (int i = 1; i < 11; i++) {
-            entityManager.persist(prepareQuestion(i));
-        }
-        //added Question with null year
-        Question question = prepareQuestion(11);
-        question.setYear(null);
+        Long count = repository.count();
+        //when
+        Set<Question> result = repository.getRandomQuestions(count.intValue() * 2);
+        //then
+        assertThat(result).hasSize(count.intValue());
+    }
+
+    @Test
+    void shouldReturnEarliestQuestionYear() {
+        //given
+        Question question = prepareQuestion(20);
+        question.setYear(1990);
         entityManager.persist(question);
 
         //when
         Integer earliestYear = repository.getEarliestYear();
 
         //then
-        assertThat(earliestYear).isEqualTo(2011);
+        assertThat(earliestYear).isEqualTo(1990);
     }
 
     @Test
-    void whenGetEarliestYearInAllNullableYear_ThenReturnZero() {
+    void shouldReturnEarliestQuestionYearWhenIsQuestionWithNullYearInDb() {
         //given
-        //added Question with null year
-        Question question = prepareQuestion(1);
-        question.setYear(null);
+        Question question = prepareQuestion(19);
+        question.setYear(1990);
         entityManager.persist(question);
+        Question question2 = prepareQuestion(20);
+        question2.setYear(null);
+        entityManager.persist(question2);
 
         //when
-        Integer latestYear = repository.getLatestYear();
+        Integer earliestYear = repository.getEarliestYear();
 
         //then
-        assertThat(latestYear).isNull();
+        assertThat(earliestYear).isEqualTo(1990);
     }
 
     @Test
-    void whenGetLatestYear_ThenReturnIntValue() {
+    void shouldReturnNullAsEarliestYearWhenDbIsEmpty() {
         //given
-        for (int i = 1; i < 11; i++) {
-            entityManager.persist(prepareQuestion(i));
-        }
-        //added Question with null year
-        Question question = prepareQuestion(11);
-        question.setYear(null);
-        entityManager.persist(question);
+        entityManager.clear();
 
         //when
-        Integer latestYear = repository.getLatestYear();
+        Integer earliestYear = repository.getEarliestYear();
 
         //then
-        assertThat(latestYear).isEqualTo(2020);
+        assertThat(earliestYear).isNull();
     }
 
     @Test
-    void whenGetLatestYearInAllNullableYear_ThenReturnZero() {
+    void shouldReturnLatestQuestionYear() {
         //given
-        //added Question with null year
-        Question question = prepareQuestion(1);
-        question.setYear(null);
+        Question question = prepareQuestion(20);
+        question.setYear(2077);
         entityManager.persist(question);
 
         //when
-        Integer latestYear = repository.getLatestYear();
+        Integer earliestYear = repository.getLatestYear();
 
         //then
-        assertThat(latestYear).isNull();
+        assertThat(earliestYear).isEqualTo(2077);
     }
 
+    @Test
+    void shouldReturnLatestQuestionYearWhenIsQuestionWithNullYearInDb() {
+        //given
+        Question question = prepareQuestion(19);
+        question.setYear(2077);
+        entityManager.persist(question);
+        Question question2 = prepareQuestion(20);
+        question2.setYear(null);
+        entityManager.persist(question2);
 
-    private Question prepareQuestion(int i) {
-        Question question = new Question();
-        question.setAnswerA(String.format("answer A for question %n", i));
-        question.setAnswerB(String.format("answer B for question %n", i));
-        question.setAnswerC(String.format("answer C for question %n", i));
-        question.setAnswerD(String.format("answer D for question %n", i));
-        question.setContent(String.format("Question %n content", i));
-        AnswerType correct = AnswerType.EMPTY;
-        switch (i % 4) {
-            case 0:
-                correct = AnswerType.A;
-                break;
-            case 1:
-                correct = AnswerType.B;
-                break;
-            case 2:
-                correct = AnswerType.C;
-                break;
-            case 3:
-                correct = AnswerType.D;
-                break;
-        }
+        //when
+        Integer earliestYear = repository.getLatestYear();
 
-        question.setCorrect(correct);
-        if (i % 3 == 0) {
-            question.setImg(String.format("img_%n.png", i));
-        }
-        question.setMonth((i % 12) + 1);
-        question.setYear(2010 + i);
-        return question;
+        //then
+        assertThat(earliestYear).isEqualTo(2077);
+    }
+
+    @Test
+    void shouldReturnNullAsLatestYearWhenDbIsEmpty() {
+        //given
+        entityManager.clear();
+
+        //when
+        Integer earliestYear = repository.getLatestYear();
+
+        //then
+        assertThat(earliestYear).isNull();
     }
 }

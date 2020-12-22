@@ -6,7 +6,7 @@ import lombok.Value;
 public class QuestionNumberResponse {
 
     long questionNumber;
-    int earliestQuestionYear;
-    int latestQuestionYear;
+    Integer earliestQuestionYear;
+    Integer latestQuestionYear;
 
 }
