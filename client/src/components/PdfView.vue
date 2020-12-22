@@ -16,12 +16,13 @@
           Na ostatniej stronie znajduje się klucz odpowiedzi - zajrzyj do niego dopiero po rozwiązaniu testu ;)
         </p>
 
-        <button @click="generatePdf"
+        <connect-error-info v-if="isConnectError"/>
+
+        <button v-else @click="generatePdf"
                 class="block w-1/2 mx-auto bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-dark-green
             rounded-xl hover:bg-dark-green hover:text-white">
           Generuj i pobierz test
         </button>
-
       </section>
 
     </main>
@@ -29,15 +30,18 @@
 </template>
 <script>
 import Banner from "@/components/visual/Banner";
+import ConnectErrorInfo from "@/components/visual/ConnectErrorInfo"
 import {HTTP} from "@/http";
 
 export default {
   name: 'PdfView',
   components: {
-    Banner
+    Banner,
+    ConnectErrorInfo
   },
   data() {
     return {
+      isConnectError: false,
       questionNumber: 0,
       earliestQuestionYear: 0,
       latestQuestionYear: 0
@@ -49,8 +53,8 @@ export default {
           .then((response) => {
             this.downloadFile(response);
           })
-          .catch((e) => {
-            console.log(e);
+          .catch(() => {
+            this.isConnectError = true;
           });
     },
     downloadFile(response) {

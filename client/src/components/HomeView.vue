@@ -7,12 +7,11 @@
           Przygotowujesz się do egzaminu kwalifikacyjnego z florystyki? Poćwicz testy!
         </header>
 
-        <p class="text-justify tracking-wide leading-loose px-6">W bazie znajdują się pytania z arkuszy egzaminacyjnych
+        <p v-if="isDataReturned" class="text-justify tracking-wide leading-loose px-6">W bazie znajdują się pytania z arkuszy egzaminacyjnych
           z lat <span class="text-red">{{ earliestQuestionYear }} - {{ latestQuestionYear }}</span>. Łączna liczba pytań
           w bazie to
-          obecnie <span class="text-red">{{ questionNumber }}</span>. Testy możesz
-          rozwiązywać na trzy sposoby:
-        </p>
+          obecnie <span class="text-red">{{ questionNumber }}</span>. </p>
+        <p class="text-justify tracking-wide leading-loose px-6">Testy możesz rozwiązywać na trzy sposoby: </p>
 
         <div class="py-6 w-full grid grid-col-1 md:grid-cols-3">
           <div class="text-center p-6">
@@ -56,6 +55,7 @@ export default {
   },
   data() {
     return {
+      isDataReturned: false,
       questionNumber: 0,
       earliestQuestionYear: 0,
       latestQuestionYear: 0
@@ -64,10 +64,15 @@ export default {
   mounted() {
     HTTP.get('/api/v3/questions/info')
         .then((response) => {
+          this.isDataReturned = true;
           this.questionNumber = response.data.questionNumber;
           this.earliestQuestionYear = response.data.earliestQuestionYear;
           this.latestQuestionYear = response.data.latestQuestionYear;
-        });
+        })
+    .catch(() => {
+      this.isDataReturned = false;
+      console.log("Wystąpił błąd połączenia z serwerem");
+    });
   }
 }
 </script>

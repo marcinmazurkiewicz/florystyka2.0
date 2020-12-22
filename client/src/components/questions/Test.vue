@@ -1,6 +1,6 @@
 <template>
   <div class="w-full max-w-screen-lg mx-auto text-white p-4">
-    <teleport to="#countdown">
+    <teleport v-if="isDataReturned" to="#countdown">
       <div> Czas do końca: {{ timer.minutes }} min {{ timer.seconds }} sek</div>
     </teleport>
     <header>
@@ -10,6 +10,7 @@
       <p class="text-sm text-center pb-8">Na rozwiązanie całej części pisemnej otrzymujesz maksymalnie 60 minut.
         To całkiem sporo czasu, więc zachowaj spokój :)</p>
     </header>
+    <div v-if="isDataReturned">
     <span v-if="solved"
           :class="[passed ? 'bg-dark-green' : 'bg-red']"
           class="block w-full mt-8 p-3 text-dark-gray text-lg text-center font-semibold">
@@ -17,25 +18,29 @@
       <span v-else>Test niezaliczony :( </span>
       Uzyskałeś {{ points }}/{{ total }} punktów ({{ percentScore }}%)
     </span>
-    <question-view v-for="(question, index) in questions" :key="question.id" :question="question"
-                   :solution="solutions[question.id]"
-                   v-model="selectedAnswers[question.id]"
-                   :number="index"></question-view>
-    <button v-if="!solved" @click="submitAnswer"
-            class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-dark-green
+      <question-view v-for="(question, index) in questions" :key="question.id" :question="question"
+                     :solution="solutions[question.id]"
+                     v-model="selectedAnswers[question.id]"
+                     :number="index"></question-view>
+      <button v-if="!solved" @click="submitAnswer"
+              class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-dark-green
             rounded hover:bg-dark-green hover:text-white">
-      Sprawdź
-    </button>
+        Sprawdź
+      </button>
+    </div>
+    <connect-error-info v-if="isConnectError"/>
   </div>
 </template>
 <script>
 import QuestionView from "@/components/questions/visual/QuestionView";
+import ConnectErrorInfo from "@/components/visual/ConnectErrorInfo";
 import {HTTP} from "@/http";
 
 export default {
   name: 'Test',
   components: {
     QuestionView,
+    ConnectErrorInfo
   },
   data() {
     return {
@@ -43,6 +48,8 @@ export default {
         minutes: 60,
         seconds: 1
       },
+      isDataReturned: false,
+      isConnectError: false,
       questions: [],
       selectedAnswers: {},
       points: 0,
@@ -110,9 +117,15 @@ export default {
   mounted() {
     HTTP.get('/api/v3/questions/test')
         .then((response) => {
+          this.isDataReturned = true;
+          this.isConnectError = false;
           this.questions = response.data;
           this.prepareAnswersMap();
           this.countdown();
+        })
+        .catch(() => {
+          this.isDataReturned = false;
+          this.isConnectError = true;
         });
   }
 }

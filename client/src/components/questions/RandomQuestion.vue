@@ -5,25 +5,32 @@
       <p class="text-sm text-center pb-8">Poćwicz pojedyncze pytania. Od razu poznasz prawidłową idpowiedź,
         co pozwoli na jej łatwiejsze zapamiętanie.</p>
     </header>
-    <single-question-wrapper :question="question" @solved="setSolved"></single-question-wrapper>
-    <button v-if="solved" @click="newQuestion"
-            class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-dark-green
+    <div v-if="isDataReturned">
+      <single-question-wrapper :question="question" @solved="setSolved"></single-question-wrapper>
+      <button v-if="solved" @click="newQuestion"
+              class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-dark-green
             rounded-xl hover:bg-dark-green hover:text-white">
-      Następne pytanie
-    </button>
+        Następne pytanie
+      </button>
+    </div>
+    <connect-error-info v-if="isConnectError"/>
   </div>
 </template>
 <script>
 import SingleQuestionWrapper from "@/components/questions/SingleQuestionWrapper";
+import ConnectErrorInfo from "@/components/visual/ConnectErrorInfo";
 import {HTTP} from '@/http';
 
 export default {
   name: 'RandomQuestion',
   components: {
     SingleQuestionWrapper,
+    ConnectErrorInfo
   },
   data() {
     return {
+      isDataReturned: false,
+      isConnectError: false,
       question: {},
       solved: false
     }
@@ -32,10 +39,16 @@ export default {
     newQuestion() {
       HTTP.get('/api/v3/questions/random')
           .then((response) => {
+            this.isDataReturned = true;
+            this.isConnectError = false;
             this.solution = {};
             this.selectedAnswer = '';
             this.solved = false;
             this.question = response.data;
+          })
+          .catch(() => {
+            this.isConnectError = true;
+            this.isDataReturned = false;
           });
     },
     setSolved(status) {

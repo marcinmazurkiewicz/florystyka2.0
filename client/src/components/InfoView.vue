@@ -14,8 +14,10 @@
 
         <p class="text-justify tracking-wide leading-loose pb-8 px-6">Szkoda, aby praca włożona w stworzenie strony
           została zmarnowana, dlatego postanowiłem udostępnić ją innym osobom, które przygotowują się do egzaminu.
-          W bazie znajdują się pytania z arkuszy egzaminacyjnych z lat {{ earliestQuestionYear }} -
-          {{ latestQuestionYear }}. Co roku w okresie przygotowań do egzaminów zawodowych korzystają z niej setki osób
+          <span v-if="isDataReturned">W bazie znajdują się pytania z arkuszy egzaminacyjnych z lat
+            {{ earliestQuestionYear }} - {{ latestQuestionYear }}.</span>
+          Co roku w okresie przygotowań do egzaminów zawodowych korzystają z niej setki
+          osób
           dziennie.
         </p>
 
@@ -41,6 +43,7 @@ export default {
   },
   data() {
     return {
+      isDataReturned: false,
       latestQuestionYear: 0,
       earliestQuestionYear: 0
     }
@@ -48,8 +51,13 @@ export default {
   mounted() {
     HTTP.get('/api/v3/questions/info')
         .then((response) => {
+          this.isDataReturned = true;
           this.earliestQuestionYear = response.data.earliestQuestionYear;
           this.latestQuestionYear = response.data.latestQuestionYear;
+        })
+        .catch(() => {
+          this.isDataReturned = false;
+          console.log("Wystąpił błąd połączenia z serwerem");
         });
   }
 }
