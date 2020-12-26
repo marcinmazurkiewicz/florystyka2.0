@@ -23,7 +23,7 @@ public class ResourceService {
     public byte[] getImage(String filename) {
         StringBuilder fullPath = new StringBuilder();
         fullPath.append(resourcesFolder);
-        if (!resourcesFolder.endsWith("/") && !questionsImgFolder.startsWith("/"))
+        if (!resourcesFolder.endsWith(File.separator) && !questionsImgFolder.startsWith(File.separator))
             fullPath.append(File.separator);
         fullPath.append(questionsImgFolder);
         fullPath.append(File.separator);

@@ -1,7 +1,7 @@
 <template>
   <div>
     <banner/>
-    <main class="w-full max-w-screen-lg m-auto text-white">
+    <main class="w-full max-w-screen-lg m-auto text-white" :class="isGenerating ? 'cursor-wait' : 'cursor-default'">
       <section>
         <header class="text-center text-4xl text-red pt-16 pb-8 px-3 md:px-6 tracking-wider leading-relaxed">
           Test w PDF
@@ -19,8 +19,10 @@
         <connect-error-info v-if="isConnectError"/>
 
         <button v-else @click="generatePdf"
-                class="block w-1/2 mx-auto bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-dark-green
-            rounded-xl hover:bg-dark-green hover:text-white">
+                :class="isGenerating ? 'bg-gray-600 text-gray-700 border-gray-700 cursor-wait'
+                : 'bg-light-green text-dark-gray border-dark-green cursor-pointer hover:bg-dark-green hover:text-white'"
+                class="block w-1/2 mx-auto  mt-8 p-3  text-lg font-semibold border rounded-xl"
+                :disabled="isGenerating">
           Generuj i pobierz test
         </button>
       </section>
@@ -42,6 +44,7 @@ export default {
   data() {
     return {
       isConnectError: false,
+      isGenerating: false,
       questionNumber: 0,
       earliestQuestionYear: 0,
       latestQuestionYear: 0
@@ -49,12 +52,19 @@ export default {
   },
   methods: {
     generatePdf() {
+      if(this.isGenerating) {
+        return;
+      }
+
+      this.isGenerating = true;
       HTTP.get(`/api/v3/questions/test/pdf`, {responseType: "blob"})
           .then((response) => {
             this.downloadFile(response);
+            this.isGenerating = false;
           })
           .catch(() => {
             this.isConnectError = true;
+            this.isGenerating = false;
           });
     },
     downloadFile(response) {
