@@ -10,6 +10,8 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "vue": "^3.0.0",
+    "vue-cookie-next": "^1.0.3",
+    "vue-gtag-next": "^1.14.0",
     "vue-router": "^4.0.0-rc.6"
   },
   "devDependencies": {

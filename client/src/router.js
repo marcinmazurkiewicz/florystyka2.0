@@ -1,4 +1,5 @@
 import {createWebHistory, createRouter} from "vue-router";
+import {trackRouter} from "vue-gtag-next";
 
 const Home = () => import("@/components/HomeView.vue");
 const Info = () => import("@/components/InfoView.vue");
@@ -6,6 +7,7 @@ const Pdf = () => import("@/components/PdfView.vue");
 const SingleQuestion = () => import("@/components/questions/SingleQuestion");
 const RandomQuestion = () => import("@/components/questions/RandomQuestion");
 const Test = () => import("@/components/questions/Test");
+const PrivacyPolicy = () => import("@/components/privacy/PrivacyPolicyView")
 
 const routes = [
     {
@@ -38,6 +40,11 @@ const routes = [
         path: "/pdf",
         name: "Pdf",
         component: Pdf
+    },
+    {
+        path: "/privacy",
+        name: "PrivacyPolicy",
+        component: PrivacyPolicy
     }
 ];
 
@@ -46,4 +53,5 @@ const router = createRouter({
     routes,
 });
 
+trackRouter(router);
 export default router;
