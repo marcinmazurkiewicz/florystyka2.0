@@ -8,6 +8,7 @@ const SingleQuestion = () => import("@/components/questions/SingleQuestion");
 const RandomQuestion = () => import("@/components/questions/RandomQuestion");
 const Test = () => import("@/components/questions/Test");
 const PrivacyPolicy = () => import("@/components/privacy/PrivacyPolicyView")
+const Login = () => import("@/components/LoginView")
 
 const routes = [
     {
@@ -45,6 +46,11 @@ const routes = [
         path: "/privacy",
         name: "PrivacyPolicy",
         component: PrivacyPolicy
+    },
+    {
+        path: "/login",
+        name: "Login",
+        component: Login
     }
 ];
 
