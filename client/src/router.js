@@ -1,5 +1,6 @@
 import {createWebHistory, createRouter} from "vue-router";
 import {trackRouter} from "vue-gtag-next";
+import {hasAnyRight, isLoggedUser} from "@/auth/authUtils";
 
 const Home = () => import("@/components/HomeView.vue");
 const Info = () => import("@/components/InfoView.vue");
@@ -11,6 +12,7 @@ const PrivacyPolicy = () => import("@/components/privacy/PrivacyPolicyView")
 const Login = () => import("@/components/LoginView")
 const AdminDashboard = () => import("@/components/admin/Dashboard")
 const AdminQuestionsView = () => import("@/components/admin/AdminQuestionsView")
+const Unauthorized = () => import("@/components/UnauthorizedView")
 
 const routes = [
     {
@@ -90,8 +92,21 @@ const routes = [
             {
                 path: "questions",
                 name: "AdminQuestionsView",
-                component: AdminQuestionsView
-            }
+                component: AdminQuestionsView,
+                meta: {
+                    requiresAuth: true,
+                    allowedFor: ['ROLE_ADMIN']
+                },
+            },
+            {
+                path: 'unauthorized',
+                name: 'Unauthorized',
+                component: Unauthorized,
+                props: true,
+                meta: {
+                    requiresAuth: true
+                }
+            },
         ]
     }
 ];
@@ -100,6 +115,30 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
 });
+
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (!isLoggedUser()) {
+            next({
+                name: 'Login',
+                params: {nextUrl: to.fullPath}
+            })
+        } else if (to.matched.some(record => record.meta.allowedFor)) {
+            if (hasAnyRight(to.meta.allowedFor)) {
+                next()
+            } else {
+                next({
+                    name: 'Unauthorized',
+                    params: {nextUrl: to.fullPath}
+                })
+            }
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+})
 
 trackRouter(router);
 export default router;
