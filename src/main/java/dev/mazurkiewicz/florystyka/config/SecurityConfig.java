@@ -1,42 +1,76 @@
 package dev.mazurkiewicz.florystyka.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.google.common.collect.Lists;
+import dev.mazurkiewicz.florystyka.jwt.JwtProperties;
+import dev.mazurkiewicz.florystyka.jwt.JwtTokenFilter;
+import dev.mazurkiewicz.florystyka.user.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
-import java.util.List;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         prePostEnabled = true,
         securedEnabled = true)
+@EnableConfigurationProperties({JwtProperties.class, SecurityProperties.class})
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${application.cors.allowedOrigins}")
-    private List<String> allowedOrigins;
+    private final SecurityProperties securityProperties;
+    private final JwtTokenFilter jwtTokenFilter;
+    private final UserService userService;
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userService);
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .cors().configurationSource(request -> {
-                    CorsConfiguration cors = new CorsConfiguration();
-                    cors.setAllowedOrigins(allowedOrigins);
-                    cors.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-                    cors.setAllowedHeaders(List.of("*"));
-                    cors.setExposedHeaders(List.of("Access-Control-Allow-Headers", "Authorization",
-                            "x-xsrf-token", "Access-Control-Allow-Headers", "Origin", "Accept", "X-Requested-With",
-                            "Content-Type", "Access-Control-Request-Method", "Access-Control-Request-Headers",
-                            "Content-Disposition"));
-                    return cors;
-                }
-        )
+                .cors().configurationSource(request -> getCorsConfiguration())
                 .and()
-                .authorizeRequests().anyRequest().permitAll();
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .authorizeRequests()
+                .antMatchers("/api/v3/questions/**").permitAll()
+                .antMatchers("/api/v3/solutions/**").permitAll()
+                .antMatchers("/resources/**").permitAll()
+                .antMatchers("/api/v3/auth/login").permitAll()
+                .antMatchers("/api/v3/auth/refresh").permitAll()
+                .anyRequest().authenticated();
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    private CorsConfiguration getCorsConfiguration() {
+        CorsConfiguration cors = new CorsConfiguration();
+        cors.setAllowedOrigins(securityProperties.getAllowedOrigins());
+        cors.setAllowedMethods(Lists.newArrayList("*"));
+        cors.setAllowedHeaders(Lists.newArrayList("*"));
+        cors.setExposedHeaders(Arrays.asList("Access-Control-Allow-Headers", "Authorization",
+                "x-xsrf-token", "Access-Control-Allow-Headers", "Origin", "Accept", "X-Requested-With",
+                "Content-Type", "Access-Control-Request-Method", "Access-Control-Request-Headers",
+                "Content-Disposition", "Refresh-Token"));
+        return cors;
     }
 }
