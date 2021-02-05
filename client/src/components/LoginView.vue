@@ -21,7 +21,7 @@
         </div>
 
         <button class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-light-green
-            rounded-xl hover:bg-dark-green hover:text-white" @click="login()">
+            rounded-xl hover:bg-dark-green hover:text-white" @click="sendLoginRequest()">
           Zaloguj
         </button>
       </div>
@@ -32,6 +32,8 @@
 <script>
 import ConnectErrorInfo from "@/components/visual/ConnectErrorInfo";
 import TextInput from "@/components/visual/TextInput";
+import { HTTP } from "@/http"
+import userUtils from "@/mixins/userUtils";
 
 export default {
   name: 'LoginView',
@@ -39,6 +41,7 @@ export default {
     ConnectErrorInfo,
     TextInput
   },
+  mixins: [userUtils],
   data() {
     return {
       username: '',
@@ -49,8 +52,20 @@ export default {
     }
   },
   methods: {
-    login() {
-
+    sendLoginRequest() {
+      HTTP.post("api/v3/auth/login", {
+        username: this.username,
+        password: this.password,
+      })
+          .then((response) => {
+            this.errors = [];
+            this.login(response);
+            this.$router.push("/admin");
+          })
+          .catch((e) => {
+            this.loginError = e.response.data.error;
+            this.errors = e.response.data.errors;
+          });
     }
   }
 }
