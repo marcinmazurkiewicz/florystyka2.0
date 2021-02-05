@@ -9,48 +9,90 @@ const RandomQuestion = () => import("@/components/questions/RandomQuestion");
 const Test = () => import("@/components/questions/Test");
 const PrivacyPolicy = () => import("@/components/privacy/PrivacyPolicyView")
 const Login = () => import("@/components/LoginView")
+const AdminDashboard = () => import("@/components/admin/Dashboard")
+const AdminQuestionsView = () => import("@/components/admin/AdminQuestionsView")
 
 const routes = [
     {
         path: "/",
         name: "Home",
         component: Home,
+        meta: {
+            requiresAuth: false
+        }
     },
     {
         path: "/single",
         name: "RandomQuestion",
-        component: RandomQuestion
+        component: RandomQuestion,
+        meta: {
+            requiresAuth: false
+        }
 
     },
     {
         path: "/question/:questionId",
         name: "SingleQuestion",
-        component: SingleQuestion
+        component: SingleQuestion,
+        meta: {
+            requiresAuth: false
+        }
     },
     {
         path: "/info",
         name: "Info",
-        component: Info
+        component: Info,
+        meta: {
+            requiresAuth: false
+        }
     },
     {
         path: "/test",
         name: "Test",
-        component: Test
+        component: Test,
+        meta: {
+            requiresAuth: false
+        }
     },
     {
         path: "/pdf",
         name: "Pdf",
-        component: Pdf
+        component: Pdf,
+        meta: {
+            requiresAuth: false
+        }
     },
     {
         path: "/privacy",
         name: "PrivacyPolicy",
-        component: PrivacyPolicy
+        component: PrivacyPolicy,
+        meta: {
+            requiresAuth: false
+        }
     },
     {
         path: "/login",
         name: "Login",
-        component: Login
+        component: Login,
+        meta: {
+            requiresAuth: false
+        }
+    },
+    {
+        path: "/admin",
+        name: "AdminDashboard",
+        component: AdminDashboard,
+        meta: {
+            requiresAuth: true,
+            allowedFor: ['ROLE_ADMIN']
+        },
+        children: [
+            {
+                path: "questions",
+                name: "AdminQuestionsView",
+                component: AdminQuestionsView
+            }
+        ]
     }
 ];
 

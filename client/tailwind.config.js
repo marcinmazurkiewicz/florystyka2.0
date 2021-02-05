@@ -26,6 +26,9 @@ module.exports = {
             },
             borderWidth: {
                 '3': '3px'
+            },
+            gridTemplateColumns: {
+                'dashboard': '200px auto'
             }
         },
     },
