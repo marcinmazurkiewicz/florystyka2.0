@@ -4,6 +4,7 @@ import '@/assets/index.css'
 import router from './router'
 import VueGtag from "vue-gtag-next";
 import {VueCookieNext} from "vue-cookie-next"
+import store from "@/store/store";
 
 createApp(App)
     .use(router)
@@ -14,6 +15,7 @@ createApp(App)
         }
     })
     .use(VueCookieNext)
+    .use(store)
     .mount('#app')
 
 VueCookieNext.config({
