@@ -28,6 +28,13 @@ public class QuestionService {
         this.questionToTest = questionToTest;
     }
 
+    public List<QuestionResponse> getAllQuestions() {
+        return repository.findAll()
+                .stream()
+                .map(mapper::mapEntityToResponse)
+                .collect(Collectors.toList());
+    }
+
     public QuestionResponse getRandomQuestion() {
         Set<Question> questionSet = repository.getRandomQuestions(1);
         if (questionSet.isEmpty())

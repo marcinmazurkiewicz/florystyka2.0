@@ -1,0 +1,10 @@
+POST http://localhost:8088/app/api/v3/users
+Content-Type: application/json
+
+{
+  "email": "user@example.local",
+  "password": "1qaZXsw2",
+  "confirmPassword": "1qaZXsw2"
+}
+
+###
