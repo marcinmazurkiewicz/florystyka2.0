@@ -1,6 +1,5 @@
 import {createWebHistory, createRouter} from "vue-router";
 import {trackRouter} from "vue-gtag-next";
-import {hasAnyRight, isLoggedUser} from "@/auth/authUtils";
 
 const Home = () => import("@/components/HomeView.vue");
 const Info = () => import("@/components/InfoView.vue");
@@ -13,6 +12,8 @@ const Login = () => import("@/components/LoginView")
 const AdminDashboard = () => import("@/components/admin/Dashboard")
 const AdminQuestionsView = () => import("@/components/admin/AdminQuestionsView")
 const Unauthorized = () => import("@/components/UnauthorizedView")
+const AdminQuestionView = () => import("@/components/admin/AdminQuestionView")
+const AddEditQuestion = () => import("@/components/admin/AddEditQuestion")
 
 const routes = [
     {
@@ -93,6 +94,24 @@ const routes = [
                 path: "questions",
                 name: "AdminQuestionsView",
                 component: AdminQuestionsView,
+                meta: {
+                    requiresAuth: true,
+                    allowedFor: ['ROLE_ADMIN']
+                },
+            },
+            {
+                path: "questions/add",
+                name: "AddQuestion",
+                component: AddEditQuestion,
+                meta: {
+                    requiresAuth: true,
+                    allowedFor: ['ROLE_ADMIN']
+                },
+            },
+            {
+                path: "questions/:questionId",
+                name: "AdminQuestionView",
+                component: AdminQuestionView,
                 meta: {
                     requiresAuth: true,
                     allowedFor: ['ROLE_ADMIN']

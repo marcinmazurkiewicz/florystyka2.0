@@ -1,5 +1,6 @@
 package dev.mazurkiewicz.florystyka.question;
 
+import dev.mazurkiewicz.florystyka.admin.question.NewQuestionRequest;
 import dev.mazurkiewicz.florystyka.answer.Answer;
 import dev.mazurkiewicz.florystyka.answer.AnswerType;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,19 @@ public class QuestionMapper {
             img = String.format("/resources/img/%s", entity.getImg());
         }
         return new QuestionResponse(entity.getId(), entity.getContent(), answers, img);
+    }
+
+    public Question mapRequestToEntity(NewQuestionRequest questionRequest) {
+        Question result = new Question();
+        result.setContent(questionRequest.getContent());
+        result.setAnswerA(questionRequest.getAnswerA());
+        result.setAnswerB(questionRequest.getAnswerB());
+        result.setAnswerC(questionRequest.getAnswerC());
+        result.setAnswerD(questionRequest.getAnswerD());
+        result.setCorrect(questionRequest.getCorrect());
+        result.setMonth(questionRequest.getMonth());
+        result.setYear(questionRequest.getYear());
+        return result;
     }
 }
 

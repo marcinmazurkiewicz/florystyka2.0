@@ -3,3 +3,8 @@
     <slot>Nie udało się nawiązać połączenia z serwerem.</slot>
   </p>
 </template>
+<script>
+export default {
+  name: "ConnectErrorInfo"
+}
+</script>

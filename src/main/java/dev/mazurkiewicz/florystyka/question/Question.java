@@ -10,10 +10,15 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "questions")
+@SequenceGenerator(
+        name = "question_id",
+        sequenceName = "question_seq",
+        allocationSize = 1
+)
 public class Question {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "question_id")
     private Integer id;
     private String content;
     private String answerA;
