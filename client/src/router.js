@@ -1,5 +1,6 @@
 import {createWebHistory, createRouter} from "vue-router";
 import {trackRouter} from "vue-gtag-next";
+import {isLoggedUser, hasAnyRight} from "@/auth/authUtils";
 
 const Home = () => import("@/components/HomeView.vue");
 const Info = () => import("@/components/InfoView.vue");
