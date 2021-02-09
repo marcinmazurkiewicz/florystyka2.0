@@ -1,7 +1,7 @@
 export default {
     data() {
         return {
-            error: {
+            errors: {
                 ABOVE_MAX: 'Wartość przekracza dopuszczalny limit',
                 EMPTY: 'Pole nie może być puste',
                 AT_LEAST_ONE: 'Musisz wybrać przynajmniej jedną opcję',
@@ -22,7 +22,7 @@ export default {
     },
     methods: {
         getErrorMsg(error) {
-            let errorMsg = this.error[error.errorType];
+            let errorMsg = this.errors[error.errorType];
             return errorMsg ? errorMsg : error.msg;
         }
     }

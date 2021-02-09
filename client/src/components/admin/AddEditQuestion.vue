@@ -116,9 +116,9 @@ export default {
           'Content-Type': 'multipart/form-data'
         }
       })
-          .then((response) => {
-            this.isConnectError = false;
-            this.question = response.data;
+          .then(() => {
+            this.$router.go(-1);
+
           })
           .catch((error) => {
             this.errors = error.response.data.errors;

@@ -11,13 +11,14 @@ public enum ErrorType {
     NOT_MATCH(List.of("FieldMatch")),
     NOT_UNIQUE(List.of("UniqueMail")),
     UNDER_MIN(List.of("DecimalMin", "Min")),
-    TYPE_MISMATCH(List.of("FileFormat")),
+    TYPE_MISMATCH(List.of("FileFormat", "FileTypeException")),
     DOCUMENT_CONTENT_NOT_VALID(List.of("IllegalImportDocumentContent")),
     FORBIDDEN(List.of("ForbiddenAccessException")),
     CREDENTIALS_ERROR(List.of("BadCredentialsException")),
     TOKEN_EXPIRED(List.of("TokenExpiredException", "ExpiredJwtException")),
     UNAUTHORIZED(List.of("UnauthorizedAccessException")),
     VALIDATION_ERROR(List.of("BindException", "MethodArgumentNotValidException")),
+    FILE_PROCESSING_ERROR(List.of("IOException")),
     UNKNOWN(List.of());
 
     private final List<String> codeNames;

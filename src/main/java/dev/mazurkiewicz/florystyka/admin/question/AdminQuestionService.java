@@ -10,14 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.Instant;
-import java.util.Dictionary;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +34,7 @@ public class AdminQuestionService {
 
     public Integer saveQuestion(NewQuestionRequest newQuestionRequest) throws IOException, FileTypeException {
         Question question = mapper.mapRequestToEntity(newQuestionRequest);
-        if(newQuestionRequest.getImage() != null) {
+        if (newQuestionRequest.getImage() != null) {
             question.setImg(resourceService.saveQuestionImage(newQuestionRequest.getImage()));
         }
         return repository.save(question).getId();
