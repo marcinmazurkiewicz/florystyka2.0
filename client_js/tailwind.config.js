@@ -22,7 +22,7 @@ module.exports = {
                 'start-img': "url('img/start.png')"
             },
             minHeight: {
-                '4/5': "80vh"
+                '80': "80vh"
             },
             borderWidth: {
                 '3': '3px'
