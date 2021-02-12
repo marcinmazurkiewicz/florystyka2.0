@@ -29,7 +29,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/pdf",
     name: "Pdf",
-    component: () => import("@/views/HomeView.vue")
+    component: () => import("@/views/PdfView.vue")
   },
   {
     path: "/privacy",
@@ -40,7 +40,11 @@ const routes: Array<RouteRecordRaw> = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
+  scrollBehavior() {
+    // always scroll to top
+    return { top: 0 };
+  }
 });
 
 export default router;
