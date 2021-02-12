@@ -33,31 +33,43 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import CookieUtils from "@/mixins/CookieUtils.ts";
+import { defineComponent, ref, onBeforeMount } from "vue";
+import usePrivacyCookies from "@/composables/usePrivacyCookies.ts";
 
 export default defineComponent({
   name: "PrivacyPolicy",
-  mixins: [CookieUtils],
-  data() {
+  setup() {
+    const {
+      setGoogleAnalyticsStatus,
+      checkIsGoogleAnalyticsCookieIsAvailable,
+      presetGoogleAnalyticsGtag
+    } = usePrivacyCookies();
+
+    const closed = ref(false);
+
+    const close = (): void => {
+      closed.value = true;
+    };
+
+    const accept = (isAccept: boolean): void => {
+      setGoogleAnalyticsStatus(isAccept);
+      close();
+    };
+
+    const preset = (): void => {
+      if (checkIsGoogleAnalyticsCookieIsAvailable()) {
+        presetGoogleAnalyticsGtag();
+        close();
+      }
+    };
+
+    onBeforeMount(preset);
+
     return {
-      closed: false
+      accept,
+      closed
     };
   },
-  methods: {
-    accept(isAccept: boolean) {
-      this.setGoogleAnalyticsStatus(isAccept);
-      this.close();
-    },
-    close() {
-      this.closed = true;
-    }
-  },
-  beforeMount() {
-    if (this.checkIsGoogleAnalyticsCookieIsAvailable()) {
-      this.presetGoogleAnalyticsGtag();
-      this.close();
-    }
-  }
+  methods: {}
 });
 </script>

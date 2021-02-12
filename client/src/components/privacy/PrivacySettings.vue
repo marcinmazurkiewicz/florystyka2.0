@@ -18,33 +18,39 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import SwitchCheckbox from "@/components/SwitchCheckbox.vue";
-import CookieUtils from "@/mixins/CookieUtils.ts";
+import { defineComponent, ref, onMounted, watch } from "vue";
+import SwitchCheckbox from "@/components/custom_inputs/SwitchCheckbox.vue";
+import usePrivacyCookies from "@/composables/usePrivacyCookies";
 
 export default defineComponent({
   name: "PrivacySettings",
   components: {
     SwitchCheckbox
   },
-  mixins: [CookieUtils],
-  data() {
-    return {
-      googleAnalyticsCookies: false
+  setup() {
+    const googleAnalyticsCookies = ref(false);
+
+    const getStatus = (): boolean => {
+      return googleAnalyticsCookies.value;
     };
-  },
-  methods: {
-    getStatus(): boolean {
-      return this.googleAnalyticsCookies;
-    }
-  },
-  mounted() {
-    this.googleAnalyticsCookies = this.getGoogleAnalyticsStatus();
-  },
-  watch: {
-    googleAnalyticsCookies: function() {
-      this.setGoogleAnalyticsStatus(this.googleAnalyticsCookies);
-    }
+
+    const {
+      getGoogleAnalyticsStatus,
+      setGoogleAnalyticsStatus
+    } = usePrivacyCookies();
+
+    watch(googleAnalyticsCookies, newValue =>
+      setGoogleAnalyticsStatus(newValue)
+    );
+
+    onMounted(
+      () => (googleAnalyticsCookies.value = getGoogleAnalyticsStatus())
+    );
+
+    return {
+      googleAnalyticsCookies,
+      getStatus
+    };
   }
 });
 </script>
