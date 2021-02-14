@@ -7,14 +7,14 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/HomeView.vue")
   },
   {
-    path: "/single",
+    path: "/random",
     name: "RandomQuestion",
-    component: () => import("@/views/HomeView.vue")
+    component: () => import("@/views/RandomQuestionView.vue")
   },
   {
     path: "/question/:questionId",
     name: "SingleQuestion",
-    component: () => import("@/views/HomeView.vue")
+    component: () => import("@/views/SingleQuestionView.vue")
   },
   {
     path: "/info",
@@ -24,7 +24,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/test",
     name: "Test",
-    component: () => import("@/views/HomeView.vue")
+    component: () => import("@/views/TestView.vue")
   },
   {
     path: "/pdf",
