@@ -11,36 +11,25 @@
       v-if="isDataReturned"
       :question="question"
     ></single-question-wrapper>
-    <connect-error-info v-if="isConnectError">
+    <error-info v-if="isConnectError">
       <span v-if="is404">Pytanie nr {{ id }} nie istnieje</span>
       <span v-else>Nie udało się nawiązać połączenia z serwerem.</span>
-    </connect-error-info>
+    </error-info>
   </div>
 </template>
 <script lang="ts">
 import SingleQuestionWrapper from "@/components/questions/SingleQuestionWrapper.vue";
-import ConnectErrorInfo from "@/components/ConnectErrorInfo.vue";
+import ErrorInfo from "@/components/ErrorInfo.vue";
 import { HTTP } from "@/http";
 import { useRoute } from "vue-router";
 import { defineComponent } from "vue";
-
-type Answer = {
-  value: string;
-  content: string;
-};
-
-type Question = {
-  id: number;
-  content: string;
-  answers: Array<Answer>;
-  img?: string;
-};
+import { Question } from "@/types/QuestionTypes";
 
 export default defineComponent({
   name: "SingleQuestion",
   components: {
     SingleQuestionWrapper,
-    ConnectErrorInfo
+    ErrorInfo
   },
   data() {
     return {

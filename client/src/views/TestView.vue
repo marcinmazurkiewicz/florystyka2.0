@@ -5,7 +5,10 @@
     </teleport>
     <header>
       <h1 class="text-center text-3xl py-6 text-red">
-        Symulacja - test {{ questions.length }} pytań
+        Symulacja
+        <span v-if="questions.length > 0"
+          >- test {{ questions.length }} pytań</span
+        >
       </h1>
       <p class="text-sm text-center pb-6">
         Sprawdź się w dokładnie takim samym trybie, jaki obowiązuje podczas
@@ -16,6 +19,9 @@
         To całkiem sporo czasu, więc zachowaj spokój :)
       </p>
     </header>
+    <error-info v-if="isError">
+      <span>{{ errorMsg }}</span>
+    </error-info>
     <div v-if="isDataReturned">
       <span
         v-if="solved"
@@ -43,104 +49,130 @@
         Sprawdź
       </button>
     </div>
-    <connect-error-info v-if="isConnectError" />
   </div>
 </template>
 <script lang="ts">
 import QuestionView from "@/components/questions/SingleQuestion.vue";
-import ConnectErrorInfo from "@/components/ConnectErrorInfo.vue";
+import ErrorInfo from "@/components/ErrorInfo.vue";
 import { HTTP } from "@/http";
-import { defineComponent } from "vue";
+import { defineComponent, ref, Ref, computed, onMounted } from "vue";
 import { Solution, Question, TestAnswer } from "@/types/QuestionTypes";
+import {
+  getErrorBasedOnResponse,
+  getErrorBasedOnErrorType
+} from "@/components/ErrorUtils";
+import { ErrorType } from "@/types/ErrorTypes";
 
 export default defineComponent({
   name: "Test",
   components: {
     QuestionView,
-    ConnectErrorInfo
+    ErrorInfo
   },
-  data() {
-    return {
-      timer: {
-        minutes: 60,
-        seconds: 1
-      },
-      isDataReturned: false,
-      isConnectError: false,
-      questions: [] as Array<Question>,
-      selectedAnswers: {} as Array<TestAnswer>,
-      points: 0,
-      total: 0,
-      solved: false,
-      solutions: {} as Array<Solution>
-    };
-  },
-  computed: {
-    percentScore(): number {
-      return (this.points / this.total) * 100;
-    },
-    passed(): boolean {
-      return this.percentScore >= 70;
-    }
-  },
-  methods: {
-    submitAnswer(): void {
-      HTTP.post(
-        `/api/v3/solutions/test`,
-        Object.values(this.selectedAnswers)
-      ).then(response => {
-        this.solved = true;
-        this.points = response.data.points;
-        this.total = response.data.total;
-        this.solutions = response.data.solutions;
-      });
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    },
-    countdown(): void {
-      if (this.timer.minutes <= 0 && this.timer.seconds <= 0) {
-        this.submitAnswer();
+  setup() {
+    const timer = ref({ minutes: 60, seconds: 1 });
+    const isDataReturned = ref(false);
+    const isError = ref(false);
+    const errorMsg = ref("");
+    const questions: Ref<Array<Question>> = ref([]);
+    const selectedAnswers: Ref<Array<TestAnswer>> = ref([]);
+    const points = ref(0);
+    const total = ref(0);
+    const solved = ref(false);
+    const solutions: Ref<Array<Solution>> = ref([]);
+
+    const countdown = (): void => {
+      if (timer.value.minutes <= 0 && timer.value.seconds <= 0) {
+        callback();
         return;
       }
 
-      if (--this.timer.seconds < 0) {
-        this.timer.seconds = 59;
-        this.timer.minutes--;
+      if (--timer.value.seconds < 0) {
+        timer.value.seconds = 59;
+        timer.value.minutes--;
       }
 
-      if (this.timer.minutes >= 0 && this.timer.seconds >= 0) {
+      if (timer.value.minutes >= 0 && timer.value.seconds >= 0) {
         setTimeout(() => {
-          this.countdown();
+          countdown();
         }, 1000);
       }
-    },
-    prepareAnswersMap(): void {
-      this.questions.forEach(question => {
-        this.selectedAnswers[question.id] = {
+    };
+
+    const percentScore = computed(() => {
+      return (points.value / total.value) * 100;
+    });
+
+    const passed = computed(() => {
+      return percentScore.value >= 70;
+    });
+
+    const submitAnswer = (): void => {
+      HTTP.post(`/api/v3/solutions/test`, Object.values(selectedAnswers.value))
+        .then(response => {
+          solved.value = true;
+          points.value = response.data.points;
+          total.value = response.data.total;
+          solutions.value = response.data.solutions;
+        })
+        .catch(e => {
+          isError.value = true;
+          errorMsg.value = getErrorBasedOnResponse(e.response.data);
+        });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    const prepareAnswersMap = (): void => {
+      questions.value.forEach(question => {
+        selectedAnswers.value[question.id] = {
           questionId: question.id,
           selectedAnswer: ""
         };
       });
-    },
-    prepareSolutionsMap(): void {
-      this.questions.forEach(question => {
-        this.solutions[question.id] = { questionId: question.id };
+    };
+
+    const prepareSolutionsMap = (): void => {
+      questions.value.forEach(question => {
+        solutions.value[question.id] = { questionId: question.id };
       });
-    }
-  },
-  mounted() {
-    HTTP.get("/api/v3/questions/test")
-      .then(response => {
-        this.isDataReturned = true;
-        this.isConnectError = false;
-        this.questions = response.data;
-        this.prepareAnswersMap();
-        this.prepareSolutionsMap();
-        this.countdown();
-      })
-      .catch(() => {
-        this.isDataReturned = false;
-        this.isConnectError = true;
-      });
+    };
+
+    const getQuestions = () => {
+      HTTP.get("/api/v3/questions/test")
+        .then(response => {
+          isDataReturned.value = true;
+          isError.value = false;
+          questions.value = response.data;
+          prepareAnswersMap();
+          prepareSolutionsMap();
+          countdown();
+        })
+        .catch(e => {
+          isDataReturned.value = false;
+          isError.value = true;
+          errorMsg.value = e.response?.data
+            ? getErrorBasedOnResponse(e.response.data)
+            : getErrorBasedOnErrorType(ErrorType.CONNECT_ERROR);
+        });
+    };
+
+    onMounted(getQuestions);
+
+    return {
+      timer,
+      questions,
+      points,
+      passed,
+      total,
+      isDataReturned,
+      isError,
+      solutions,
+      selectedAnswers,
+      solved,
+      percentScore,
+      submitAnswer,
+      errorMsg
+    };
   }
 });
 </script>

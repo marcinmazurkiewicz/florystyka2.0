@@ -22,7 +22,7 @@
           dopiero po rozwiązaniu testu ;)
         </p>
 
-        <connect-error-info v-if="isConnectError" />
+        <error-info v-if="isConnectError" />
 
         <button
           v-else
@@ -44,7 +44,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Banner from "@/components/Banner.vue";
-import ConnectErrorInfo from "@/components/ConnectErrorInfo.vue";
+import ErrorInfo from "@/components/ErrorInfo.vue";
 import { HTTP } from "@/http";
 import { AxiosResponse } from "axios";
 
@@ -52,7 +52,7 @@ export default defineComponent({
   name: "PdfView",
   components: {
     Banner,
-    ConnectErrorInfo
+    ErrorInfo
   },
   data() {
     return {

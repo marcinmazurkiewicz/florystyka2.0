@@ -21,38 +21,21 @@
         Następne pytanie
       </button>
     </div>
-    <connect-error-info v-if="isConnectError" />
+    <error-info v-if="isConnectError" />
   </div>
 </template>
 <script lang="ts">
 import SingleQuestionWrapper from "@/components/questions/SingleQuestionWrapper.vue";
-import ConnectErrorInfo from "@/components/ConnectErrorInfo.vue";
+import ErrorInfo from "@/components/ErrorInfo.vue";
 import { HTTP } from "@/http";
 import { defineComponent } from "vue";
-
-type Answer = {
-  value: string;
-  content: string;
-};
-
-type Question = {
-  id: number;
-  content: string;
-  answers: Array<Answer>;
-  img?: string;
-};
-
-type Solution = {
-  questionId: number;
-  correct: string;
-  selected: string;
-};
+import { Question } from "@/types/QuestionTypes";
 
 export default defineComponent({
   name: "RandomQuestion",
   components: {
     SingleQuestionWrapper,
-    ConnectErrorInfo
+    ErrorInfo
   },
   data() {
     return {
