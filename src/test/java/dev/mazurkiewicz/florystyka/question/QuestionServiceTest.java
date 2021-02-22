@@ -201,12 +201,12 @@ class QuestionServiceTest {
         when(mapper.mapEntityToResponse(ArgumentMatchers.any(Question.class))).thenReturn(response);
 
         //when
-        List<QuestionResponse> result = service.getQuestionsToTest();
+        TestResponse result = service.getQuestionsToTest();
 
         //then
         verify(repository, times(1)).getRandomQuestions(questionToTest);
         verify(mapper, times(questionToTest)).mapEntityToResponse(ArgumentMatchers.any(Question.class));
-        assertThat(result).hasSize(questionToTest);
+        assertThat(result.getQuestions()).hasSize(questionToTest);
     }
 
     @Test

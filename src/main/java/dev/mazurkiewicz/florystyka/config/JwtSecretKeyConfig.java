@@ -1,5 +1,6 @@
-package dev.mazurkiewicz.florystyka.jwt;
+package dev.mazurkiewicz.florystyka.config;
 
+import dev.mazurkiewicz.florystyka.jwt.JwtProperties;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +10,7 @@ import javax.crypto.SecretKey;
 
 @Configuration
 @RequiredArgsConstructor
-public class JwtSecretKey {
+public class JwtSecretKeyConfig {
 
     private final JwtProperties jwtProperties;
 

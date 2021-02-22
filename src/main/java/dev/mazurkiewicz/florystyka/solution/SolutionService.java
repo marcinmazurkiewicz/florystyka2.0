@@ -2,10 +2,12 @@ package dev.mazurkiewicz.florystyka.solution;
 
 import dev.mazurkiewicz.florystyka.answer.AnswerType;
 import dev.mazurkiewicz.florystyka.exception.ResourceNotFoundException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -19,28 +21,34 @@ public class SolutionService {
     }
 
     public SolutionResponse checkSingleAnswer(SolutionRequest solution) {
-        AnswerType selectedAnswer;
-        try {
-            selectedAnswer = AnswerType.valueOf(solution.getSelectedAnswer().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            selectedAnswer = AnswerType.EMPTY;
-        }
-        AnswerType finalSelectedAnswer = selectedAnswer;
         return repository
                 .findById(solution.getQuestionId())
-                .map(s -> new SolutionResponse(s.getId(), s.getCorrect(), finalSelectedAnswer))
+                .map(s -> new SolutionResponse(
+                        s.getCorrect().equals(solution.getSelectedAnswer()) ? 1 : 0,
+                        1,
+                        Map.of(s.getId(), s.getCorrect()))
+                )
                 .orElseThrow(() -> new ResourceNotFoundException(
                         String.format("Question with id %d doesn't exist", solution.getQuestionId())));
 
     }
 
-    public TestSolutionResponse checkTest(List<SolutionRequest> solutions) {
-        Map<Integer, SolutionResponse> solutionMap = solutions
-                .stream()
-                .map(this::checkSingleAnswer)
-                .collect(Collectors.toMap(SolutionResponse::getQuestionId, Function.identity()));
-        long points = solutionMap.values().stream().filter(s -> s.getCorrect().equals(s.getSelected())).count();
+    public SolutionResponse checkTest(List<SolutionRequest> solutions) {
+        Set<Integer> questionIds = solutions.stream().map(SolutionRequest::getQuestionId).collect(Collectors.toSet());
 
-        return new TestSolutionResponse(points, solutionMap.size(), solutionMap);
+        Map<Integer, AnswerType> solutionMap = repository.findAllById(questionIds).stream()
+                .collect(Collectors.toMap(Solution::getId, Solution::getCorrect));
+
+        if(!solutionMap.keySet().containsAll(questionIds)) {
+            throw new IncorrectResultSizeDataAccessException("Some answers are missing", questionIds.size(), solutionMap.size());
+        }
+
+        long points = solutions
+                .stream()
+                .filter(s -> s.getSelectedAnswer().equals(solutionMap.get(s.getQuestionId())))
+                .count();
+
+        return new SolutionResponse(points, solutionMap.size(), solutionMap);
     }
+
 }

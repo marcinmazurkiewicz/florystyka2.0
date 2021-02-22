@@ -2,9 +2,9 @@ package dev.mazurkiewicz.florystyka.config;
 
 import com.google.common.collect.Lists;
 import dev.mazurkiewicz.florystyka.jwt.JwtProperties;
-import dev.mazurkiewicz.florystyka.jwt.JwtTokenFilter;
 import dev.mazurkiewicz.florystyka.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.util.Arrays;
 
@@ -30,7 +31,8 @@ import java.util.Arrays;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final SecurityProperties securityProperties;
-    private final JwtTokenFilter jwtTokenFilter;
+    @Qualifier("jwtTokenFilter")
+    private final OncePerRequestFilter jwtTokenFilter;
     private final UserService userService;
 
     @Override
