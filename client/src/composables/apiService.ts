@@ -11,7 +11,7 @@ import { ResponseStatus } from "@/types/ResponseStatus";
 import {
   getErrorBasedOnResponse,
   getErrorBasedOnStatusCode
-} from "@/components/ErrorUtils";
+} from "@/utils/errorUtils";
 import { AxiosError } from "axios";
 import { PreparedResponse } from "@/types/PreparedResponse";
 

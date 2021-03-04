@@ -35,6 +35,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/privacy",
     name: "PrivacyPolicy",
     component: () => import("@/views/PrivacyPolicyView.vue")
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("@/views/LoginView.vue")
   }
 ];
 

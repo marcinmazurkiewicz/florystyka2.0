@@ -2,7 +2,7 @@ import { Ref, ref } from "vue";
 import {
   getErrorBasedOnErrorType,
   getErrorBasedOnResponse
-} from "@/components/ErrorUtils";
+} from "@/utils/errorUtils";
 import { ErrorType } from "@/types/ErrorTypes";
 import {
   QuestionUnit,

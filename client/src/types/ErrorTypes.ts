@@ -38,7 +38,11 @@ type ResponseError = {
   message: string;
   path: string;
   status: number;
-  errors?: Array<FieldError>;
+  errors?: FieldError;
 };
 
-export { ErrorType, ErrorMap, ResponseError };
+type ParsedError = {
+  [key: string]: string;
+};
+
+export { ErrorType, ErrorMap, ResponseError, ErrorInfo, ParsedError };

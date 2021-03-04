@@ -1,4 +1,10 @@
-import { ErrorType, ErrorMap, ResponseError } from "@/types/ErrorTypes";
+import {
+  ErrorType,
+  ErrorMap,
+  ResponseError,
+  ParsedError,
+  ErrorInfo
+} from "@/types/ErrorTypes";
 
 const errorMap: ErrorMap = {
   [ErrorType.ABOVE_MAX]: "Wartość przekracza dopuszczalny limit",
@@ -44,8 +50,25 @@ const getErrorBasedOnResponse = (error: ResponseError): string => {
   return errorMsg ? errorMsg : error.message;
 };
 
+const getErrorBasedOnErrorInfo = (error: ErrorInfo): string => {
+  const errorMsg: string = getErrorBasedOnErrorType(error.errorType);
+  return errorMsg ? errorMsg : error.msg;
+};
+
+const parseErrorRequest = (error: ResponseError): ParsedError => {
+  const result: ParsedError = {};
+  result["responseError"] = getErrorBasedOnResponse(error);
+  if (error.errors) {
+    for (const [key, val] of Object.entries(error.errors)) {
+      result[key] = getErrorBasedOnErrorInfo(val);
+    }
+  }
+  return result;
+};
+
 export {
   getErrorBasedOnResponse,
   getErrorBasedOnErrorType,
-  getErrorBasedOnStatusCode
+  getErrorBasedOnStatusCode,
+  parseErrorRequest
 };
