@@ -1,24 +1,67 @@
-type TestAnswer = {
-  questionId: number;
-  selectedAnswer: string;
+export type AvailableAnswer = "A" | "B" | "C" | "D";
+
+export type UserChoice = AvailableAnswer | "";
+
+export type Timer = {
+  minutes: number;
+  seconds: number;
 };
 
-type Answer = {
-  value: string;
+export type Answer = {
+  value: AvailableAnswer;
   content: string;
 };
 
-type Question = {
+export type Question = {
   id: number;
   content: string;
   answers: Array<Answer>;
   img?: string;
 };
 
-type Solution = {
-  questionId: number;
-  correct?: string;
-  selected?: string;
+export type QuestionUnit = {
+  question: Question;
+  selectedAnswer: UserChoice;
+  correctAnswer?: AvailableAnswer;
 };
 
-export { Answer, Solution, Question, TestAnswer };
+export class Test {
+  timer: Timer;
+  questions: QuestionUnit[];
+
+  constructor(timer: Timer, questionList: Question[]) {
+    this.timer = timer;
+    this.questions = [];
+    questionList.forEach(q =>
+      this.questions.push({ question: q, selectedAnswer: "" })
+    );
+  }
+}
+
+export type TestResponse = {
+  timer: Timer;
+  questions: Question[];
+};
+
+export type SolutionResponse = {
+  [key: number]: AvailableAnswer;
+};
+
+export type SingleSolutionResponse = {
+  solutions: SolutionResponse;
+};
+
+export type TestSolutionResponse = {
+  points: number;
+  total: number;
+  solutions: SolutionResponse;
+};
+
+export type SolutionRequest = {
+  questionId: number;
+  selectedAnswer: UserChoice;
+};
+
+export function isTest(test: Test | null): test is Test {
+  return test != null;
+}

@@ -1,13 +1,15 @@
 <template>
   <div class="w-full max-w-screen-lg mx-auto text-white p-4">
-    <teleport v-if="isDataReturned" to="#countdown">
-      <div>Czas do końca: {{ timer.minutes }} min {{ timer.seconds }} sek</div>
+    <teleport v-if="responseStatus.isDataReturned" to="#countdown">
+      <div v-if="test?.timer">
+        Czas do końca: {{ test.timer.minutes }} min {{ test.timer.seconds }} sek
+      </div>
     </teleport>
     <header>
       <h1 class="text-center text-3xl py-6 text-red">
         Symulacja
-        <span v-if="questions.length > 0"
-          >- test {{ questions.length }} pytań</span
+        <span v-if="test?.questions?.length">
+          - test {{ test.questions.length }} pytań</span
         >
       </h1>
       <p class="text-sm text-center pb-6">
@@ -19,10 +21,7 @@
         To całkiem sporo czasu, więc zachowaj spokój :)
       </p>
     </header>
-    <error-info v-if="isError">
-      <span>{{ errorMsg }}</span>
-    </error-info>
-    <div v-if="isDataReturned">
+    <view-wrapper :response-status="responseStatus">
       <span
         v-if="solved"
         :class="[passed ? 'bg-dark-green' : 'bg-red']"
@@ -32,14 +31,15 @@
         <span v-else>Test niezaliczony :( </span>
         Uzyskałeś {{ points }}/{{ total }} punktów ({{ percentScore }}%)
       </span>
-      <question-view
-        v-for="(question, index) in questions"
-        :key="question.id"
-        :question="question"
-        :solution="solutions[question.id]"
-        v-model="selectedAnswers[question.id].selectedAnswer"
-        :number="index"
-      ></question-view>
+      <div v-if="test != null">
+        <question-view
+          v-for="(question, index) in test.questions"
+          :key="question.id"
+          :questionUnit="question"
+          :number="index"
+          @selected="select(question, $event)"
+        ></question-view>
+      </div>
       <button
         v-if="!solved"
         @click="submitAnswer"
@@ -48,56 +48,34 @@
       >
         Sprawdź
       </button>
-    </div>
+    </view-wrapper>
   </div>
 </template>
 <script lang="ts">
-import QuestionView from "@/components/questions/SingleQuestion.vue";
-import ErrorInfo from "@/components/ErrorInfo.vue";
-import { HTTP } from "@/http";
-import { defineComponent, ref, Ref, computed, onMounted } from "vue";
-import { Solution, Question, TestAnswer } from "@/types/QuestionTypes";
-import {
-  getErrorBasedOnResponse,
-  getErrorBasedOnErrorType
-} from "@/components/ErrorUtils";
-import { ErrorType } from "@/types/ErrorTypes";
+import QuestionView from "@/components/questions/Question.vue";
+import ViewWrapper from "@/components/ViewWrapper.vue";
+import { defineComponent, computed, onMounted, watch } from "vue";
+import { countdownInterval } from "@/composables/useCountdown";
+import { useTest } from "@/composables/questionService";
+import { isTest, QuestionUnit, UserChoice } from "@/types/QuestionTypes";
 
 export default defineComponent({
   name: "Test",
   components: {
     QuestionView,
-    ErrorInfo
+    ViewWrapper
   },
   setup() {
-    const timer = ref({ minutes: 60, seconds: 1 });
-    const isDataReturned = ref(false);
-    const isError = ref(false);
-    const errorMsg = ref("");
-    const questions: Ref<Array<Question>> = ref([]);
-    const selectedAnswers: Ref<Array<TestAnswer>> = ref([]);
-    const points = ref(0);
-    const total = ref(0);
-    const solved = ref(false);
-    const solutions: Ref<Array<Solution>> = ref([]);
-
-    const countdown = (): void => {
-      if (timer.value.minutes <= 0 && timer.value.seconds <= 0) {
-        callback();
-        return;
-      }
-
-      if (--timer.value.seconds < 0) {
-        timer.value.seconds = 59;
-        timer.value.minutes--;
-      }
-
-      if (timer.value.minutes >= 0 && timer.value.seconds >= 0) {
-        setTimeout(() => {
-          countdown();
-        }, 1000);
-      }
-    };
+    let countdown = 0;
+    const {
+      points,
+      total,
+      test,
+      responseStatus,
+      solved,
+      getQuestions,
+      sendAnswers
+    } = useTest();
 
     const percentScore = computed(() => {
       return (points.value / total.value) * 100;
@@ -107,71 +85,38 @@ export default defineComponent({
       return percentScore.value >= 70;
     });
 
+    const select = (question: QuestionUnit, selectedAnswer: UserChoice) => {
+      question.selectedAnswer = selectedAnswer;
+    };
+
     const submitAnswer = (): void => {
-      HTTP.post(`/api/v3/solutions/test`, Object.values(selectedAnswers.value))
-        .then(response => {
-          solved.value = true;
-          points.value = response.data.points;
-          total.value = response.data.total;
-          solutions.value = response.data.solutions;
-        })
-        .catch(e => {
-          isError.value = true;
-          errorMsg.value = getErrorBasedOnResponse(e.response.data);
-        });
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      clearInterval(countdown);
+      if (isTest(test.value)) {
+        sendAnswers(test.value.questions);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     };
 
-    const prepareAnswersMap = (): void => {
-      questions.value.forEach(question => {
-        selectedAnswers.value[question.id] = {
-          questionId: question.id,
-          selectedAnswer: ""
-        };
-      });
-    };
+    watch(test, () => {
+      if (isTest(test.value)) {
+        countdown = countdownInterval(test.value.timer, submitAnswer);
+      }
+    })
 
-    const prepareSolutionsMap = (): void => {
-      questions.value.forEach(question => {
-        solutions.value[question.id] = { questionId: question.id };
-      });
-    };
-
-    const getQuestions = () => {
-      HTTP.get("/api/v3/questions/test")
-        .then(response => {
-          isDataReturned.value = true;
-          isError.value = false;
-          questions.value = response.data;
-          prepareAnswersMap();
-          prepareSolutionsMap();
-          countdown();
-        })
-        .catch(e => {
-          isDataReturned.value = false;
-          isError.value = true;
-          errorMsg.value = e.response?.data
-            ? getErrorBasedOnResponse(e.response.data)
-            : getErrorBasedOnErrorType(ErrorType.CONNECT_ERROR);
-        });
-    };
-
-    onMounted(getQuestions);
+    onMounted(() => {
+      getQuestions();
+    });
 
     return {
-      timer,
-      questions,
+      test,
       points,
       passed,
       total,
-      isDataReturned,
-      isError,
-      solutions,
-      selectedAnswers,
       solved,
       percentScore,
       submitAnswer,
-      errorMsg
+      select,
+      responseStatus
     };
   }
 });

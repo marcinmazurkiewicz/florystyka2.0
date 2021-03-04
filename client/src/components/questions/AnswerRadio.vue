@@ -19,8 +19,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed, toRefs, PropType } from "vue";
-import { Solution } from "@/types/QuestionTypes";
+import { defineComponent, computed, toRefs } from "vue";
 
 export default defineComponent({
   name: "AnswerRadio",
@@ -38,39 +37,25 @@ export default defineComponent({
     modelValue: {
       type: String,
       required: true
-    },
-    solution: {
-      type: Object as PropType<Solution>,
-      required: true
     }
   },
   setup(props) {
-    const { solution, value, modelValue } = toRefs(props);
+    const { value, modelValue } = toRefs(props);
 
     const isChecked = computed(() => {
       return value.value === modelValue.value;
-    });
-
-    const isCorrect = computed(() => {
-      return solution.value.correct === value.value;
     });
 
     const color = computed(() => {
       const defaultStyle =
         "text-white border-dark-gray hover:text-azure hover:border-azure";
       const checked = "text-azure border-azure";
-      const correct = "text-light-green border-light-green";
-      const incorrect = "text-red border-red";
-      if (solution.value != null && solution.value.correct != null) {
-        if (isCorrect.value) {
-          return correct;
-        } else if (isChecked.value) {
-          return incorrect;
-        }
-      } else if (isChecked.value) {
+
+      if (isChecked.value) {
         return checked;
+      } else {
+        return defaultStyle;
       }
-      return defaultStyle;
     });
 
     return { color, isChecked };

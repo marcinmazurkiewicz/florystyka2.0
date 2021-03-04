@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <view-wrapper :response-status="responseStatus">
     <span
       v-if="solved"
       :class="[correct ? 'bg-dark-green' : 'bg-red']"
@@ -8,82 +8,98 @@
       <span v-if="correct">Dobrze :)</span>
       <span v-else>Błędna odpowiedź :(</span>
     </span>
-    <question
-      :question="question"
-      :solution="solution"
-      v-model="selectedAnswer"
-    ></question>
+    <question :questionUnit="question" @selected="select(question, $event)" />
     <button
       v-if="!solved"
-      @click="submitAnswer"
+      @click="checkAnswer"
       class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-dark-green
             rounded-xl hover:bg-dark-green hover:text-white"
     >
       Sprawdź
     </button>
-  </div>
+
+    <button
+      v-if="solved && allowNext"
+      @click="getRandomQuestion"
+      class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-dark-green
+            rounded-xl hover:bg-dark-green hover:text-white"
+    >
+      Następne pytanie
+    </button>
+  </view-wrapper>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import Question from "@/components/questions/SingleQuestion.vue";
-import { HTTP } from "@/http";
-
-type Answer = {
-  value: string;
-  content: string;
-};
-
-type Question = {
-  id: number;
-  content: string;
-  answers: Array<Answer>;
-  img?: string;
-};
-
-type Solution = {
-  questionId: number;
-  correct?: string;
-  selected?: string;
-};
+import { defineComponent, computed, onMounted } from "vue";
+import Question from "@/components/questions/Question.vue";
+import { useQuestion } from "@/composables/questionService";
+import ViewWrapper from "@/components/ViewWrapper.vue";
+import { QuestionUnit, UserChoice } from "@/types/QuestionTypes";
 
 export default defineComponent({
-  name: "RandomQuestion",
-  props: ["question"],
-  components: {
-    Question
-  },
-  data() {
-    return {
-      selectedAnswer: "",
-      solution: {} as Solution,
-      allowNext: true
-    };
-  },
-  computed: {
-    solved(): boolean {
-      return this.solution.correct != null;
+  name: "SingleQuestionWrapper",
+  props: {
+    questionId: {
+      type: String,
+      required: false
     },
-    correct(): boolean {
-      return this.solution.correct === this.selectedAnswer;
+    allowNext: {
+      type: Boolean,
+      default: false
     }
   },
-  methods: {
-    submitAnswer() {
-      const data = {
-        questionId: this.question.id,
-        selectedAnswer: this.selectedAnswer
-      };
-      HTTP.post(`/api/v3/solutions/single`, data).then(response => {
-        this.solution = response.data;
-        this.$emit("solved", true);
-      });
-    }
+  emits: ["solved"],
+  components: {
+    Question,
+    ViewWrapper
   },
-  watch: {
-    question: function() {
-      this.solution = { questionId: this.question.id };
-      this.selectedAnswer = "";
-    }
+  setup(props) {
+    const {
+      question,
+      responseStatus,
+      getRandomQuestion,
+      getSingleQuestion,
+      solved,
+      submitAnswer,
+      selectedAnswer
+    } = useQuestion();
+
+    // const select = (selectedAnswer: UserChoice) => {
+    //   if(question.value) {
+    //     question.value.selectedAnswer = selectedAnswer;
+    //   }
+    // }
+
+    const select = (question: QuestionUnit, selectedAnswer: UserChoice) => {
+      question.selectedAnswer = selectedAnswer;
+    };
+
+    const correct = computed(
+      () => question.value?.selectedAnswer === question.value?.correctAnswer
+    );
+
+    const checkAnswer = () => {
+      if (question.value != null) {
+        submitAnswer(question.value);
+        solved.value = true;
+      }
+    };
+
+    onMounted(() => {
+      props.questionId == null
+        ? getRandomQuestion()
+        : getSingleQuestion(props.questionId);
+    });
+
+    return {
+      question,
+      responseStatus,
+      solved,
+      selectedAnswer,
+      correct,
+      checkAnswer,
+      select,
+      getRandomQuestion
+    };
   }
 });
 </script>

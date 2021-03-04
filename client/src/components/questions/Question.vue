@@ -1,21 +1,24 @@
 <template>
   <section>
-    <p :id="question.id" class="py-4 px-5 mt-5 mb-1 bg-dark-gray font-bold">
+    <p
+      :id="questionUnit.question.id"
+      class="py-4 px-5 mt-5 mb-1 bg-dark-gray font-bold"
+    >
       {{ number + 1 }}.
-      <span v-html="question.content"></span>
+      <span v-html="questionUnit.question.content"></span>
       <img
-        v-if="question.img"
+        v-if="questionUnit.question.img"
         :src="imgUrl"
         class="pt-4 mx-auto"
         alt="obrazek do pytania"
       />
     </p>
-    <div v-for="answer in question.answers" :key="answer.value">
+    <div v-for="answer in questionUnit.question.answers" :key="answer.value">
       <answer-span
         v-if="solved"
         :value="answer.value"
-        :id="question.id + '_' + answer.value"
-        :solution="solution"
+        :id="questionUnit.question.id + '_' + answer.value"
+        :solution="questionUnit.correctAnswer"
         :checked="isChecked(answer.value)"
       >
         <span v-html="answer.content"></span>
@@ -23,16 +26,15 @@
       <answer-radio
         v-else
         :value="answer.value"
-        :id="question.id + '_' + answer.value"
-        :name="question.id + '_answer'"
-        :solution="solution"
-        v-model="localSelectedAnswer"
+        :id="questionUnit.question.id + '_' + answer.value"
+        :name="questionUnit.question.id + '_answer'"
+        v-model="selectedAnswer"
       >
         <span v-html="answer.content"></span>
       </answer-radio>
     </div>
     <span class="block py-2 px-5 mb-1 bg-dark-gray text-xs text-right "
-      >Pyt. {{ question.id }}</span
+      >Pyt. {{ questionUnit.question.id }}</span
     >
   </section>
 </template>
@@ -40,54 +42,47 @@
 import { defineComponent, PropType } from "vue";
 import AnswerRadio from "@/components/questions/AnswerRadio.vue";
 import AnswerSpan from "@/components/questions/AnswerSpan.vue";
-import { Question, Solution } from "@/types/QuestionTypes";
+import { QuestionUnit } from "@/types/QuestionTypes";
 
 export default defineComponent({
-  name: "SingleQuestion",
+  name: "Question",
   components: {
     AnswerSpan,
     AnswerRadio
   },
+  emits: ["selected"],
   props: {
-    modelValue: {
-      type: String,
-      required: true
-    },
     number: {
       type: Number,
       required: false,
       default: 0
     },
-    question: {
-      type: Object as PropType<Question>,
+    questionUnit: {
+      type: Object as PropType<QuestionUnit>,
       required: true
-    },
-    solution: {
-      type: Object as PropType<Solution>
     }
   },
-  data() {
-    return {};
-  },
   computed: {
-    localSelectedAnswer: {
+    selectedAnswer: {
       get(): string {
-        return this.modelValue;
+        return this.questionUnit.selectedAnswer;
       },
-      set(localSelectedAnswer: string): void {
-        this.$emit("update:modelValue", localSelectedAnswer);
+      set(selectedAnswer: string): void {
+        this.$emit("selected", selectedAnswer);
       }
     },
     imgUrl(): string {
-      return `${process.env.VUE_APP_API_URL}${this.question.img}`;
+      return this.questionUnit.question.img
+        ? `${process.env.VUE_APP_API_URL}${this.questionUnit.question.img}`
+        : "";
     },
     solved(): boolean {
-      return this.solution != null && this.solution.correct != null;
+      return typeof this.questionUnit.correctAnswer !== "undefined";
     }
   },
   methods: {
     isChecked(value: string): boolean {
-      return this.modelValue === value;
+      return this.questionUnit.selectedAnswer === value;
     }
   }
 });

@@ -7,62 +7,22 @@
         pozwoli na jej łatwiejsze zapamiętanie.
       </p>
     </header>
-    <single-question-wrapper
-      v-if="isDataReturned"
-      :question="question"
-    ></single-question-wrapper>
-    <error-info v-if="isConnectError">
-      <span v-if="is404">Pytanie nr {{ id }} nie istnieje</span>
-      <span v-else>Nie udało się nawiązać połączenia z serwerem.</span>
-    </error-info>
+    <single-question-wrapper :question-id="questionId" />
   </div>
 </template>
 <script lang="ts">
 import SingleQuestionWrapper from "@/components/questions/SingleQuestionWrapper.vue";
-import ErrorInfo from "@/components/ErrorInfo.vue";
-import { HTTP } from "@/http";
-import { useRoute } from "vue-router";
 import { defineComponent } from "vue";
-import { Question } from "@/types/QuestionTypes";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   name: "SingleQuestion",
   components: {
-    SingleQuestionWrapper,
-    ErrorInfo
+    SingleQuestionWrapper
   },
-  data() {
-    return {
-      isDataReturned: false,
-      isConnectError: false,
-      is404: false,
-      id: 0,
-      question: {} as Question
-    };
-  },
-  methods: {
-    getQuestion(id: number): void {
-      HTTP.get(`/api/v3/questions/${id}`)
-        .then(response => {
-          this.isDataReturned = true;
-          this.isConnectError = false;
-          this.question = response.data;
-        })
-        .catch(error => {
-          if (error.response) {
-            this.is404 = error.response.status === 404;
-          }
-          this.isDataReturned = false;
-          this.isConnectError = true;
-        });
-    }
-  },
-  mounted() {
-    const {
-      params: { questionId }
-    } = useRoute();
-    this.id = Number(questionId);
-    this.getQuestion(this.id);
+  setup() {
+    const route = useRoute();
+    return { questionId: route.params.questionId };
   }
 });
 </script>

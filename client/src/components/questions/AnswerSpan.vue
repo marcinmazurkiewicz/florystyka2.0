@@ -46,7 +46,7 @@ export default defineComponent({
       return style;
     },
     isCorrect(): boolean {
-      return this.solution.correct === this.value;
+      return this.solution === this.value;
     }
   }
 });

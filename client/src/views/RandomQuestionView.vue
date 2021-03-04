@@ -7,64 +7,17 @@
         pozwoli na jej łatwiejsze zapamiętanie.
       </p>
     </header>
-    <div v-if="isDataReturned">
-      <single-question-wrapper
-        :question="question"
-        @solved="setSolved"
-      ></single-question-wrapper>
-      <button
-        v-if="solved"
-        @click="newQuestion"
-        class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-dark-green
-            rounded-xl hover:bg-dark-green hover:text-white"
-      >
-        Następne pytanie
-      </button>
-    </div>
-    <error-info v-if="isConnectError" />
+    <single-question-wrapper :allow-next="true" />
   </div>
 </template>
 <script lang="ts">
 import SingleQuestionWrapper from "@/components/questions/SingleQuestionWrapper.vue";
-import ErrorInfo from "@/components/ErrorInfo.vue";
-import { HTTP } from "@/http";
 import { defineComponent } from "vue";
-import { Question } from "@/types/QuestionTypes";
 
 export default defineComponent({
   name: "RandomQuestion",
   components: {
-    SingleQuestionWrapper,
-    ErrorInfo
-  },
-  data() {
-    return {
-      isDataReturned: false,
-      isConnectError: false,
-      question: {} as Question,
-      solved: false
-    };
-  },
-  methods: {
-    newQuestion() {
-      HTTP.get("/api/v3/questions/random")
-        .then(response => {
-          this.isDataReturned = true;
-          this.isConnectError = false;
-          this.solved = false;
-          this.question = response.data;
-        })
-        .catch(() => {
-          this.isConnectError = true;
-          this.isDataReturned = false;
-        });
-    },
-    setSolved(status: boolean) {
-      this.solved = status;
-    }
-  },
-  mounted() {
-    this.newQuestion();
+    SingleQuestionWrapper
   }
 });
 </script>

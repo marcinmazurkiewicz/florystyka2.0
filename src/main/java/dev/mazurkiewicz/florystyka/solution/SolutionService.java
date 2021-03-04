@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,11 +22,7 @@ public class SolutionService {
     public SolutionResponse checkSingleAnswer(SolutionRequest solution) {
         return repository
                 .findById(solution.getQuestionId())
-                .map(s -> new SolutionResponse(
-                        s.getCorrect().equals(solution.getSelectedAnswer()) ? 1 : 0,
-                        1,
-                        Map.of(s.getId(), s.getCorrect()))
-                )
+                .map(s -> new SolutionResponse(Map.of(s.getId(), s.getCorrect())))
                 .orElseThrow(() -> new ResourceNotFoundException(
                         String.format("Question with id %d doesn't exist", solution.getQuestionId())));
 
@@ -39,7 +34,7 @@ public class SolutionService {
         Map<Integer, AnswerType> solutionMap = repository.findAllById(questionIds).stream()
                 .collect(Collectors.toMap(Solution::getId, Solution::getCorrect));
 
-        if(!solutionMap.keySet().containsAll(questionIds)) {
+        if (!solutionMap.keySet().containsAll(questionIds)) {
             throw new IncorrectResultSizeDataAccessException("Some answers are missing", questionIds.size(), solutionMap.size());
         }
 
@@ -48,7 +43,7 @@ public class SolutionService {
                 .filter(s -> s.getSelectedAnswer().equals(solutionMap.get(s.getQuestionId())))
                 .count();
 
-        return new SolutionResponse(points, solutionMap.size(), solutionMap);
+        return new SolutionResponse(Long.valueOf(points).intValue(), solutionMap.size(), solutionMap);
     }
 
 }

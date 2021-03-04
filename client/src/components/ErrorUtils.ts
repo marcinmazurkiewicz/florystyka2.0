@@ -18,16 +18,34 @@ const errorMap: ErrorMap = {
   [ErrorType.FILE_PROCESSING_ERROR]: "Wystąpił problem z zapisem pliku",
   [ErrorType.CHOOSE_CORRECT]: "Zaznacz prawidłową odpowiedź",
   [ErrorType.CONNECT_ERROR]: "Nie udało się nawiązać połączenia z serwerem.",
+  [ErrorType.NOT_FOUND]: "Pytanie nie istnieje",
   [ErrorType.UNKNOWN]: "Błąd serwera"
 };
 
+const errorCodeMap: { [key: number]: ErrorType } = {
+  400: ErrorType.VALIDATION_ERROR,
+  401: ErrorType.UNAUTHORIZED,
+  403: ErrorType.FORBIDDEN,
+  404: ErrorType.NOT_FOUND,
+  503: ErrorType.CONNECT_ERROR
+};
+
+const getErrorBasedOnErrorType = (error: ErrorType): string => errorMap[error];
+
+const getErrorBasedOnStatusCode = (status: number): string =>
+  getErrorBasedOnErrorType(errorCodeMap[status]);
+
 const getErrorBasedOnResponse = (error: ResponseError): string => {
-  const errorMsg: string = errorMap[error.error];
+  let errorMsg: string = errorMap[error.error];
+  const errorCode: number = error.status;
+  if (!errorMsg) {
+    errorMsg = getErrorBasedOnStatusCode(errorCode);
+  }
   return errorMsg ? errorMsg : error.message;
 };
 
-const getErrorBasedOnErrorType = (error: ErrorType): string => {
-  return errorMap[error];
+export {
+  getErrorBasedOnResponse,
+  getErrorBasedOnErrorType,
+  getErrorBasedOnStatusCode
 };
-
-export { getErrorBasedOnResponse, getErrorBasedOnErrorType };
