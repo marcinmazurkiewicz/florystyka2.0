@@ -1,8 +1,5 @@
 import { Ref, ref } from "vue";
-import {
-  getErrorBasedOnErrorType,
-  getErrorBasedOnResponse
-} from "@/utils/errorUtils";
+import { getErrorBasedOnErrorType, getResponseError } from "@/utils/errorUtils";
 import { ErrorType } from "@/types/ErrorTypes";
 import {
   QuestionUnit,
@@ -16,7 +13,7 @@ import {
   getRandomQuestion,
   getSingleQuestion,
   getTest
-} from "@/composables/apiService";
+} from "@/services/questionApiService";
 import { ResponseStatus } from "@/types/ResponseStatus";
 
 export function useQuestion() {
@@ -139,12 +136,15 @@ export function useTest() {
     );
     await checkTest(answers)
       .then(response => {
-        points.value = response.points;
-        total.value = response.total;
-        questions.forEach(
-          question =>
-            (question.correctAnswer = response.solutions[question.question.id])
-        );
+        if (response.data) {
+          points.value = response.data.points;
+          total.value = response.data.total;
+          questions.forEach(
+            question =>
+              (question.correctAnswer =
+                response.data?.solutions[question.question.id])
+          );
+        }
       })
       .catch(error => {
         responseStatus.value = {
@@ -152,7 +152,7 @@ export function useTest() {
           isError: true,
           isPending: false,
           errorMsg: error.response?.data
-            ? getErrorBasedOnResponse(error.response.data)
+            ? getResponseError(error.response.data)
             : getErrorBasedOnErrorType(ErrorType.CONNECT_ERROR)
         };
       });

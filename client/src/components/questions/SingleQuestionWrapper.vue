@@ -31,7 +31,7 @@
 <script lang="ts">
 import { defineComponent, computed, onMounted } from "vue";
 import Question from "@/components/questions/Question.vue";
-import { useQuestion } from "@/composables/questionService";
+import { useQuestion } from "@/composables/useQuestions";
 import ViewWrapper from "@/components/ViewWrapper.vue";
 import { QuestionUnit, UserChoice } from "@/types/QuestionTypes";
 
@@ -62,12 +62,6 @@ export default defineComponent({
       submitAnswer,
       selectedAnswer
     } = useQuestion();
-
-    // const select = (selectedAnswer: UserChoice) => {
-    //   if(question.value) {
-    //     question.value.selectedAnswer = selectedAnswer;
-    //   }
-    // }
 
     const select = (question: QuestionUnit, selectedAnswer: UserChoice) => {
       question.selectedAnswer = selectedAnswer;

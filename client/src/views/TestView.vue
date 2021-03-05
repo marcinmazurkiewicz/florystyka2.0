@@ -56,7 +56,7 @@ import QuestionView from "@/components/questions/Question.vue";
 import ViewWrapper from "@/components/ViewWrapper.vue";
 import { defineComponent, computed, onMounted, watch } from "vue";
 import { countdownInterval } from "@/composables/useCountdown";
-import { useTest } from "@/composables/questionService";
+import { useTest } from "@/composables/useQuestions";
 import { isTest, QuestionUnit, UserChoice } from "@/types/QuestionTypes";
 
 export default defineComponent({
@@ -101,7 +101,7 @@ export default defineComponent({
       if (isTest(test.value)) {
         countdown = countdownInterval(test.value.timer, submitAnswer);
       }
-    })
+    });
 
     onMounted(() => {
       getQuestions();

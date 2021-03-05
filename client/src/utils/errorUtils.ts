@@ -41,7 +41,7 @@ const getErrorBasedOnErrorType = (error: ErrorType): string => errorMap[error];
 const getErrorBasedOnStatusCode = (status: number): string =>
   getErrorBasedOnErrorType(errorCodeMap[status]);
 
-const getErrorBasedOnResponse = (error: ResponseError): string => {
+const getResponseError = (error: ResponseError): string => {
   let errorMsg: string = errorMap[error.error];
   const errorCode: number = error.status;
   if (!errorMsg) {
@@ -57,7 +57,7 @@ const getErrorBasedOnErrorInfo = (error: ErrorInfo): string => {
 
 const parseErrorRequest = (error: ResponseError): ParsedError => {
   const result: ParsedError = {};
-  result["responseError"] = getErrorBasedOnResponse(error);
+  result["responseError"] = getResponseError(error);
   if (error.errors) {
     for (const [key, val] of Object.entries(error.errors)) {
       result[key] = getErrorBasedOnErrorInfo(val);
@@ -67,7 +67,7 @@ const parseErrorRequest = (error: ResponseError): ParsedError => {
 };
 
 export {
-  getErrorBasedOnResponse,
+  getResponseError,
   getErrorBasedOnErrorType,
   getErrorBasedOnStatusCode,
   parseErrorRequest
