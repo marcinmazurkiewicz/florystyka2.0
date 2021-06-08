@@ -55,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/resources/**").permitAll()
                 .antMatchers("/api/v3/auth/login").permitAll()
                 .antMatchers("/api/v3/auth/refresh").permitAll()
+                .antMatchers("/api/v3/users").permitAll()
                 .anyRequest().authenticated();
     }
 
@@ -72,7 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         cors.setExposedHeaders(Arrays.asList("Access-Control-Allow-Headers", "Authorization",
                 "x-xsrf-token", "Access-Control-Allow-Headers", "Origin", "Accept", "X-Requested-With",
                 "Content-Type", "Access-Control-Request-Method", "Access-Control-Request-Headers",
-                "Content-Disposition", "Refresh-Token"));
+                "Content-Disposition"));
         return cors;
     }
 }
