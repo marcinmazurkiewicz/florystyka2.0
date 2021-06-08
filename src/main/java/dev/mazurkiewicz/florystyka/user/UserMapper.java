@@ -21,7 +21,7 @@ public class UserMapper {
         result.setEmail(userRequest.getEmail().toLowerCase());
         result.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         result.setEnabled(true);
-        Set<Authority> authorities = userRequest.roles.isEmpty()
+        Set<Authority> authorities = userRequest.roles == null || userRequest.roles.isEmpty()
                 ? UserRole.STUDENT.getGrantedAuthorities()
                 : userRequest.getRoles().stream()
                 .map(UserRole::getGrantedAuthorities)
@@ -31,12 +31,7 @@ public class UserMapper {
     }
 
     public UserResponse mapEntityToResponse(User entity) {
-        UserResponse response = new UserResponse();
-        response.setId(entity.getId());
-        response.setEmail(entity.getEmail());
-        response.setAccountLocked(entity.isAccountLocked());
-        response.setEnabled(entity.isEnabled());
-        response.setAuthorities(entity.getAuthorities().stream().map(Authority::getAuthority).collect(Collectors.toSet()));
-        return response;
+        Set<String> authorities = entity.getAuthorities().stream().map(Authority::getAuthority).collect(Collectors.toSet());
+        return new UserResponse(entity.getId(), entity.getEmail(), authorities);
     }
 }
