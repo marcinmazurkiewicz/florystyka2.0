@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class QuestionMapperTest {
 
-    private final QuestionMapper mapper  = new QuestionMapper();
+    private final QuestionMapper mapper = new QuestionMapper();
     private Question question;
     private final int questionId = 1;
     private final String questionContent = "Content of question";
@@ -92,8 +92,6 @@ class QuestionMapperTest {
         assertResponseFields(response, questionId, expectedContent);
     }
 
-
-
     @Test
     void shouldReturnQuestionResponseWithNullImgWhenQuestionImgIsEmptyString() {
         //given
@@ -129,5 +127,4 @@ class QuestionMapperTest {
         //then
         assertThat(exception.getMessage()).isEqualTo("Question cannot be empty");
     }
-
 }

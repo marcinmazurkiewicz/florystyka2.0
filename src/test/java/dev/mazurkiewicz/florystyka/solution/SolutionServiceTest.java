@@ -2,14 +2,11 @@ package dev.mazurkiewicz.florystyka.solution;
 
 import dev.mazurkiewicz.florystyka.answer.AnswerType;
 import dev.mazurkiewicz.florystyka.exception.ResourceNotFoundException;
-import dev.mazurkiewicz.florystyka.jwt.JwtTokenUtil;
-import dev.mazurkiewicz.florystyka.user.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import java.util.ArrayList;

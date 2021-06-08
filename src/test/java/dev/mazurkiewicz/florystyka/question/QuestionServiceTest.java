@@ -216,7 +216,6 @@ class QuestionServiceTest {
         for (int i = 1; i < questionToTest; i++) {
             questions.add(prepareQuestion(i));
         }
-        QuestionResponse response = new QuestionResponse(1, "mock content", new ArrayList<>(), "");
         when(repository.getRandomQuestions(questionToTest)).thenReturn(questions);
 
         //when
