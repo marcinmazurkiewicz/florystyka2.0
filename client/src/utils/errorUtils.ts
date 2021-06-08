@@ -2,7 +2,7 @@ import {
   ErrorType,
   ErrorMap,
   ResponseError,
-  ParsedError,
+  ValidError,
   ErrorInfo
 } from "@/types/ErrorTypes";
 
@@ -55,9 +55,8 @@ const getErrorBasedOnErrorInfo = (error: ErrorInfo): string => {
   return errorMsg ? errorMsg : error.msg;
 };
 
-const parseErrorRequest = (error: ResponseError): ParsedError => {
-  const result: ParsedError = {};
-  result["responseError"] = getResponseError(error);
+const parseValidErrors = (error: ResponseError): ValidError => {
+  const result: ValidError = {};
   if (error.errors) {
     for (const [key, val] of Object.entries(error.errors)) {
       result[key] = getErrorBasedOnErrorInfo(val);
@@ -70,5 +69,5 @@ export {
   getResponseError,
   getErrorBasedOnErrorType,
   getErrorBasedOnStatusCode,
-  parseErrorRequest
+  parseValidErrors
 };

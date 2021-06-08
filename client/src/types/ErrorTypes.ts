@@ -41,8 +41,8 @@ type ResponseError = {
   errors?: FieldError;
 };
 
-type ParsedError = {
+type ValidError = {
   [key: string]: string;
 };
 
-export { ErrorType, ErrorMap, ResponseError, ErrorInfo, ParsedError };
+export { ErrorType, ErrorMap, ResponseError, ErrorInfo, ValidError };
