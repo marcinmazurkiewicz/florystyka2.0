@@ -1,11 +1,16 @@
 import { ResponseStatus } from "@/types/ResponseStatus";
 
-export type Header = {
-  [key: string]: string;
+export enum Header {
+  AUTHORIZATION,
+  EXPIRES
+}
+
+export type Headers = {
+  [key in keyof typeof Header]?: string;
 };
 
 export type PreparedResponse<T> = {
   data?: T;
   responseStatus: ResponseStatus;
-  headers?: Header[];
+  headers?: Headers;
 };
