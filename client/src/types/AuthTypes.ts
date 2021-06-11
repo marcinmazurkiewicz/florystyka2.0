@@ -8,3 +8,8 @@ export type LoginResponse = {
   email: string;
   authorities: string[];
 };
+
+export type MemoryToken = {
+  token: string;
+  expiryAtSeconds: number;
+};
