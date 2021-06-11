@@ -6,7 +6,7 @@ import {
   parseValidErrors
 } from "@/utils/errorUtils";
 import { AxiosError } from "axios";
-import { PreparedResponse } from "@/types/PreparedResponse";
+import { Header, Headers, PreparedResponse } from "@/types/PreparedResponse";
 import { ValidError } from "@/types/ErrorTypes";
 
 function parseError(
@@ -45,11 +45,7 @@ function prepareErrorResponseStatus(error: AxiosError): ResponseStatus {
 
 export async function getRequest<T>(url: string): Promise<PreparedResponse<T>> {
   const result: PreparedResponse<T> = {
-    responseStatus: {
-      isDataReturned: false,
-      isError: false,
-      isPending: true
-    }
+    responseStatus: ResponseStatus.pending()
   };
 
   try {
@@ -58,11 +54,22 @@ export async function getRequest<T>(url: string): Promise<PreparedResponse<T>> {
     result.responseStatus.isPending = false;
     result.responseStatus.isDataReturned = true;
     result.data = data;
-    result.headers = headers;
+    result.headers = getHeaders(headers);
     return Promise.resolve(result);
   } catch (error) {
     return Promise.reject(prepareErrorResponseStatus(error));
   }
+}
+
+function getHeaders(headers: { [key: string]: string }): Headers {
+  const result: Headers = {};
+  if (headers["authorization"]) {
+    result[Header.AUTHORIZATION] = headers["authorization"];
+  }
+  if (headers["expires"]) {
+    result[Header.EXPIRES] = headers["expires"];
+  }
+  return result;
 }
 
 export async function postRequest<T>(
@@ -70,12 +77,7 @@ export async function postRequest<T>(
   payload: RequestPayload
 ): Promise<PreparedResponse<T>> {
   const result: PreparedResponse<T> = {
-    responseStatus: {
-      isDataReturned: false,
-      isError: false,
-      isPending: true,
-      errors: {}
-    }
+    responseStatus: ResponseStatus.pending()
   };
 
   try {
@@ -84,7 +86,7 @@ export async function postRequest<T>(
     result.responseStatus.isPending = false;
     result.responseStatus.isDataReturned = true;
     result.data = data;
-    result.headers = headers;
+    result.headers = getHeaders(headers);
     return Promise.resolve(result);
   } catch (error) {
     return Promise.reject(prepareErrorResponseStatus(error));
