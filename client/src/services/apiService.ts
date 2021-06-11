@@ -43,6 +43,17 @@ function prepareErrorResponseStatus(error: AxiosError): ResponseStatus {
   };
 }
 
+function getHeaders(headers: { [key: string]: string }): Headers {
+  const result: Headers = {};
+  if (headers["authorization"]) {
+    result[Header.AUTHORIZATION] = headers["authorization"];
+  }
+  if (headers["expires"]) {
+    result[Header.EXPIRES] = headers["expires"];
+  }
+  return result;
+}
+
 export async function getRequest<T>(url: string): Promise<PreparedResponse<T>> {
   const result: PreparedResponse<T> = {
     responseStatus: ResponseStatus.pending()
@@ -59,17 +70,6 @@ export async function getRequest<T>(url: string): Promise<PreparedResponse<T>> {
   } catch (error) {
     return Promise.reject(prepareErrorResponseStatus(error));
   }
-}
-
-function getHeaders(headers: { [key: string]: string }): Headers {
-  const result: Headers = {};
-  if (headers["authorization"]) {
-    result[Header.AUTHORIZATION] = headers["authorization"];
-  }
-  if (headers["expires"]) {
-    result[Header.EXPIRES] = headers["expires"];
-  }
-  return result;
 }
 
 export async function postRequest<T>(
