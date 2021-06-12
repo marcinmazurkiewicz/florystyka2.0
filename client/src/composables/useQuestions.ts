@@ -2,19 +2,24 @@ import { Ref, ref } from "vue";
 import { getErrorBasedOnErrorType, getResponseError } from "@/utils/errorUtils";
 import { ErrorType } from "@/types/ErrorTypes";
 import {
+  AdminPagedQuestions,
   QuestionUnit,
   SolutionRequest,
   Test,
   UserChoice
 } from "@/types/QuestionTypes";
+import router from "@/router/index.ts";
+
 import {
   checkAnswer,
   checkTest,
   getRandomQuestion,
   getSingleQuestion,
-  getTest
+  getTest,
+  getPagedQuestions
 } from "@/services/questionApiService";
 import { ResponseStatus } from "@/types/ResponseStatus";
+import { PreparedResponse } from "@/types/PreparedResponse";
 
 export function useQuestion() {
   const solved = ref(false);
@@ -167,4 +172,52 @@ export function useTest() {
     getQuestions,
     sendAnswers
   };
+}
+
+export function useQuestionsAsAdmin() {
+  const nearbyPages = function(
+    totalPages: number,
+    currentPage: number
+  ): number[] {
+    const result = [];
+    if (totalPages < 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        result.push(i);
+      }
+    } else if (currentPage < 2) {
+      result.push(1, 2, 3, 4, 5);
+    } else if (currentPage > totalPages - 2) {
+      result.push(
+        totalPages - 4,
+        totalPages - 3,
+        totalPages - 2,
+        totalPages - 1,
+        totalPages
+      );
+    } else {
+      result.push(
+        currentPage - 2,
+        currentPage - 1,
+        currentPage,
+        currentPage + 1,
+        currentPage + 2
+      );
+    }
+    return result;
+  };
+
+  const goToDetails = function(questionId: number): void {
+    router.push({
+      name: "AdminQuestionView",
+      params: { questionId: questionId }
+    });
+  };
+
+  const goToPage = function(
+    page: number
+  ): Promise<PreparedResponse<AdminPagedQuestions>> {
+    return getPagedQuestions(page);
+  };
+
+  return { nearbyPages, goToPage, goToDetails };
 }
