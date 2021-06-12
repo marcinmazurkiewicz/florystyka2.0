@@ -1,5 +1,6 @@
 package dev.mazurkiewicz.florystyka.jwt;
 
+import dev.mazurkiewicz.florystyka.auth.Authority;
 import dev.mazurkiewicz.florystyka.exception.TokenExpiredException;
 import dev.mazurkiewicz.florystyka.exception.UnauthorizedAccessException;
 import dev.mazurkiewicz.florystyka.user.User;
@@ -12,6 +13,8 @@ import javax.crypto.SecretKey;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -25,13 +28,21 @@ public class JwtTokenUtil {
         String token = Jwts.builder()
                 .setSubject(user.getUsername())
                 .setIssuer(jwtProperties.getIssuer())
-                .claim("authorities", user.getAuthorities())
+                .claim("authorities", getUserAuthorities(user))
                 .claim("userId", user.getId())
                 .setIssuedAt(new Date())
-                .setExpiration(Timestamp.valueOf(LocalDateTime.now().plusSeconds(jwtProperties.getTokenExpirationAfterSeconds())))
+                .setExpiration(calculateExpirationTime())
                 .signWith(secretKey)
                 .compact();
         return String.format("%s %s", jwtProperties.getTokenPrefix(), token);
+    }
+
+    private Set<String> getUserAuthorities(User user) {
+        return user.getAuthorities().stream().map(Authority::getAuthority).collect(Collectors.toSet());
+    }
+
+    private Timestamp calculateExpirationTime() {
+        return Timestamp.valueOf(LocalDateTime.now().plusSeconds(jwtProperties.getTokenExpirationAfterSeconds()));
     }
 
     public Jws<Claims> getJwt(String token) {

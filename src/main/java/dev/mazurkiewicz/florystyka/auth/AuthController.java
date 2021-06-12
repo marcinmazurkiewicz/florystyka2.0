@@ -72,7 +72,6 @@ public class AuthController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, jwtTokenUtil.generateToken(user))
-                .header(HttpHeaders.EXPIRES, securityProperties.getRefreshTokenExpirationAfterSeconds().toString())
                 .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
                 .body(userMapper.mapEntityToResponse(user));
     }
