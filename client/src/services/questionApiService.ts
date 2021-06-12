@@ -1,4 +1,5 @@
 import {
+  AdminPagedQuestions,
   Question,
   SingleSolutionResponse,
   SolutionRequest,
@@ -37,5 +38,13 @@ export async function checkAnswer(answer: {
   return postRequest<SingleSolutionResponse>(
     "/api/v3/solutions/single",
     answer
+  );
+}
+
+export async function getPagedQuestions(
+  pageNo: number
+): Promise<PreparedResponse<AdminPagedQuestions>> {
+  return getRequest<AdminPagedQuestions>(
+    `/api/v3/admin/questions?page=${pageNo - 1}`
   );
 }
