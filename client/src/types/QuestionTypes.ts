@@ -19,6 +19,19 @@ export type Question = {
   img?: string;
 };
 
+export type AdminQuestion = {
+  id: number;
+  content: string;
+  answerA: string;
+  answerB: string;
+  answerC: string;
+  answerD: string;
+  correct: string;
+  month?: number;
+  year?: number;
+  img?: string;
+};
+
 export type QuestionUnit = {
   question: Question;
   selectedAnswer: UserChoice;
@@ -65,3 +78,10 @@ export type SolutionRequest = {
 export function isTest(test: Test | null): test is Test {
   return test != null;
 }
+
+export type AdminPagedQuestions = {
+  content: AdminQuestion[];
+  totalPages: number;
+  number: number;
+  size: number;
+};
