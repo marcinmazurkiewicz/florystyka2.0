@@ -1,6 +1,6 @@
 import { LoginRequest, LoginResponse } from "@/types/AuthTypes";
 import { ref, Ref } from "vue";
-import { postRequest } from "@/services/apiService";
+import { getRequest, postRequest } from "@/services/apiService";
 import { ResponseStatus } from "@/types/ResponseStatus";
 import { Header, PreparedResponse } from "@/types/PreparedResponse";
 import { login } from "@/utils/authUtils";
@@ -21,9 +21,7 @@ export function useAuthorization() {
         if (response.headers) {
           const token: string | undefined =
             response.headers[Header.AUTHORIZATION];
-          const tokenExp: string | undefined = response.headers[Header.EXPIRES];
-          if (token != undefined && tokenExp != undefined)
-            login(token, Number.parseInt(tokenExp));
+          if (token != undefined) login(token);
         }
 
         return response;
@@ -36,8 +34,19 @@ export function useAuthorization() {
       });
   }
 
+  function refreshTokenRequest(): void {
+    getRequest<LoginResponse>("api/v3/auth/refresh").then(response => {
+      if (response.headers) {
+        const token: string | undefined =
+          response.headers[Header.AUTHORIZATION];
+        if (token != undefined) login(token);
+      }
+    });
+  }
+
   return {
     responseStatus,
-    sendLoginRequest
+    sendLoginRequest,
+    refreshTokenRequest
   };
 }
