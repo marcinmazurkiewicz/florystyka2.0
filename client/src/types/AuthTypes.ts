@@ -11,5 +11,6 @@ export type LoginResponse = {
 
 export type MemoryToken = {
   token: string;
-  expiryAtSeconds: number;
+  expiry: number;
+  authorities: string[];
 };
