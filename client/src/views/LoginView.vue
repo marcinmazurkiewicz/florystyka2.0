@@ -57,10 +57,8 @@ export default defineComponent({
 
     const loginRequest = function () {
       sendLoginRequest({username: username.value, password: password.value})
-          .then(response => {
-            console.log(response.data);
-            console.log(response.headers);
-            router.push("/");
+          .then(() => {
+            router.push({ name: "DashboardView"});
           })
     }
     return {
