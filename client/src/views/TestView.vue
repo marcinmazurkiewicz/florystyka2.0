@@ -23,9 +23,9 @@
     </header>
     <view-wrapper :response-status="responseStatus">
       <span
-        v-if="solved"
-        :class="[passed ? 'bg-dark-green' : 'bg-red']"
-        class="block w-full mt-8 p-3 text-dark-gray text-lg text-center font-semibold"
+          v-if="solved"
+          :class="[passed ? 'bg-dark-green' : 'bg-red']"
+          class="block w-full mt-8 p-3 text-dark-gray text-lg text-center font-semibold"
       >
         <span v-if="passed">Test zaliczony! </span>
         <span v-else>Test niezaliczony :( </span>
@@ -33,17 +33,17 @@
       </span>
       <div v-if="test != null">
         <question-view
-          v-for="(question, index) in test.questions"
-          :key="question.id"
-          :questionUnit="question"
-          :number="index"
-          @selected="select(question, $event)"
+            v-for="(question, index) in test.questions"
+            :key="question.id"
+            :questionUnit="question"
+            :number="index"
+            @selected="select(question, $event)"
         ></question-view>
       </div>
       <button
-        v-if="!solved"
-        @click="submitAnswer"
-        class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-dark-green
+          v-if="!solved"
+          @click="submitAnswer"
+          class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-dark-green
             rounded hover:bg-dark-green hover:text-white"
       >
         Sprawdź
@@ -54,10 +54,10 @@
 <script lang="ts">
 import QuestionView from "@/components/questions/Question.vue";
 import ViewWrapper from "@/components/ViewWrapper.vue";
-import { defineComponent, computed, onMounted, watch } from "vue";
-import { countdownInterval } from "@/composables/useCountdown";
-import { useTest } from "@/composables/useQuestions";
-import { isTest, QuestionUnit, UserChoice } from "@/types/QuestionTypes";
+import {computed, defineComponent, onMounted, watch, inject} from "vue";
+import {countdownInterval} from "@/composables/useCountdown";
+import {useTest} from "@/composables/useQuestions";
+import {isTest, QuestionUnit, UserChoice} from "@/types/QuestionTypes";
 
 export default defineComponent({
   name: "Test",
@@ -89,11 +89,18 @@ export default defineComponent({
       question.selectedAnswer = selectedAnswer;
     };
 
+    const smoothScroll: any = inject('smoothScroll');
+    const scrollToTop = () => {
+      smoothScroll({
+        scrollTo: document.getElementById("app")
+      });
+    };
+
     const submitAnswer = (): void => {
       clearInterval(countdown);
       if (isTest(test.value)) {
+        scrollToTop();
         sendAnswers(test.value.questions);
-        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     };
 
