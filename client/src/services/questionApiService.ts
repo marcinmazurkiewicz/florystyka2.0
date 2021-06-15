@@ -45,6 +45,7 @@ export async function getPagedQuestions(
   pageNo: number
 ): Promise<PreparedResponse<AdminPagedQuestions>> {
   return getRequest<AdminPagedQuestions>(
-    `/api/v3/admin/questions?page=${pageNo - 1}`
+    `/api/v3/admin/questions?page=${pageNo - 1}`,
+    true
   );
 }

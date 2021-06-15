@@ -1,4 +1,4 @@
-import { HTTP } from "@/http";
+import { HTTP, authHTTP } from "@/http";
 import { ResponseStatus } from "@/types/ResponseStatus";
 import {
   getErrorBasedOnStatusCode,
@@ -54,14 +54,17 @@ function getHeaders(headers: { [key: string]: string }): Headers {
   return result;
 }
 
-export async function getRequest<T>(url: string): Promise<PreparedResponse<T>> {
+export async function getRequest<T>(
+  url: string,
+  auth = false
+): Promise<PreparedResponse<T>> {
   const result: PreparedResponse<T> = {
     responseStatus: ResponseStatus.pending()
   };
 
   try {
-    const response = HTTP.get(url);
-    const { data, headers } = await response;
+    const response = auth ? await authHTTP.get(url) : await HTTP.get(url);
+    const { data, headers } = response;
     result.responseStatus.isPending = false;
     result.responseStatus.isDataReturned = true;
     result.data = data;
@@ -74,15 +77,18 @@ export async function getRequest<T>(url: string): Promise<PreparedResponse<T>> {
 
 export async function postRequest<T>(
   url: string,
-  payload: RequestPayload
+  payload: RequestPayload,
+  auth = false
 ): Promise<PreparedResponse<T>> {
   const result: PreparedResponse<T> = {
     responseStatus: ResponseStatus.pending()
   };
 
   try {
-    const response = HTTP.post(url, payload);
-    const { data, headers } = await response;
+    const response = auth
+      ? await authHTTP.post(url, payload)
+      : await HTTP.post(url, payload);
+    const { data, headers } = response;
     result.responseStatus.isPending = false;
     result.responseStatus.isDataReturned = true;
     result.data = data;

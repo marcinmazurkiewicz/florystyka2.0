@@ -1,5 +1,7 @@
-import { MemoryToken } from "@/types/AuthTypes";
-
+import { LoginResponse, MemoryToken } from "@/types/AuthTypes";
+import store from "@/store/index";
+import { getRequest } from "@/services/apiService";
+import { Header } from "@/types/PreparedResponse";
 let memoryToken: MemoryToken;
 
 function decodeToken(token: string): { authorities: string[]; expiry: number } {
@@ -15,7 +17,6 @@ function decodeToken(token: string): { authorities: string[]; expiry: number } {
   const decodedToken = JSON.parse(jsonPayload);
   const authorities: string[] = decodedToken.authorities;
   const expiry: number = decodedToken.exp;
-
   return { authorities, expiry };
 }
 
@@ -26,6 +27,7 @@ function login(token: string): void {
     expiry,
     authorities
   };
+  store.commit("setLogged", true);
 }
 
 function getToken(): string {
@@ -33,7 +35,7 @@ function getToken(): string {
 }
 
 function isLoggedUser(): boolean {
-  return memoryToken != null && memoryToken.token != null;
+  return memoryToken != null && Date.now() / 1000 < memoryToken.expiry;
 }
 
 function hasRight(permission: string): boolean {
@@ -50,4 +52,24 @@ function hasAnyRight(permissions: string[]): boolean {
   return hasPermission;
 }
 
-export { login, getToken, isLoggedUser, hasRight, hasAnyRight };
+function refreshToken(): Promise<boolean> {
+  return getRequest<LoginResponse>("api/v3/auth/refresh")
+    .then(response => {
+      if (response.headers) {
+        const token: string | undefined =
+          response.headers[Header.AUTHORIZATION];
+        if (token != undefined) {
+          login(token);
+          return Promise.resolve(true);
+        } else {
+          return Promise.resolve(false);
+        }
+      }
+      return false;
+    })
+    .catch(() => {
+      return Promise.resolve(false);
+    });
+}
+
+export { login, getToken, isLoggedUser, hasRight, hasAnyRight, refreshToken };

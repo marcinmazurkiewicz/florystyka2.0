@@ -57,7 +57,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             Map<String, Object> details = new HashMap<>();
             details.put("userId", body.get("userId"));
             Set<SimpleGrantedAuthority> authorities = authList.stream()
-                    .map(m -> ((Map<?, ?>) m).get("authority"))
                     .map(auth -> new SimpleGrantedAuthority(auth.toString()))
                     .collect(Collectors.toSet());
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken

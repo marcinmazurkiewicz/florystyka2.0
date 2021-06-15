@@ -1,6 +1,11 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import {
+  createRouter,
+  createWebHistory,
+  RouteRecordRaw
+} from "vue-router";
 import { trackRouter } from "vue-gtag-next";
-import { isLoggedUser, hasAnyRight } from "@/utils/authUtils";
+import { hasAnyRight, isLoggedUser, refreshToken } from "@/utils/authUtils";
+import store from "@/store/index";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -107,22 +112,20 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!isLoggedUser()) {
-      next({
-        name: "Login",
-        params: { nextUrl: to.fullPath }
-      });
-    } else if (to.matched.some(record => record.meta.allowedFor)) {
-      if (hasAnyRight(to.meta.allowedFor)) {
-        next();
+    if (store.getters["isLogged"] && isLoggedUser()) {
+      if (to.matched.some(record => record.meta.allowedFor)) {
+        hasAnyRight(to.meta.allowedFor)
+          ? next()
+          : next({ name: "Unauthorized", params: { nextUrl: to.fullPath } });
       } else {
-        next({
-          name: "Unauthorized",
-          params: { nextUrl: to.fullPath }
-        });
+        next();
       }
     } else {
-      next();
+      refreshToken().then(status =>
+        status
+          ? next()
+          : next({ name: "Login", params: { nextUrl: to.fullPath } })
+      );
     }
   } else {
     next();
