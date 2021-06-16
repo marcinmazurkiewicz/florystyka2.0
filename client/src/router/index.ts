@@ -1,8 +1,4 @@
-import {
-  createRouter,
-  createWebHistory,
-  RouteRecordRaw
-} from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { trackRouter } from "vue-gtag-next";
 import { hasAnyRight, isLoggedUser, refreshToken } from "@/utils/authUtils";
 import store from "@/store/index";
@@ -87,18 +83,25 @@ const routes: RouteRecordRaw[] = [
     meta: {
       requiresAuth: true,
       allowedFor: ["ROLE_ADMIN"]
-    },
-    children: [
-      {
-        path: "/questions",
-        name: "AdminQuestionsView",
-        component: () => import("@/views/logged/admin/AdminQuestionsView.vue"),
-        meta: {
-          requiresAuth: true,
-          allowedFor: ["ROLE_ADMIN"]
-        }
-      }
-    ]
+    }
+  },
+  {
+    path: "/admin/questions",
+    name: "AdminQuestionsView",
+    component: () => import("@/views/logged/admin/AdminQuestionsView.vue"),
+    meta: {
+      requiresAuth: true,
+      allowedFor: ["ROLE_ADMIN"]
+    }
+  },
+  {
+    path: "/admin/questions/:questionId",
+    name: "AdminQuestionView",
+    component: () => import("@/views/logged/admin/SingleQuestionPreview.vue"),
+    meta: {
+      requiresAuth: true,
+      allowedFor: ["ROLE_ADMIN"]
+    }
   }
 ];
 

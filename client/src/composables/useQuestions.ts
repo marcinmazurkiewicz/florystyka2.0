@@ -3,6 +3,7 @@ import { getErrorBasedOnErrorType, getResponseError } from "@/utils/errorUtils";
 import { ErrorType } from "@/types/ErrorTypes";
 import {
   AdminPagedQuestions,
+  AdminQuestion,
   QuestionUnit,
   SolutionRequest,
   Test,
@@ -16,7 +17,8 @@ import {
   getRandomQuestion,
   getSingleQuestion,
   getTest,
-  getPagedQuestions
+  getPagedQuestions,
+  getSingleQuestionPreview
 } from "@/services/questionApiService";
 import { ResponseStatus } from "@/types/ResponseStatus";
 import { PreparedResponse } from "@/types/PreparedResponse";
@@ -219,5 +221,11 @@ export function useQuestionsAsAdmin() {
     return getPagedQuestions(page);
   };
 
-  return { nearbyPages, goToPage, goToDetails };
+  const getQuestionPreview = function(
+    questionId: number
+  ): Promise<PreparedResponse<AdminQuestion>> {
+    return getSingleQuestionPreview(questionId);
+  };
+
+  return { nearbyPages, goToPage, goToDetails, getQuestionPreview };
 }

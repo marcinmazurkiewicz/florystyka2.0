@@ -29,7 +29,7 @@ export type AdminQuestion = {
   correct: string;
   month?: number;
   year?: number;
-  img?: string;
+  image?: string;
 };
 
 export type QuestionUnit = {
