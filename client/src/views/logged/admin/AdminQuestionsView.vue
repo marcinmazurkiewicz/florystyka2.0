@@ -3,12 +3,12 @@
     <div class="block w-full flex items-center">
       <router-link :to="{name: 'AdminQuestionsView'}">Dodaj pytanie</router-link>
       <ul class="block">
-        <li class="p-4 inline-block" @click="goToPage(1)">&#10092;&#10092;</li>
-        <li :class="n === currentPage ? 'bg-light-green' : 'bg-light-gray'" class="p-4 inline-block"
-            v-for="n in pages()" :key="n">
+        <li class="p-4 inline-block cursor-pointer" @click="getPage(1)">&#10092;&#10092;</li>
+        <li :class="n === currentPage ? 'bg-light-green' : 'bg-light-gray'" class="p-4 inline-block cursor-pointer"
+            v-for="n in pages()" :key="n" @click="getPage(n)">
           {{ n }}
         </li>
-        <li class="p-4 inline-block" @click="goToPage(this.totalPages)">&#10093;&#10093;</li>
+        <li class="p-4 inline-block cursor-pointer" @click="getPage(this.totalPages)">&#10093;&#10093;</li>
       </ul>
     </div>
 
@@ -64,25 +64,28 @@ export default defineComponent({
     const currentPage: Ref<number> = ref(0);
     const {nearbyPages, goToPage, goToDetails} = useQuestionsAsAdmin();
 
-    const pages = function() {
+    const pages = function () {
       return nearbyPages(totalPages.value, currentPage.value);
     }
 
-    onMounted(() => goToPage(1)
-        .then(result => {
-          if(result.data) {
-            totalPages.value = result.data.totalPages;
-            currentPage.value = result.data.number + 1;
-            questions.value = result.data.content;
-          }
-        })
-    );
+    const getPage = function (pageNo: number): void {
+      goToPage(pageNo)
+          .then(result => {
+            if (result.data) {
+              totalPages.value = result.data.totalPages;
+              currentPage.value = result.data.number + 1;
+              questions.value = result.data.content;
+            }
+          })
+    }
+
+    onMounted(() => getPage(1));
 
     return {
       questions,
       totalPages,
       currentPage,
-      goToPage,
+      getPage,
       goToDetails,
       pages
     };

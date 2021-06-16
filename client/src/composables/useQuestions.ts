@@ -184,7 +184,7 @@ export function useQuestionsAsAdmin() {
       for (let i = 1; i <= totalPages; i++) {
         result.push(i);
       }
-    } else if (currentPage < 2) {
+    } else if (currentPage < 3) {
       result.push(1, 2, 3, 4, 5);
     } else if (currentPage > totalPages - 2) {
       result.push(
