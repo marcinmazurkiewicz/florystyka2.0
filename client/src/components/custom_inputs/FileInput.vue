@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <span class="block w-full text-right text-sm text-red" v-if="error">
-      {{ getErrorBasedOnErrorInfo(error) }}
+      {{ error }}
     </span>
     <div class="flex">
       <input
@@ -10,7 +10,7 @@
         :required="required"
         type="file"
         :accept="accept"
-        ref="fileInputRef"
+        :ref="el => (fileInputRef = el)"
         class="opacity-0 absolute block w-3/5 pl-4 pr-2 py-2.5 mt-2 mb-7 max-w-screen-sm border"
         @change="handleFile"
       />
@@ -33,9 +33,7 @@
   </div>
 </template>
 <script lang="ts">
-import { getErrorBasedOnErrorInfo } from "@/utils/errorUtils";
-import { defineComponent, PropType, ref, Ref } from "vue";
-import { ErrorInfo } from "@/types/ErrorTypes";
+import { defineComponent, ref, Ref } from "vue";
 
 export default defineComponent({
   name: "FileInput",
@@ -45,7 +43,7 @@ export default defineComponent({
       type: String,
       required: true
     },
-    error: Object as PropType<ErrorInfo>,
+    error: String,
     required: {
       type: Boolean,
       default: true
@@ -58,13 +56,15 @@ export default defineComponent({
   setup(props, { emit }) {
     const filename: Ref<string> = ref("");
     const fileInputRef = ref();
+
     const handleFile = function() {
       if (fileInputRef.value.files[0]) {
         filename.value = fileInputRef.value.files[0].name;
       }
       emit("handle-file", fileInputRef.value.files[0]);
     };
-    return { filename, fileInputRef, handleFile, getErrorBasedOnErrorInfo };
+
+    return { filename, fileInputRef, handleFile };
   }
 });
 </script>

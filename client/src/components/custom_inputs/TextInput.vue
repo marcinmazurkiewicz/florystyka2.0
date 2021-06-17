@@ -7,7 +7,7 @@
     >
       <slot /> </label
     ><span class="inline-block w-1/2 text-right text-sm text-red" v-if="error">
-      {{ getErrorBasedOnErrorInfo(error) }}</span
+      {{ error }}</span
     >
     <input
       :id="id"
@@ -25,15 +25,13 @@
   </div>
 </template>
 <script lang="ts">
-import { getErrorBasedOnErrorInfo } from "@/utils/errorUtils";
-import { defineComponent, PropType } from "vue";
-import { ErrorInfo } from "@/types/ErrorTypes";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "TextInput",
   emits: ["update:modelValue"],
   props: {
-    error: Object as PropType<ErrorInfo>,
+    error: String,
     modelValue: {
       type: [String, Number],
       required: true
@@ -50,9 +48,6 @@ export default defineComponent({
       type: Boolean,
       default: true
     }
-  },
-  setup() {
-    return { getErrorBasedOnErrorInfo };
   }
 });
 </script>

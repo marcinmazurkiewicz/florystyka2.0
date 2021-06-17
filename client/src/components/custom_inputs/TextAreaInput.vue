@@ -7,7 +7,7 @@
     >
       <slot /> </label
     ><span class="inline-block w-1/2 text-right text-sm text-red" v-if="error">
-      {{ getErrorBasedOnErrorInfo(error) }}
+      {{ error }}
     </span>
     <textarea
       :id="id"
@@ -24,9 +24,7 @@
   </div>
 </template>
 <script lang="ts">
-import { getErrorBasedOnErrorInfo } from "@/utils/errorUtils";
-import { defineComponent, PropType } from "vue";
-import { ErrorInfo } from "@/types/ErrorTypes";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "TextAreaInput",
@@ -40,14 +38,11 @@ export default defineComponent({
       type: String,
       required: true
     },
-    error: Object as PropType<ErrorInfo>,
+    error: String,
     required: {
       type: Boolean,
       default: true
     }
-  },
-  setup() {
-    return { getErrorBasedOnErrorInfo };
   }
 });
 </script>

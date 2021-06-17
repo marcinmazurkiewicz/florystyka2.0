@@ -21,14 +21,12 @@
       <slot />
     </label>
     <p v-if="error" class="text-red pt-3">
-      {{ getErrorBasedOnErrorType("CHOOSE_CORRECT") }}
+      {{ error }}
     </p>
   </div>
 </template>
 <script lang="ts">
-import { getErrorBasedOnErrorType } from "@/utils/errorUtils";
-import { computed, defineComponent, PropType } from "vue";
-import { ErrorInfo } from "@/types/ErrorTypes";
+import { computed, defineComponent } from "vue";
 
 export default defineComponent({
   name: "SwitchRadio",
@@ -46,7 +44,7 @@ export default defineComponent({
       required: true
     },
     error: {
-      type: Object as PropType<ErrorInfo>,
+      type: String,
       required: false
     }
   },
@@ -54,7 +52,7 @@ export default defineComponent({
     const isChecked = computed(() => {
       return props.value === props.modelValue;
     });
-    return { isChecked, getErrorBasedOnErrorType };
+    return { isChecked };
   }
 });
 </script>
