@@ -69,5 +69,6 @@ export {
   getResponseError,
   getErrorBasedOnErrorType,
   getErrorBasedOnStatusCode,
+  getErrorBasedOnErrorInfo,
   parseValidErrors
 };

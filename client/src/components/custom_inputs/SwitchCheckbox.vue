@@ -24,6 +24,7 @@
 </template>
 <script>
 import { defineComponent } from "vue";
+
 export default defineComponent({
   name: "SwitchCheckbox",
   props: ["modelValue", "id"]

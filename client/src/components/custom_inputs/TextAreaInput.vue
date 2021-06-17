@@ -7,9 +7,9 @@
     >
       <slot /> </label
     ><span class="inline-block w-1/2 text-right text-sm text-red" v-if="error">
-      {{ getErrorBasedOnErrorInfo(error) }}</span
-    >
-    <input
+      {{ getErrorBasedOnErrorInfo(error) }}
+    </span>
+    <textarea
       :id="id"
       :class="
         error
@@ -18,7 +18,6 @@
       "
       :name="id"
       :required="required"
-      :type="type"
       class="form-input block w-full pl-4 pr-2 py-3 text-black sm:text-sm sm:leading-5 mt-2 mb-7 focus:shadow-none border-3 border-white"
       @input="$emit('update:modelValue', $event.target.value)"
     />
@@ -30,10 +29,9 @@ import { defineComponent, PropType } from "vue";
 import { ErrorInfo } from "@/types/ErrorTypes";
 
 export default defineComponent({
-  name: "TextInput",
+  name: "TextAreaInput",
   emits: ["update:modelValue"],
   props: {
-    error: Object as PropType<ErrorInfo>,
     modelValue: {
       type: [String, Number],
       required: true
@@ -42,10 +40,7 @@ export default defineComponent({
       type: String,
       required: true
     },
-    type: {
-      type: String,
-      default: "text"
-    },
+    error: Object as PropType<ErrorInfo>,
     required: {
       type: Boolean,
       default: true

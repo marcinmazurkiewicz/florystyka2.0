@@ -98,3 +98,33 @@ export async function postRequest<T>(
     return Promise.reject(prepareErrorResponseStatus(error));
   }
 }
+
+export async function postFormDataRequest<T>(
+  url: string,
+  payload: FormData,
+  auth = false
+): Promise<PreparedResponse<T>> {
+  const result: PreparedResponse<T> = {
+    responseStatus: ResponseStatus.pending()
+  };
+
+  const config = {
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  };
+
+  try {
+    const response = auth
+      ? await authHTTP.post(url, payload, config)
+      : await HTTP.post(url, payload, config);
+    const { data, headers } = response;
+    result.responseStatus.isPending = false;
+    result.responseStatus.isDataReturned = true;
+    result.data = data;
+    result.headers = getHeaders(headers);
+    return Promise.resolve(result);
+  } catch (error) {
+    return Promise.reject(prepareErrorResponseStatus(error));
+  }
+}

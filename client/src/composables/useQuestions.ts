@@ -18,10 +18,12 @@ import {
   getSingleQuestion,
   getTest,
   getPagedQuestions,
-  getSingleQuestionPreview
+  getSingleQuestionPreview,
+  saveQuestion
 } from "@/services/questionApiService";
 import { ResponseStatus } from "@/types/ResponseStatus";
-import { PreparedResponse } from "@/types/PreparedResponse";
+import {  PreparedResponse } from "@/types/PreparedResponse";
+
 
 export function useQuestion() {
   const solved = ref(false);
@@ -227,5 +229,26 @@ export function useQuestionsAsAdmin() {
     return getSingleQuestionPreview(questionId);
   };
 
-  return { nearbyPages, goToPage, goToDetails, getQuestionPreview };
+  const addQuestion = function(
+    question: FormData
+  ): Promise<PreparedResponse<AdminQuestion>> {
+    return saveQuestion(question)
+      .then(response => {
+        return response;
+      })
+      .catch(errorStatus => {
+        const response: PreparedResponse<AdminQuestion> = {
+          responseStatus: errorStatus
+        };
+        return Promise.reject(response);
+      });
+  };
+
+  return {
+    nearbyPages,
+    goToPage,
+    goToDetails,
+    getQuestionPreview,
+    addQuestion
+  };
 }

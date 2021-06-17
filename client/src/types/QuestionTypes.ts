@@ -32,6 +32,18 @@ export type AdminQuestion = {
   image?: string;
 };
 
+export type NewQuestion = {
+  content: string;
+  answerA: string;
+  answerB: string;
+  answerC: string;
+  answerD: string;
+  correct: string;
+  month?: number;
+  year?: number;
+  image?: Blob;
+};
+
 export type QuestionUnit = {
   question: Question;
   selectedAnswer: UserChoice;

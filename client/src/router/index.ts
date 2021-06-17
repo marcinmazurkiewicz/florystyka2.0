@@ -102,6 +102,15 @@ const routes: RouteRecordRaw[] = [
       requiresAuth: true,
       allowedFor: ["ROLE_ADMIN"]
     }
+  },
+  {
+    path: "/admin/questions/add",
+    name: "AdminAddQuestion",
+    component: () => import("@/views/logged/admin/AddEditQuestionView.vue"),
+    meta: {
+      requiresAuth: true,
+      allowedFor: ["ROLE_ADMIN"]
+    }
   }
 ];
 

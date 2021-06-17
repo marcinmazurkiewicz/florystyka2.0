@@ -10,7 +10,11 @@ import {
 } from "@/types/QuestionTypes";
 
 import { PreparedResponse } from "@/types/PreparedResponse";
-import { getRequest, postRequest } from "@/services/apiService";
+import {
+  getRequest,
+  postFormDataRequest,
+  postRequest
+} from "@/services/apiService";
 
 export async function getTest(): Promise<PreparedResponse<TestResponse>> {
   return getRequest<TestResponse>("/api/v3/questions/test");
@@ -54,4 +58,14 @@ export async function getSingleQuestionPreview(
   id: number
 ): Promise<PreparedResponse<AdminQuestion>> {
   return getRequest<AdminQuestion>(`/api/v3/admin/questions/${id}`, true);
+}
+
+export async function saveQuestion(
+  question: FormData
+): Promise<PreparedResponse<AdminQuestion>> {
+  return postFormDataRequest<AdminQuestion>(
+    `/api/v3/admin/questions`,
+    question,
+    true
+  );
 }
