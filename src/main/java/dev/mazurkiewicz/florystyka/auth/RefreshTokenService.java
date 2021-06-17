@@ -28,8 +28,8 @@ public class RefreshTokenService {
         return refreshToken.getRefreshToken();
     }
 
-    public RefreshToken getToken(RefreshTokenRequest refreshToken) {
-        return repository.getByRefreshToken(refreshToken.getRefreshToken())
+    public RefreshToken getToken(String refreshToken) {
+        return repository.getByRefreshToken(refreshToken)
                 .orElseThrow(() ->
                         new UnauthorizedAccessException(String.format("Refresh token %s has not found", refreshToken)));
     }

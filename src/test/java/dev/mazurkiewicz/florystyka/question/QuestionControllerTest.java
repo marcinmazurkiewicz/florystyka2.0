@@ -4,6 +4,9 @@ import dev.mazurkiewicz.florystyka.answer.Answer;
 import dev.mazurkiewicz.florystyka.answer.AnswerType;
 import dev.mazurkiewicz.florystyka.exception.PdfRenderException;
 import dev.mazurkiewicz.florystyka.exception.ResourceNotFoundException;
+import dev.mazurkiewicz.florystyka.jwt.JwtTokenUtil;
+import dev.mazurkiewicz.florystyka.user.UserService;
+import dev.mazurkiewicz.florystyka.utils.TestTimer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,12 @@ class QuestionControllerTest {
 
     @MockBean
     private QuestionService service;
+
+    @MockBean
+    private UserService userService;
+
+    @MockBean
+    private JwtTokenUtil jwtTokenUtil;
 
     private static final List<QuestionResponse> questionResponses = new ArrayList<>();
 
@@ -179,34 +188,36 @@ class QuestionControllerTest {
 
     @Test
     void shouldReturnListOfQuestionResponseWhenCallGetQuestionToTest() throws Exception {
-        when(service.getQuestionsToTest()).thenReturn(questionResponses);
+        when(service.getQuestionsToTest()).thenReturn(new TestResponse(new TestTimer(60, 0),questionResponses));
 
         mvc.perform(get("/api/v3/questions/test"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(10)))
-                .andExpect(jsonPath("$[0].content", is("Question 1")))
-                .andExpect(jsonPath("$[0].answers", hasSize(4)))
-                .andExpect(jsonPath("$[0].answers[0].value", is("A")))
-                .andExpect(jsonPath("$[0].answers[0].content", is("answer A for question 1")))
-                .andExpect(jsonPath("$[0].answers[1].value", is("B")))
-                .andExpect(jsonPath("$[0].answers[1].content", is("answer B for question 1")))
-                .andExpect(jsonPath("$[0].answers[2].value", is("C")))
-                .andExpect(jsonPath("$[0].answers[2].content", is("answer C for question 1")))
-                .andExpect(jsonPath("$[0].answers[3].value", is("D")))
-                .andExpect(jsonPath("$[0].answers[3].content", is("answer D for question 1")))
-                .andExpect(jsonPath("$[0].img").doesNotExist())
-                .andExpect(jsonPath("$[9].id", is(10)))
-                .andExpect(jsonPath("$[9].content", is("Question 10")))
-                .andExpect(jsonPath("$[9].answers", hasSize(4)))
-                .andExpect(jsonPath("$[9].answers[0].value", is("A")))
-                .andExpect(jsonPath("$[9].answers[0].content", is("answer A for question 10")))
-                .andExpect(jsonPath("$[9].answers[1].value", is("B")))
-                .andExpect(jsonPath("$[9].answers[1].content", is("answer B for question 10")))
-                .andExpect(jsonPath("$[9].answers[2].value", is("C")))
-                .andExpect(jsonPath("$[9].answers[2].content", is("answer C for question 10")))
-                .andExpect(jsonPath("$[9].answers[3].value", is("D")))
-                .andExpect(jsonPath("$[9].answers[3].content", is("answer D for question 10")))
-                .andExpect(jsonPath("$[9].img", is("/resources/img/img_10.png")));
+                .andExpect(jsonPath("$.timer.minutes", is(60)))
+                .andExpect(jsonPath("$.timer.seconds", is(0)))
+                .andExpect(jsonPath("$.questions", hasSize(10)))
+                .andExpect(jsonPath("$.questions[0].content", is("Question 1")))
+                .andExpect(jsonPath("$.questions[0].answers", hasSize(4)))
+                .andExpect(jsonPath("$.questions[0].answers[0].value", is("A")))
+                .andExpect(jsonPath("$.questions[0].answers[0].content", is("answer A for question 1")))
+                .andExpect(jsonPath("$.questions[0].answers[1].value", is("B")))
+                .andExpect(jsonPath("$.questions[0].answers[1].content", is("answer B for question 1")))
+                .andExpect(jsonPath("$.questions[0].answers[2].value", is("C")))
+                .andExpect(jsonPath("$.questions[0].answers[2].content", is("answer C for question 1")))
+                .andExpect(jsonPath("$.questions[0].answers[3].value", is("D")))
+                .andExpect(jsonPath("$.questions[0].answers[3].content", is("answer D for question 1")))
+                .andExpect(jsonPath("$.questions[0].img").doesNotExist())
+                .andExpect(jsonPath("$.questions[9].id", is(10)))
+                .andExpect(jsonPath("$.questions[9].content", is("Question 10")))
+                .andExpect(jsonPath("$.questions[9].answers", hasSize(4)))
+                .andExpect(jsonPath("$.questions[9].answers[0].value", is("A")))
+                .andExpect(jsonPath("$.questions[9].answers[0].content", is("answer A for question 10")))
+                .andExpect(jsonPath("$.questions[9].answers[1].value", is("B")))
+                .andExpect(jsonPath("$.questions[9].answers[1].content", is("answer B for question 10")))
+                .andExpect(jsonPath("$.questions[9].answers[2].value", is("C")))
+                .andExpect(jsonPath("$.questions[9].answers[2].content", is("answer C for question 10")))
+                .andExpect(jsonPath("$.questions[9].answers[3].value", is("D")))
+                .andExpect(jsonPath("$.questions[9].answers[3].content", is("answer D for question 10")))
+                .andExpect(jsonPath("$.questions[9].img", is("/resources/img/img_10.png")));
     }
 
     @Test

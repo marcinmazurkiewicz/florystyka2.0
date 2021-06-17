@@ -39,7 +39,7 @@ public class QuestionController {
     }
 
     @GetMapping("/test")
-    public List<QuestionResponse> getQuestionToTest() {
+    public TestResponse getQuestionToTest() {
         try {
             return service.getQuestionsToTest();
         } catch (IncorrectResultSizeDataAccessException e) {

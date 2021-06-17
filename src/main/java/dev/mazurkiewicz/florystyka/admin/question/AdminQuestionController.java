@@ -31,6 +31,11 @@ public class AdminQuestionController {
         return questionService.getPagedQuestions(page);
     }
 
+    @GetMapping("/{id}")
+    public AdminQuestionResponse getQuestionById(@PathVariable("id") Integer id) {
+        return questionService.getQuestionById(id);
+    }
+
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<?> saveNewQuestion(@Valid @ModelAttribute NewQuestionRequest questionRequest) {
         Integer questionId;

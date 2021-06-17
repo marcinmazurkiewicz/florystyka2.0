@@ -28,20 +28,20 @@ hs_err_pid*
 *~
 .Trash-*
 
-client/.DS_Store
-client/node_modules
-client/dist
+client_js/.DS_Store
+client_js/node_modules
+client_js/dist
 
 
 # local env files
-client/.env.local
-client/.env.*.local
+client_js/.env.local
+client_js/.env.*.local
 
 # Log files
-client/npm-debug.log*
-client/yarn-debug.log*
-client/yarn-error.log*
-client/pnpm-debug.log*
+client_js/npm-debug.log*
+client_js/yarn-debug.log*
+client_js/yarn-error.log*
+client_js/pnpm-debug.log*
 
 # Editor directories and files
 .idea

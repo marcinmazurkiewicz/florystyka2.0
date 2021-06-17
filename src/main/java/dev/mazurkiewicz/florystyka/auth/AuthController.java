@@ -9,15 +9,14 @@ import dev.mazurkiewicz.florystyka.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.Date;
@@ -46,9 +45,9 @@ public class AuthController {
         return response;
     }
 
-    @PostMapping("/refresh")
-    public ResponseEntity<?> refreshToken(@RequestBody @Valid RefreshTokenRequest refreshTokenRequest) {
-        RefreshToken refreshToken = refreshTokenService.getToken(refreshTokenRequest);
+    @GetMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@CookieValue(name="refresh-token") String refreshTokenCookie) {
+        RefreshToken refreshToken = refreshTokenService.getToken(refreshTokenCookie);
         if (refreshToken.getExpiredAt().isBefore(Instant.now())) {
             refreshTokenService.removeRefreshToken(refreshToken);
             throw new TokenExpiredException("Refresh token has expired");
@@ -58,17 +57,22 @@ public class AuthController {
         return prepareResponseWithTokens(loggedUser);
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestBody @Valid RefreshTokenRequest refreshTokenRequest) {
-        RefreshToken refreshToken = refreshTokenService.getToken(refreshTokenRequest);
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout(@CookieValue(name="refresh-token") String refreshTokenCookie) {
+        RefreshToken refreshToken = refreshTokenService.getToken(refreshTokenCookie);
         refreshTokenService.removeRefreshToken(refreshToken);
         return ResponseEntity.ok().build();
     }
 
     private ResponseEntity<?> prepareResponseWithTokens(User user) {
+        ResponseCookie refreshTokenCookie = ResponseCookie.from(securityProperties.getRefreshTokenHeader(),
+                refreshTokenService.createNewRefreshToken(user.getId()))
+                .httpOnly(true)
+                .build();
+
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, jwtTokenUtil.generateToken(user))
-                .header(securityProperties.getRefreshTokenHeader(), refreshTokenService.createNewRefreshToken(user.getId()))
+                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
                 .body(userMapper.mapEntityToResponse(user));
     }
 }

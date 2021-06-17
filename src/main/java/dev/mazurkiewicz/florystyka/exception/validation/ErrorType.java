@@ -18,6 +18,7 @@ public enum ErrorType {
     TOKEN_EXPIRED(List.of("TokenExpiredException", "ExpiredJwtException")),
     UNAUTHORIZED(List.of("UnauthorizedAccessException")),
     VALIDATION_ERROR(List.of("BindException", "MethodArgumentNotValidException")),
+    PARSE_ERROR(List.of("HttpMessageNotReadableException")),
     FILE_PROCESSING_ERROR(List.of("IOException")),
     UNKNOWN(List.of());
 

@@ -9,14 +9,13 @@ import dev.mazurkiewicz.florystyka.exception.UnauthorizedAccessException;
 import dev.mazurkiewicz.florystyka.exception.validation.ErrorType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -30,19 +29,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
+@Component("jwtTokenFilter")
+@RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final JwtProperties jwtProperties;
     private final JwtTokenUtil jwtTokenUtil;
-    private final HandlerExceptionResolver resolver;
-
-    public JwtTokenFilter(JwtProperties jwtProperties, JwtTokenUtil jwtTokenUtil,
-                          @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
-        this.jwtProperties = jwtProperties;
-        this.jwtTokenUtil = jwtTokenUtil;
-        this.resolver = resolver;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -59,14 +51,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String token = authHeader.replace(jwtProperties.getTokenPrefix(), "").trim();
         try {
             Jws<Claims> claimsJws = jwtTokenUtil.getJwt(token);
-
             Claims body = claimsJws.getBody();
             String username = body.getSubject();
             List<?> authList = (List<?>) body.get("authorities");
             Map<String, Object> details = new HashMap<>();
             details.put("userId", body.get("userId"));
             Set<SimpleGrantedAuthority> authorities = authList.stream()
-                    .map(m -> ((Map<?, ?>) m).get("authority"))
                     .map(auth -> new SimpleGrantedAuthority(auth.toString()))
                     .collect(Collectors.toSet());
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken

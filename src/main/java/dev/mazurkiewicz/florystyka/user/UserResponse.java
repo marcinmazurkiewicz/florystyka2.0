@@ -1,18 +1,15 @@
 package dev.mazurkiewicz.florystyka.user;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Value;
 
 import java.util.Set;
 
-@Getter
-@Setter
+@Value
 public class UserResponse {
-
-    private Long id;
-    private String email;
-    private boolean isAccountLocked;
-    private boolean isEnabled;
-    private Set<String> authorities;
-
+    Long id;
+    String email;
+    Set<String> authorities;
 }

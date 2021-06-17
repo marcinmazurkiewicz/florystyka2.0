@@ -3,6 +3,7 @@ package dev.mazurkiewicz.florystyka.question;
 import dev.mazurkiewicz.florystyka.exception.PdfRenderException;
 import dev.mazurkiewicz.florystyka.exception.ResourceNotFoundException;
 import dev.mazurkiewicz.florystyka.pdf.PdfGenerator;
+import dev.mazurkiewicz.florystyka.utils.TestTimer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -51,13 +52,14 @@ public class QuestionService {
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Question with id %d doesn't exist", id)));
     }
 
-    public List<QuestionResponse> getQuestionsToTest() {
+    public TestResponse getQuestionsToTest() {
         Set<Question> result = repository.getRandomQuestions(questionToTest);
         if (result.size() != questionToTest)
             throw new IncorrectResultSizeDataAccessException("Incorrect questions number", questionToTest);
-        return result.stream()
+        List<QuestionResponse> questions = result.stream()
                 .map(mapper::mapEntityToResponse)
                 .collect(Collectors.toList());
+        return new TestResponse(new TestTimer(60, 0), questions);
     }
 
     public QuestionNumberResponse countQuestions() {
