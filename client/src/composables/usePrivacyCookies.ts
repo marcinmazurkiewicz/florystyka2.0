@@ -1,7 +1,10 @@
 import { useState } from "vue-gtag-next";
-import { VueCookieNext } from "vue-cookie-next";
-
+import { useCookie } from "@vue-composable/cookie";
+import { Ref } from "vue";
 const googleAnalyticsCookie = "privacy_analytics_cookies";
+
+const isCookie = (cookie: Ref<string | null | undefined>): boolean =>
+  cookie.value !== undefined && cookie.value !== null;
 
 export default function usePrivacyCookies() {
   const setGoogleAnalyticsGtag = (enable: boolean) => {
@@ -11,12 +14,14 @@ export default function usePrivacyCookies() {
     }
   };
   const setGoogleAnalyticsStatus = (enable: boolean): void => {
-    VueCookieNext.setCookie(googleAnalyticsCookie, String(enable));
+    const { cookie } = useCookie(googleAnalyticsCookie);
+    cookie.value = String(enable);
     setGoogleAnalyticsGtag(enable);
   };
 
   const getGoogleAnalyticsStatus = (): boolean => {
-    return "true" === VueCookieNext.getCookie(googleAnalyticsCookie);
+    const { cookie } = useCookie(googleAnalyticsCookie);
+    return isCookie(cookie) && cookie.value === "true";
   };
 
   const presetGoogleAnalyticsGtag = (): void => {
@@ -27,7 +32,8 @@ export default function usePrivacyCookies() {
   };
 
   const checkIsGoogleAnalyticsCookieIsAvailable = (): boolean => {
-    return VueCookieNext.isCookieAvailable(googleAnalyticsCookie);
+    const { cookie } = useCookie(googleAnalyticsCookie);
+    return isCookie(cookie);
   };
 
   return {
