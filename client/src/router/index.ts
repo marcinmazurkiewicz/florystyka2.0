@@ -111,6 +111,10 @@ const routes: RouteRecordRaw[] = [
       requiresAuth: true,
       allowedFor: ["ROLE_ADMIN"]
     }
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    component: () => import("@/views/NotFoundView.vue")
   }
 ];
 
