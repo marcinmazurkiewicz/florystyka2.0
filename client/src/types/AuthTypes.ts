@@ -15,6 +15,8 @@ export type LoginResponse = {
   authorities: string[];
 };
 
+export type RegisterResponse = {};
+
 export type MemoryToken = {
   token: string;
   expiry: number;

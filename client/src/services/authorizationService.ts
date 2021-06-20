@@ -3,7 +3,8 @@ import { getRequest, postRequest } from "@/services/apiService";
 import {
   LoginRequest,
   LoginResponse,
-  RegisterRequest
+  RegisterRequest,
+  RegisterResponse
 } from "@/types/AuthTypes";
 
 export function sendLoginRequest(
@@ -20,6 +21,6 @@ export function sendRefreshTokenRequest(): Promise<
 
 export function sendRegisterRequest(
   registerRequest: RegisterRequest
-): Promise<PreparedResponse<LoginResponse>> {
-  return postRequest<LoginResponse>("api/v3/users/", registerRequest);
+): Promise<PreparedResponse<RegisterResponse>> {
+  return postRequest<RegisterResponse>("api/v3/users", registerRequest);
 }
