@@ -69,6 +69,14 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
+    path: "/register",
+    name: "Register",
+    component: () => import("@/views/RegisterView.vue"),
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
     path: "/unauthorized",
     name: "Unauthorized",
     component: () => import("@/views/UnauthorizedView.vue"),
