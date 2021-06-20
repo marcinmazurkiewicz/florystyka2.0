@@ -1,5 +1,7 @@
 package dev.mazurkiewicz.florystyka.user.validation;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import javax.validation.constraints.Email;
@@ -10,12 +12,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @NotBlank
-@Email
+@Length(min = 2, max = 32)
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = UniqueMailValidator.class)
-public @interface UniqueMail {
-    String message() default "{dev.mazurkiewicz.florystyka.user.validation.UniqueMail.message}";
+@Constraint(validatedBy = UniqueUsernameValidator.class)
+public @interface UniqueUsername {
+    String message() default "{dev.mazurkiewicz.florystyka.user.validation.UniqueUsername.message}";
 
     Class<?>[] groups() default {};
 
