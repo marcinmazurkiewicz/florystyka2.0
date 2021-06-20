@@ -15,7 +15,7 @@ export default createStore({
       state.isLogged = isLogged;
     },
     logout(state) {
-      this.setLogged(state, false);
+      state.isLogged = false;
     }
   },
   actions: {

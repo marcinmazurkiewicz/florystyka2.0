@@ -90,7 +90,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/views/logged/DashboardView.vue"),
     meta: {
       requiresAuth: true,
-      allowedFor: ["ROLE_ADMIN"]
+      allowedFor: ["ROLE_ADMIN", "ROLE_STUDENT"]
     }
   },
   {

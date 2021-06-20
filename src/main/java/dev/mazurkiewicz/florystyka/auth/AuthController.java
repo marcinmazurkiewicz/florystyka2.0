@@ -16,7 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.Date;
@@ -46,7 +45,7 @@ public class AuthController {
     }
 
     @GetMapping("/refresh")
-    public ResponseEntity<?> refreshToken(@CookieValue(name="refresh-token") String refreshTokenCookie) {
+    public ResponseEntity<?> refreshToken(@CookieValue(name = "refresh-token") String refreshTokenCookie) {
         RefreshToken refreshToken = refreshTokenService.getToken(refreshTokenCookie);
         if (refreshToken.getExpiredAt().isBefore(Instant.now())) {
             refreshTokenService.removeRefreshToken(refreshToken);
@@ -58,10 +57,18 @@ public class AuthController {
     }
 
     @GetMapping("/logout")
-    public ResponseEntity<?> logout(@CookieValue(name="refresh-token") String refreshTokenCookie) {
+    public ResponseEntity<?> logout(@CookieValue(name = "refresh-token") String refreshTokenCookie) {
         RefreshToken refreshToken = refreshTokenService.getToken(refreshTokenCookie);
         refreshTokenService.removeRefreshToken(refreshToken);
-        return ResponseEntity.ok().build();
+
+        ResponseCookie removeRefreshTokenCookie = ResponseCookie.from(securityProperties.getRefreshTokenHeader(), "")
+                .httpOnly(true)
+                .maxAge(0L)
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, removeRefreshTokenCookie.toString())
+                .build();
     }
 
     private ResponseEntity<?> prepareResponseWithTokens(User user) {

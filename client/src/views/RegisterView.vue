@@ -81,7 +81,10 @@ export default defineComponent({
         confirmPassword: confirmPassword.value
       })
         .then(() => {
-          tryLogin({ username: username.value, password: password.value });
+          return tryLogin({
+            username: username.value,
+            password: password.value
+          });
         })
         .then(() => {
           router.push({ name: "DashboardView" });

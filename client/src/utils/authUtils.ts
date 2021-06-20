@@ -1,7 +1,10 @@
-import { MemoryToken } from "@/types/AuthTypes";
+import { MemoryToken, NoneResponse } from "@/types/AuthTypes";
 import store from "@/store/index";
-import { Header } from "@/types/PreparedResponse";
-import { sendRefreshTokenRequest } from "@/services/authorizationService";
+import { Header, PreparedResponse } from "@/types/PreparedResponse";
+import {
+  sendLogoutRequest,
+  sendRefreshTokenRequest
+} from "@/services/authorizationService";
 
 let memoryToken: MemoryToken;
 
@@ -73,4 +76,24 @@ function refreshToken(): Promise<boolean> {
     });
 }
 
-export { login, getToken, isLoggedUser, hasRight, hasAnyRight, refreshToken };
+function logout(): Promise<PreparedResponse<NoneResponse>> {
+  return sendLogoutRequest().then(response => {
+    memoryToken = {
+      token: "",
+      expiry: Date.now() / 1000,
+      authorities: []
+    };
+    store.commit("logout");
+    return response;
+  });
+}
+
+export {
+  login,
+  getToken,
+  isLoggedUser,
+  hasRight,
+  hasAnyRight,
+  refreshToken,
+  logout
+};

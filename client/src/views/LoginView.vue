@@ -49,7 +49,7 @@
 import TextInput from "@/components/custom_inputs/TextInput.vue";
 import { defineComponent, ref, Ref } from "vue";
 import { useAuthorization } from "@/composables/useAuthorization";
-import router from "@/router/index.ts";
+import { useRouter } from "vue-router";
 import { ResponseStatus } from "@/types/ResponseStatus";
 import ErrorInfo from "@/components/ErrorInfo.vue";
 
@@ -64,6 +64,7 @@ export default defineComponent({
     const password: Ref<string> = ref("");
     const responseStatus: Ref<ResponseStatus> = ref(ResponseStatus.ok());
     const { tryLogin } = useAuthorization();
+    const router = useRouter();
 
     const login = function() {
       tryLogin({ username: username.value, password: password.value })

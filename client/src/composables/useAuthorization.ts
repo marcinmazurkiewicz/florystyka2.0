@@ -2,7 +2,7 @@ import {
   LoginRequest,
   RegisterRequest,
   LoginResponse,
-  RegisterResponse
+  NoneResponse
 } from "@/types/AuthTypes";
 
 import { Header, PreparedResponse } from "@/types/PreparedResponse";
@@ -35,7 +35,7 @@ export function useAuthorization() {
 
   function tryRegister(
     registerRequest: RegisterRequest
-  ): Promise<PreparedResponse<RegisterResponse>> {
+  ): Promise<PreparedResponse<NoneResponse>> {
     return sendRegisterRequest(registerRequest).catch(errorStatus => {
       const response: PreparedResponse<LoginResponse> = {
         responseStatus: errorStatus
