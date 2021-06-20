@@ -18,7 +18,7 @@
         <li class="inline-block h-full">
           <router-link
             :to="{ name: 'Home' }"
-            class="block py-3 px-2 md:px-4 md:py-4 md:py4hover:bg-black-01 cursor-pointer h-full flex items-stretch content-center"
+            class="block py-3 px-2 md:px-4 md:py-4 md:py4 hover:bg-black-01 cursor-pointer h-full flex items-stretch content-center"
             exact-active-class="bg-dark-green"
           >
             <span class="block self-center">Start</span>
@@ -58,6 +58,15 @@
             exact-active-class="bg-dark-green"
           >
             <span class="block self-center">Info</span>
+          </router-link>
+        </li>
+        <li class="inline-block h-full">
+          <router-link
+            :to="{ name: 'Login' }"
+            class="block py-3 px-2 md:px-4 md:py-4 hover:bg-black-01 cursor-pointer h-full flex items-stretch content-center"
+            exact-active-class="bg-dark-green"
+          >
+            <span class="block self-center">Zaloguj</span>
           </router-link>
         </li>
       </ul>
