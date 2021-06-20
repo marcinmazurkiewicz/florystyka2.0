@@ -2,7 +2,8 @@ package dev.mazurkiewicz.florystyka.user;
 
 import dev.mazurkiewicz.florystyka.auth.UserRole;
 import dev.mazurkiewicz.florystyka.user.validation.FieldMatch;
-import dev.mazurkiewicz.florystyka.user.validation.UniqueMail;
+import dev.mazurkiewicz.florystyka.user.validation.NewUserRoles;
+import dev.mazurkiewicz.florystyka.user.validation.UniqueUsername;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -14,12 +15,13 @@ import java.util.List;
 @FieldMatch(first = "password", second = "confirmPassword")
 public class NewUserRequest {
 
-    @UniqueMail
-    private final String email;
+    @UniqueUsername
+    private final String username;
     @NotEmpty
     private final String password;
     @NotEmpty
     private final String confirmPassword;
+    @NewUserRoles
     List<UserRole> roles;
 
 
