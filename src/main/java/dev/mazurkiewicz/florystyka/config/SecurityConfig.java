@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -50,12 +51,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/api/v3/questions/**").permitAll()
-                .antMatchers("/api/v3/solutions/**").permitAll()
-                .antMatchers("/resources/**").permitAll()
-                .antMatchers("/api/v3/auth/login").permitAll()
-                .antMatchers("/api/v3/auth/refresh").permitAll()
-                .antMatchers("/api/v3/users").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v3/questions/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v3/solutions/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/resources/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v3/auth/login").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v3/auth/refresh").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/v3/users").permitAll()
                 .anyRequest().authenticated();
     }
 
