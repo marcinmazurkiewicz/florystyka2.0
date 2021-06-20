@@ -23,13 +23,13 @@ export function useAuthorization() {
             response.headers[Header.AUTHORIZATION];
           if (token != undefined) login(token);
         }
-        return response;
+        return Promise.resolve(response);
       })
       .catch(errorStatus => {
         const response: PreparedResponse<LoginResponse> = {
           responseStatus: errorStatus
         };
-        return response;
+        return Promise.reject(response);
       });
   }
 

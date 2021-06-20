@@ -1,13 +1,16 @@
 <template>
-  <view-wrapper :response-status="responseStatus">
-    <div class="w-full max-w-screen-sm mx-auto my-8">
-      <div
-        class="text-white my-12 px-8 pt-16 pb-8 border border-dark-gray md:rounded-2xl bg-dark-gray"
-      >
-        <header>
-          <h1 class="text-center text-3xl pb-16">Zaloguj się</h1>
-        </header>
-        <div>
+  <div class="w-full max-w-screen-sm mx-auto my-8">
+    <div
+      class="text-white my-12 px-8 pt-16 pb-8 border border-dark-gray md:rounded-2xl bg-dark-gray"
+    >
+      <header>
+        <h1 class="text-center text-3xl pb-8">Zaloguj się</h1>
+      </header>
+      <error-info v-if="responseStatus.isError">
+        {{ responseStatus.errorMsg }}
+      </error-info>
+      <div class="mt-8">
+        <form>
           <TextInput
             v-model="username"
             id="username"
@@ -23,38 +26,38 @@
           >
             Hasło
           </TextInput>
-          <button
-            class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-light-green
+        </form>
+        <button
+          class="w-full bg-light-green mt-8 p-3 text-dark-gray text-lg font-semibold border border-light-green
             rounded-xl hover:bg-dark-green hover:text-white"
-            @click="login()"
-          >
-            Zaloguj
-          </button>
+          @click="login()"
+        >
+          Zaloguj
+        </button>
 
-          <p class="py-8 text-center">
-            Nie posiadasz konta?
-            <router-link :to="{ name: 'Register' }" class="text-red pl-2">
-              Zarejestruj się
-            </router-link>
-          </p>
-        </div>
+        <p class="py-8 text-center">
+          Nie posiadasz konta?
+          <router-link :to="{ name: 'Register' }" class="text-red pl-2">
+            Zarejestruj się
+          </router-link>
+        </p>
       </div>
     </div>
-  </view-wrapper>
+  </div>
 </template>
 <script lang="ts">
 import TextInput from "@/components/custom_inputs/TextInput.vue";
 import { defineComponent, ref, Ref } from "vue";
 import { useAuthorization } from "@/composables/useAuthorization";
-import ViewWrapper from "@/components/ViewWrapper.vue";
 import router from "@/router/index.ts";
 import { ResponseStatus } from "@/types/ResponseStatus";
+import ErrorInfo from "@/components/ErrorInfo.vue";
 
 export default defineComponent({
   name: "LoginView",
   components: {
-    TextInput,
-    ViewWrapper
+    ErrorInfo,
+    TextInput
   },
   setup() {
     const username: Ref<string> = ref("");
@@ -63,11 +66,13 @@ export default defineComponent({
     const { tryLogin } = useAuthorization();
 
     const login = function() {
-      tryLogin({ username: username.value, password: password.value }).then(
-        () => {
+      tryLogin({ username: username.value, password: password.value })
+        .then(() => {
           router.push({ name: "DashboardView" });
-        }
-      );
+        })
+        .catch(error => {
+          responseStatus.value = error.responseStatus;
+        });
     };
     return {
       username,
