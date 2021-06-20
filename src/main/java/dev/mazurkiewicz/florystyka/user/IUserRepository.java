@@ -9,9 +9,7 @@ import java.util.Optional;
 @Repository
 public interface IUserRepository extends JpaRepository<User, Long> {
 
-    @Query("SELECT u FROM users u WHERE LOWER(u.email) = LOWER(:username)")
+    @Query("SELECT u FROM users u WHERE LOWER(u.username) = LOWER(:username)")
     Optional<User> selectUserByUsername(String username);
-
-    Optional<User> findByEmail(String email);
 
 }
