@@ -40,7 +40,8 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ErrorResponse errorResponse = mapToErrorResponse(ex, status, request);
+        Exception parseEx = new HttpMessageNotReadableException("Cannot deserialize value", ex.getHttpInputMessage());
+        ErrorResponse errorResponse = mapToErrorResponse(parseEx, status, request);
         return ResponseEntity.status(status).body(errorResponse);
     }
 
