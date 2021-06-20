@@ -3,6 +3,12 @@ export interface LoginRequest extends RequestPayload {
   password: string;
 }
 
+export interface RegisterRequest extends RequestPayload {
+  username: string;
+  password: string;
+  confirmPassword: string;
+}
+
 export type LoginResponse = {
   id: number;
   email: string;
