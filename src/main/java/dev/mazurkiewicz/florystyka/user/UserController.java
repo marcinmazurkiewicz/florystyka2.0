@@ -1,8 +1,14 @@
 package dev.mazurkiewicz.florystyka.user;
 
+import dev.mazurkiewicz.florystyka.exception.ErrorResponse;
+import dev.mazurkiewicz.florystyka.exception.validation.ErrorInfo;
+import dev.mazurkiewicz.florystyka.exception.validation.ErrorType;
+import dev.mazurkiewicz.florystyka.recaptcha.RecaptchaAction;
+import dev.mazurkiewicz.florystyka.recaptcha.RecaptchaService;
+import io.jsonwebtoken.lang.Maps;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -16,6 +22,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final RecaptchaService recaptchaService;
 
     @GetMapping
     public List<UserResponse> getUsers() {
@@ -29,9 +36,17 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> registerUser(@RequestBody @Valid NewUserRequest userRequest) {
-        Long savedUserId = userService.registerUser(userRequest);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(savedUserId).toUri();
-        return ResponseEntity.created(location).build();
+        boolean isValidCaptcha = recaptchaService.verifyCaptcha(userRequest.getCaptchaToken(), RecaptchaAction.REGISTER.name());
+        if (isValidCaptcha) {
+            Long savedUserId = userService.registerUser(userRequest);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                    .buildAndExpand(savedUserId).toUri();
+            return ResponseEntity.created(location).build();
+        } else {
+            String path = ServletUriComponentsBuilder.fromCurrentRequest().build().getPath();
+            ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "reCAPTCHA verification not passed", path, ErrorType.VALIDATION_ERROR,
+                    Maps.of("recaptcha", new ErrorInfo(ErrorType.CAPTCHA_ERROR, "reCAPTCHA verification not passed")).build());
+            return ResponseEntity.badRequest().body(error);
+        }
     }
 }
