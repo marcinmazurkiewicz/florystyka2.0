@@ -1,5 +1,6 @@
 package dev.mazurkiewicz.florystyka.resource;
 
+import dev.mazurkiewicz.florystyka.config.ApplicationProperties;
 import dev.mazurkiewicz.florystyka.exception.FileTypeException;
 import dev.mazurkiewicz.florystyka.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.*;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -18,13 +20,10 @@ import java.util.stream.Stream;
 @Service
 public class ResourceService {
 
-    private final String resourcesFolder;
-    private final String questionsImgFolder;
+    private final ApplicationProperties properties;
 
-    public ResourceService(@Value("${dev.mazurkiewicz.florystyka.resourcesFolder}") String resourcesFolder,
-                           @Value("${dev.mazurkiewicz.florystyka.questionsImgFolder}") String questionsImgFolder) {
-        this.resourcesFolder = resourcesFolder;
-        this.questionsImgFolder = questionsImgFolder;
+    public ResourceService(ApplicationProperties properties) {
+        this.properties = properties;
     }
 
     public byte[] getImage(String filename) {
@@ -47,16 +46,16 @@ public class ResourceService {
 
     private String getImageFolderPath() {
         StringBuilder fullPath = new StringBuilder();
-        fullPath.append(resourcesFolder);
-        if (!resourcesFolder.endsWith(File.separator) && !questionsImgFolder.startsWith(File.separator))
+        fullPath.append(properties.getResourcesFolder());
+        if (!properties.getResourcesFolder().endsWith(File.separator) && !properties.getQuestionsImgFolder().startsWith(File.separator))
             fullPath.append(File.separator);
-        fullPath.append(questionsImgFolder);
+        fullPath.append(properties.getQuestionsImgFolder());
         fullPath.append(File.separator);
         return fullPath.toString();
     }
 
     public Set<String> getListOfImages(String dir) {
-        return Stream.of(new File(dir).listFiles())
+        return Stream.of(Objects.requireNonNull(new File(dir).listFiles()))
                 .filter(file -> !file.isDirectory())
                 .map(File::getName)
                 .collect(Collectors.toSet());
@@ -80,7 +79,7 @@ public class ResourceService {
 
     public String saveQuestionImage(MultipartFile image) throws IOException, FileTypeException {
         StringBuilder path = new StringBuilder();
-        String filename = generateFilename(MimeType.valueOf(image.getContentType()));
+        String filename = generateFilename(MimeType.valueOf(Objects.requireNonNull(image.getContentType())));
         path.append(getImageFolderPath());
         path.append(filename);
 

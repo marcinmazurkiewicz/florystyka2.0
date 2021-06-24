@@ -1,5 +1,6 @@
 package dev.mazurkiewicz.florystyka.resource;
 
+import dev.mazurkiewicz.florystyka.config.ApplicationProperties;
 import dev.mazurkiewicz.florystyka.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,8 +15,9 @@ class ResourceServiceTest {
 
     private static byte[] expectedPngFileByteArray;
     private static byte[] expectedJpgFileByteArray;
+    private final ApplicationProperties properties = new ApplicationProperties(10, "src/test/resources", "/img");
 
-    private ResourceService service = new ResourceService("src/test/resources", "/img");
+    private ResourceService service = new ResourceService(properties);
 
     @BeforeAll
     private static void prepareExpectedImages() {

@@ -28,7 +28,7 @@ import java.util.Arrays;
 @EnableGlobalMethodSecurity(
         prePostEnabled = true,
         securedEnabled = true)
-@EnableConfigurationProperties({JwtProperties.class, SecurityProperties.class, RecaptchaProperties.class})
+@EnableConfigurationProperties({JwtProperties.class, SecurityProperties.class, RecaptchaProperties.class, ApplicationProperties.class})
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/resources/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v3/auth/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v3/auth/refresh").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/v3/users").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v3/users").permitAll()
                 .anyRequest().authenticated();
     }
 

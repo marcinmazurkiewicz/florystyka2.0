@@ -30,8 +30,8 @@ public class RecaptchaService {
 
     private URI getVerifyUrl(String token) {
         return UriComponentsBuilder.fromHttpUrl(properties.getVerifyUrl())
-                .queryParam("secret", properties.getSecretKey())
-                .queryParam("response", token)
+                .queryParam(properties.getKeyParamName(), properties.getSecretKey())
+                .queryParam(properties.getTokenParamName(), token)
                 .build()
                 .encode()
                 .toUri();

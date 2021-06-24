@@ -8,9 +8,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Setter
 @ConfigurationProperties(prefix = "application.recaptcha")
 public class RecaptchaProperties {
-
     private String secretKey;
     private String hostname;
     private String verifyUrl;
-
+    private String keyParamName;
+    private String tokenParamName;
 }
