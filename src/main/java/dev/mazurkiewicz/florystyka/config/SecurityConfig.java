@@ -2,6 +2,7 @@ package dev.mazurkiewicz.florystyka.config;
 
 import com.google.common.collect.Lists;
 import dev.mazurkiewicz.florystyka.jwt.JwtProperties;
+import dev.mazurkiewicz.florystyka.recaptcha.RecaptchaProperties;
 import dev.mazurkiewicz.florystyka.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,7 +28,7 @@ import java.util.Arrays;
 @EnableGlobalMethodSecurity(
         prePostEnabled = true,
         securedEnabled = true)
-@EnableConfigurationProperties({JwtProperties.class, SecurityProperties.class})
+@EnableConfigurationProperties({JwtProperties.class, SecurityProperties.class, RecaptchaProperties.class})
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
