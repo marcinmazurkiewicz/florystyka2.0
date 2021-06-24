@@ -5,23 +5,24 @@ import java.util.List;
 
 public enum ErrorType {
     ABOVE_MAX(List.of("DecimalMax", "Max")),
-    EMPTY(List.of("NotEmpty", "NotNull", "NotBlank", "NotNullFile")),
     AT_LEAST_ONE(List.of("AtLeastOne")),
+    CAPTCHA_ERROR(List.of()),
+    CREDENTIALS_ERROR(List.of("BadCredentialsException")),
+    DOCUMENT_CONTENT_NOT_VALID(List.of("IllegalImportDocumentContent")),
+    EMPTY(List.of("NotEmpty", "NotNull", "NotBlank", "NotNullFile")),
+    FILE_PROCESSING_ERROR(List.of("IOException")),
+    FORBIDDEN(List.of("ForbiddenAccessException", "NewUserRoles")),
     NOT_MAIL(List.of("Email")),
     NOT_MATCH(List.of("FieldMatch")),
     NOT_UNIQUE(List.of("UniqueUsername")),
-    UNDER_MIN(List.of("DecimalMin", "Min")),
-    SIZE(List.of("Size", "Length")),
-    TYPE_MISMATCH(List.of("FileFormat", "FileTypeException")),
-    DOCUMENT_CONTENT_NOT_VALID(List.of("IllegalImportDocumentContent")),
-    FORBIDDEN(List.of("ForbiddenAccessException", "NewUserRoles")),
-    CREDENTIALS_ERROR(List.of("BadCredentialsException")),
-    TOKEN_EXPIRED(List.of("TokenExpiredException", "ExpiredJwtException")),
-    UNAUTHORIZED(List.of("UnauthorizedAccessException")),
-    VALIDATION_ERROR(List.of("BindException", "MethodArgumentNotValidException")),
     PARSE_ERROR(List.of("HttpMessageNotReadableException")),
-    FILE_PROCESSING_ERROR(List.of("IOException")),
-    UNKNOWN(List.of());
+    SIZE(List.of("Size", "Length")),
+    TOKEN_EXPIRED(List.of("TokenExpiredException", "ExpiredJwtException")),
+    TYPE_MISMATCH(List.of("FileFormat", "FileTypeException")),
+    UNAUTHORIZED(List.of("UnauthorizedAccessException")),
+    UNDER_MIN(List.of("DecimalMin", "Min")),
+    UNKNOWN(List.of()),
+    VALIDATION_ERROR(List.of("BindException", "MethodArgumentNotValidException"));
 
     private final List<String> codeNames;
 
