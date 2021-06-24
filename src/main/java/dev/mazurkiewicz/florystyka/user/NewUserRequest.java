@@ -21,6 +21,8 @@ public class NewUserRequest {
     private final String password;
     @NotEmpty
     private final String confirmPassword;
+    @NotEmpty
+    private final String captchaToken;
     @NewUserRoles
     List<UserRole> roles;
 
