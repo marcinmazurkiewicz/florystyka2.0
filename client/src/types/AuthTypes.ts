@@ -7,6 +7,7 @@ export interface RegisterRequest extends RequestPayload {
   username: string;
   password: string;
   confirmPassword: string;
+  captchaToken: string;
 }
 
 export type LoginResponse = {

@@ -14,7 +14,12 @@
         </p>
       </header>
       <error-info v-if="responseStatus.isError">
-        {{ responseStatus.errorMsg }}
+        <span v-if="responseStatus.errors['recaptcha']">
+          {{ responseStatus.errors["recaptcha"] }}
+        </span>
+        <span v-else>
+          {{ responseStatus.errorMsg }}
+        </span>
       </error-info>
       <div class="mt-8">
         <form>
@@ -42,6 +47,16 @@
             Powtórz hasło
           </TextInput>
         </form>
+        <p class="text-gray-400 p-4 border rounded-md border-gray-400">
+          Ta strona jest chroniona przez reCAPTCHA i obowiązuje na niej oraz
+          <a class="text-red" href="https://policies.google.com/privacy"
+            >Polityka prywatności</a
+          >
+          Google oraz
+          <a class="text-red" href="https://policies.google.com/terms"
+            >Warunki korzystania z usługi.</a
+          >
+        </p>
         <button
           class="w-full bg-light-green my-8 p-3 text-dark-gray text-lg font-semibold border border-light-green
             rounded-xl hover:bg-dark-green hover:text-white"
@@ -51,48 +66,64 @@
         </button>
       </div>
     </div>
+    <div id="recaptcha-badge"></div>
   </div>
 </template>
-<script lang="ts">
+<script lang="js">
 import TextInput from "@/components/custom_inputs/TextInput.vue";
-import { defineComponent, ref, Ref } from "vue";
-import { useAuthorization } from "@/composables/useAuthorization";
+import {useAuthorization} from "@/composables/useAuthorization";
 import router from "@/router/index.ts";
-import { ResponseStatus } from "@/types/ResponseStatus";
+import {ResponseStatus} from "@/types/ResponseStatus";
 import ErrorInfo from "@/components/ErrorInfo.vue";
+import {useReCaptcha} from "vue-recaptcha-v3";
+import {ref} from "vue";
 
-export default defineComponent({
+
+export default {
   name: "RegisterView",
   components: {
     ErrorInfo,
     TextInput
   },
   setup() {
-    const username: Ref<string> = ref("");
-    const password: Ref<string> = ref("");
-    const confirmPassword: Ref<string> = ref("");
-    const responseStatus: Ref<ResponseStatus> = ref(ResponseStatus.ok());
-    const { tryRegister, tryLogin } = useAuthorization();
+    const username = ref("");
+    const password = ref("");
+    const confirmPassword = ref("");
+    const responseStatus = ref(ResponseStatus.ok());
+    const {tryRegister, tryLogin} = useAuthorization();
 
-    const register = function() {
+    const {executeRecaptcha, recaptchaLoaded} = useReCaptcha();
+
+
+    const recaptcha = async () => {
+      await recaptchaLoaded();
+      return await executeRecaptcha("register");
+    }
+
+    const register = async function () {
+      const token = await recaptcha();
+
       tryRegister({
         username: username.value,
         password: password.value,
-        confirmPassword: confirmPassword.value
+        confirmPassword: confirmPassword.value,
+        captchaToken: token
       })
-        .then(() => {
-          return tryLogin({
-            username: username.value,
-            password: password.value
+          .then(() => {
+            return tryLogin({
+              username: username.value,
+              password: password.value
+            });
+          })
+          .then(() => {
+            router.push({name: "DashboardView"});
+          })
+          .catch(error => {
+            console.log(error);
+            responseStatus.value = error.responseStatus;
           });
-        })
-        .then(() => {
-          router.push({ name: "DashboardView" });
-        })
-        .catch(error => {
-          responseStatus.value = error.responseStatus;
-        });
     };
+
     return {
       username,
       password,
@@ -101,5 +132,5 @@ export default defineComponent({
       register
     };
   }
-});
+}
 </script>
