@@ -23,40 +23,36 @@
       </error-info>
       <div class="mt-8">
         <form>
-          <TextInput
+          <text-input
             v-model="username"
             id="username"
             :error="responseStatus.errors['username']"
           >
             Nazwa użytkownika
-          </TextInput>
-          <TextInput
+          </text-input>
+          <text-input
             v-model="password"
             id="password"
             type="password"
             :error="responseStatus.errors['password']"
           >
             Hasło
-          </TextInput>
-          <TextInput
+          </text-input>
+          <text-input
             v-model="confirmPassword"
             id="password"
             type="password"
             :error="responseStatus.errors['password']"
           >
             Powtórz hasło
-          </TextInput>
+          </text-input>
+          <recaptcha
+            ref="recaptcha"
+            @verify="getVerifyToken"
+            :error="responseStatus.errors['captchaToken']"
+          />
         </form>
-        <p class="text-gray-400 p-4 border rounded-md border-gray-400">
-          Ta strona jest chroniona przez reCAPTCHA i obowiązuje na niej oraz
-          <a class="text-red" href="https://policies.google.com/privacy"
-            >Polityka prywatności</a
-          >
-          Google oraz
-          <a class="text-red" href="https://policies.google.com/terms"
-            >Warunki korzystania z usługi.</a
-          >
-        </p>
+
         <button
           class="w-full bg-light-green my-8 p-3 text-dark-gray text-lg font-semibold border border-light-green
             rounded-xl hover:bg-dark-green hover:text-white"
@@ -69,59 +65,54 @@
     <div id="recaptcha-badge"></div>
   </div>
 </template>
-<script lang="js">
+<script lang="ts">
 import TextInput from "@/components/custom_inputs/TextInput.vue";
-import {useAuthorization} from "@/composables/useAuthorization";
+import { useAuthorization } from "@/composables/useAuthorization";
 import router from "@/router/index.ts";
-import {ResponseStatus} from "@/types/ResponseStatus";
+import { ResponseStatus } from "@/types/ResponseStatus";
 import ErrorInfo from "@/components/ErrorInfo.vue";
-import {useReCaptcha} from "vue-recaptcha-v3";
-import {ref} from "vue";
+import { defineComponent, ref } from "vue";
+import Recaptcha from "@/components/RecaptchaV2.vue";
 
-
-export default {
+export default defineComponent({
   name: "RegisterView",
   components: {
     ErrorInfo,
-    TextInput
+    TextInput,
+    Recaptcha
   },
   setup() {
     const username = ref("");
     const password = ref("");
     const confirmPassword = ref("");
     const responseStatus = ref(ResponseStatus.ok());
-    const {tryRegister, tryLogin} = useAuthorization();
+    const { tryRegister, tryLogin } = useAuthorization();
+    const recaptcha = ref();
+    const captchaToken = ref("");
 
-    const {executeRecaptcha, recaptchaLoaded} = useReCaptcha();
-
-
-    const recaptcha = async () => {
-      await recaptchaLoaded();
-      return await executeRecaptcha("register");
-    }
-
-    const register = async function () {
-      const token = await recaptcha();
-
+    const getVerifyToken = (response: string) =>
+      (captchaToken.value = response);
+    const register = async function() {
       tryRegister({
         username: username.value,
         password: password.value,
         confirmPassword: confirmPassword.value,
-        captchaToken: token
+        captchaToken: captchaToken.value
       })
-          .then(() => {
-            return tryLogin({
-              username: username.value,
-              password: password.value
-            });
-          })
-          .then(() => {
-            router.push({name: "DashboardView"});
-          })
-          .catch(error => {
-            console.log(error);
-            responseStatus.value = error.responseStatus;
+        .then(() => {
+          return tryLogin({
+            username: username.value,
+            password: password.value
           });
+        })
+        .then(() => {
+          router.push({ name: "DashboardView" });
+        })
+        .catch(error => {
+          console.log(error);
+          recaptcha.value.reset();
+          responseStatus.value = error.responseStatus;
+        });
     };
 
     return {
@@ -129,8 +120,10 @@ export default {
       password,
       confirmPassword,
       responseStatus,
-      register
+      register,
+      recaptcha,
+      getVerifyToken
     };
   }
-}
+});
 </script>
