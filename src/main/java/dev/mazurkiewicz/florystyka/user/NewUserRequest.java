@@ -1,6 +1,7 @@
 package dev.mazurkiewicz.florystyka.user;
 
 import dev.mazurkiewicz.florystyka.auth.UserRole;
+import dev.mazurkiewicz.florystyka.recaptcha.Recaptcha;
 import dev.mazurkiewicz.florystyka.user.validation.FieldMatch;
 import dev.mazurkiewicz.florystyka.user.validation.NewUserRoles;
 import dev.mazurkiewicz.florystyka.user.validation.UniqueUsername;
@@ -21,7 +22,7 @@ public class NewUserRequest {
     private final String password;
     @NotEmpty
     private final String confirmPassword;
-    @NotEmpty
+    @Recaptcha
     private final String captchaToken;
     @NewUserRoles
     List<UserRole> roles;

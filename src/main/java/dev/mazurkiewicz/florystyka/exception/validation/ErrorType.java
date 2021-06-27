@@ -6,7 +6,7 @@ import java.util.List;
 public enum ErrorType {
     ABOVE_MAX(List.of("DecimalMax", "Max")),
     AT_LEAST_ONE(List.of("AtLeastOne")),
-    CAPTCHA_ERROR(List.of()),
+    CAPTCHA_ERROR(List.of("Recaptcha")),
     CREDENTIALS_ERROR(List.of("BadCredentialsException")),
     DOCUMENT_CONTENT_NOT_VALID(List.of("IllegalImportDocumentContent")),
     EMPTY(List.of("NotEmpty", "NotNull", "NotBlank", "NotNullFile")),

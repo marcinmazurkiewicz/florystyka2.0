@@ -35,17 +35,9 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> registerUser(@RequestBody @Valid NewUserRequest userRequest) {
-        boolean isValidCaptcha = recaptchaService.verifyCaptcha(userRequest.getCaptchaToken());
-        if (isValidCaptcha) {
-            Long savedUserId = userService.registerUser(userRequest);
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(savedUserId).toUri();
-            return ResponseEntity.created(location).build();
-        } else {
-            String path = ServletUriComponentsBuilder.fromCurrentRequest().build().getPath();
-            ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "reCAPTCHA verification not passed", path, ErrorType.VALIDATION_ERROR,
-                    Maps.of("recaptcha", new ErrorInfo(ErrorType.CAPTCHA_ERROR, "reCAPTCHA verification not passed")).build());
-            return ResponseEntity.badRequest().body(error);
-        }
+        Long savedUserId = userService.registerUser(userRequest);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(savedUserId).toUri();
+        return ResponseEntity.created(location).build();
     }
 }
