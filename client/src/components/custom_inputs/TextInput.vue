@@ -5,10 +5,11 @@
       :class="error ? 'text-red' : 'text-dark-green'"
       class="inline-block text-md leading-5 font-medium pl-2 w-1/2"
     >
-      <slot /> </label
-    ><span class="inline-block w-1/2 text-right text-sm text-red" v-if="error">
-      {{ error }}</span
-    >
+      <slot />
+    </label>
+    <span class="inline-block w-1/2 text-right text-sm text-red" v-if="error">
+      {{ error }}
+    </span>
     <input
       :id="id"
       :class="
