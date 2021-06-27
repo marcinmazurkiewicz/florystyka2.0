@@ -18,7 +18,7 @@ public class UserMapper {
 
     public User mapRequestToEntity(NewUserRequest userRequest) {
         User result = new User();
-        result.setEmail(userRequest.getEmail().toLowerCase());
+        result.setUsername(userRequest.getUsername().toLowerCase());
         result.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         result.setEnabled(true);
         Set<Authority> authorities = userRequest.roles == null || userRequest.roles.isEmpty()
@@ -32,6 +32,6 @@ public class UserMapper {
 
     public UserResponse mapEntityToResponse(User entity) {
         Set<String> authorities = entity.getAuthorities().stream().map(Authority::getAuthority).collect(Collectors.toSet());
-        return new UserResponse(entity.getId(), entity.getEmail(), authorities);
+        return new UserResponse(entity.getId(), entity.getUsername(), authorities);
     }
 }

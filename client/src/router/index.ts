@@ -69,6 +69,14 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
+    path: "/register",
+    name: "Register",
+    component: () => import("@/views/RegisterView.vue"),
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
     path: "/unauthorized",
     name: "Unauthorized",
     component: () => import("@/views/UnauthorizedView.vue"),
@@ -82,7 +90,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/views/logged/DashboardView.vue"),
     meta: {
       requiresAuth: true,
-      allowedFor: ["ROLE_ADMIN"]
+      allowedFor: ["ROLE_ADMIN", "ROLE_STUDENT"]
     }
   },
   {

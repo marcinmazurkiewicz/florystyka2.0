@@ -2,12 +2,14 @@ package dev.mazurkiewicz.florystyka.config;
 
 import com.google.common.collect.Lists;
 import dev.mazurkiewicz.florystyka.jwt.JwtProperties;
+import dev.mazurkiewicz.florystyka.recaptcha.RecaptchaProperties;
 import dev.mazurkiewicz.florystyka.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -26,7 +28,7 @@ import java.util.Arrays;
 @EnableGlobalMethodSecurity(
         prePostEnabled = true,
         securedEnabled = true)
-@EnableConfigurationProperties({JwtProperties.class, SecurityProperties.class})
+@EnableConfigurationProperties({JwtProperties.class, SecurityProperties.class, RecaptchaProperties.class, ApplicationProperties.class})
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -50,12 +52,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/api/v3/questions/**").permitAll()
-                .antMatchers("/api/v3/solutions/**").permitAll()
-                .antMatchers("/resources/**").permitAll()
-                .antMatchers("/api/v3/auth/login").permitAll()
-                .antMatchers("/api/v3/auth/refresh").permitAll()
-                .antMatchers("/api/v3/users").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v3/questions/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v3/solutions/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/resources/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v3/auth/login").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v3/auth/refresh").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v3/users").permitAll()
                 .anyRequest().authenticated();
     }
 

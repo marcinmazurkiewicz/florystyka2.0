@@ -2,6 +2,7 @@ package dev.mazurkiewicz.florystyka.pdf;
 
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
+import dev.mazurkiewicz.florystyka.config.ApplicationProperties;
 import dev.mazurkiewicz.florystyka.exception.PdfRenderException;
 import dev.mazurkiewicz.florystyka.question.Question;
 import dev.mazurkiewicz.florystyka.resource.ResourceService;
@@ -27,12 +28,11 @@ import java.util.Set;
 public class PdfGenerator {
 
     private final ResourceService resourceService;
-    private final String resourcesFolder;
+    private final ApplicationProperties properties;
 
-    public PdfGenerator(ResourceService resourceService,
-                        @Value("${dev.mazurkiewicz.florystyka.resourcesFolder}") String resourcesFolder) {
+    public PdfGenerator(ResourceService resourceService, ApplicationProperties properties) {
         this.resourceService = resourceService;
-        this.resourcesFolder = resourcesFolder;
+        this.properties = properties;
     }
 
     protected String parseThymeleafTemplate(List<Question> questions) {
@@ -58,8 +58,8 @@ public class PdfGenerator {
     public byte[] generatePdfFromHtml(String html)
             throws PdfRenderException {
         StringBuilder fontPath = new StringBuilder();
-        fontPath.append(resourcesFolder);
-        if (!resourcesFolder.endsWith(File.separator))
+        fontPath.append(properties.getResourcesFolder());
+        if (!properties.getResourcesFolder().endsWith(File.separator))
             fontPath.append(File.separator);
         fontPath.append("fonts/arial.ttf");
 

@@ -1,10 +1,10 @@
 package dev.mazurkiewicz.florystyka.question;
 
+import dev.mazurkiewicz.florystyka.config.ApplicationProperties;
 import dev.mazurkiewicz.florystyka.exception.PdfRenderException;
 import dev.mazurkiewicz.florystyka.exception.ResourceNotFoundException;
 import dev.mazurkiewicz.florystyka.pdf.PdfGenerator;
 import dev.mazurkiewicz.florystyka.utils.TestTimer;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
@@ -19,14 +19,13 @@ public class QuestionService {
     private final QuestionRepository repository;
     private final QuestionMapper mapper;
     private final PdfGenerator pdfGenerator;
-    private final int questionToTest;
+    private final ApplicationProperties properties;
 
-    public QuestionService(QuestionRepository repository, QuestionMapper mapper, PdfGenerator pdfGenerator,
-                           @Value("${dev.mazurkiewicz.florystyka.testQuestionsNumber}") int questionToTest) {
+    public QuestionService(QuestionRepository repository, QuestionMapper mapper, PdfGenerator pdfGenerator, ApplicationProperties properties) {
         this.repository = repository;
         this.mapper = mapper;
         this.pdfGenerator = pdfGenerator;
-        this.questionToTest = questionToTest;
+        this.properties = properties;
     }
 
     public List<QuestionResponse> getAllQuestions() {
@@ -53,9 +52,9 @@ public class QuestionService {
     }
 
     public TestResponse getQuestionsToTest() {
-        Set<Question> result = repository.getRandomQuestions(questionToTest);
-        if (result.size() != questionToTest)
-            throw new IncorrectResultSizeDataAccessException("Incorrect questions number", questionToTest);
+        Set<Question> result = repository.getRandomQuestions(properties.getTestQuestionsNumber());
+        if (result.size() != properties.getTestQuestionsNumber())
+            throw new IncorrectResultSizeDataAccessException("Incorrect questions number", properties.getTestQuestionsNumber());
         List<QuestionResponse> questions = result.stream()
                 .map(mapper::mapEntityToResponse)
                 .collect(Collectors.toList());
@@ -70,7 +69,7 @@ public class QuestionService {
     }
 
     public byte[] getPdfTest() throws PdfRenderException {
-        Set<Question> questions = repository.getRandomQuestions(questionToTest);
+        Set<Question> questions = repository.getRandomQuestions(properties.getTestQuestionsNumber());
         return pdfGenerator.generateTest(questions);
     }
 

@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, Ref } from "vue";
 import PrivacyPolicyBanner from "@/components/privacy/PrivacyPolicyChecker.vue";
 import TopNav from "@/components/TopNav.vue";
 
@@ -32,10 +32,9 @@ export default defineComponent({
     TopNav,
     PrivacyPolicyBanner
   },
-  data() {
-    return {
-      appVer: process.env.VUE_APP_VERSION
-    };
+  setup() {
+    const appVer: Ref<string> = ref(process.env.VUE_APP_VERSION);
+    return { appVer };
   }
 });
 </script>

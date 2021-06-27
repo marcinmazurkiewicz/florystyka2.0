@@ -1,7 +1,11 @@
-import { LoginResponse, MemoryToken } from "@/types/AuthTypes";
+import { MemoryToken, NoneResponse } from "@/types/AuthTypes";
 import store from "@/store/index";
-import { getRequest } from "@/services/apiService";
-import { Header } from "@/types/PreparedResponse";
+import { Header, PreparedResponse } from "@/types/PreparedResponse";
+import {
+  sendLogoutRequest,
+  sendRefreshTokenRequest
+} from "@/services/authorizationService";
+
 let memoryToken: MemoryToken;
 
 function decodeToken(token: string): { authorities: string[]; expiry: number } {
@@ -53,7 +57,7 @@ function hasAnyRight(permissions: string[]): boolean {
 }
 
 function refreshToken(): Promise<boolean> {
-  return getRequest<LoginResponse>("api/v3/auth/refresh")
+  return sendRefreshTokenRequest()
     .then(response => {
       if (response.headers) {
         const token: string | undefined =
@@ -72,4 +76,24 @@ function refreshToken(): Promise<boolean> {
     });
 }
 
-export { login, getToken, isLoggedUser, hasRight, hasAnyRight, refreshToken };
+function logout(): Promise<PreparedResponse<NoneResponse>> {
+  return sendLogoutRequest().then(response => {
+    memoryToken = {
+      token: "",
+      expiry: Date.now() / 1000,
+      authorities: []
+    };
+    store.commit("logout");
+    return response;
+  });
+}
+
+export {
+  login,
+  getToken,
+  isLoggedUser,
+  hasRight,
+  hasAnyRight,
+  refreshToken,
+  logout
+};

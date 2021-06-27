@@ -16,7 +16,7 @@ public class User implements UserDetails, Serializable {
     @GeneratedValue
     private Long id;
     @Column(nullable = false, unique = true)
-    private String email;
+    private String username;
     @Column(nullable = false)
     private String password;
     private boolean isAccountExpired;
@@ -28,11 +28,6 @@ public class User implements UserDetails, Serializable {
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "auth_id", referencedColumnName = "id")})
     private Set<Authority> authorities;
-
-    @Override
-    public String getUsername() {
-        return getEmail();
-    }
 
     @Override
     @Transient

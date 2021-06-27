@@ -1,40 +1,51 @@
-import { LoginRequest, LoginResponse } from "@/types/AuthTypes";
-import { ref, Ref } from "vue";
-import { postRequest } from "@/services/apiService";
-import { ResponseStatus } from "@/types/ResponseStatus";
+import {
+  LoginRequest,
+  RegisterRequest,
+  LoginResponse,
+  NoneResponse
+} from "@/types/AuthTypes";
+
 import { Header, PreparedResponse } from "@/types/PreparedResponse";
 import { login } from "@/utils/authUtils";
+import {
+  sendLoginRequest,
+  sendRegisterRequest
+} from "@/services/authorizationService";
 
 export function useAuthorization() {
-  const responseStatus: Ref<ResponseStatus> = ref({
-    isDataReturned: true,
-    isError: false,
-    isPending: false,
-    errors: {}
-  });
-
-  async function sendLoginRequest(
+  function tryLogin(
     loginRequest: LoginRequest
   ): Promise<PreparedResponse<LoginResponse>> {
-    return postRequest<LoginResponse>("api/v3/auth/login", loginRequest)
+    return sendLoginRequest(loginRequest)
       .then(response => {
         if (response.headers) {
           const token: string | undefined =
             response.headers[Header.AUTHORIZATION];
           if (token != undefined) login(token);
         }
-        return response;
+        return Promise.resolve(response);
       })
       .catch(errorStatus => {
         const response: PreparedResponse<LoginResponse> = {
           responseStatus: errorStatus
         };
-        return response;
+        return Promise.reject(response);
       });
   }
 
+  function tryRegister(
+    registerRequest: RegisterRequest
+  ): Promise<PreparedResponse<NoneResponse>> {
+    return sendRegisterRequest(registerRequest).catch(errorStatus => {
+      const response: PreparedResponse<LoginResponse> = {
+        responseStatus: errorStatus
+      };
+      return Promise.reject(response);
+    });
+  }
+
   return {
-    responseStatus,
-    sendLoginRequest
+    tryLogin,
+    tryRegister
   };
 }
