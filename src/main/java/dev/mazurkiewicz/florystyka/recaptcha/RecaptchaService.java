@@ -21,11 +21,11 @@ public class RecaptchaService {
         this.client = new RestTemplate();
     }
 
-    public boolean verifyCaptcha(String token, String action) {
+    public boolean verifyCaptcha(String token) {
         URI url = getVerifyUrl(token);
         RequestEntity<Void> request = RequestEntity.post(url).build();
         ResponseEntity<RecaptchaResponse> exchange = client.exchange(request, RecaptchaResponse.class);
-        return isPositivelyVerified(action, exchange);
+        return isPositivelyVerified(exchange);
     }
 
     private URI getVerifyUrl(String token) {
@@ -37,30 +37,20 @@ public class RecaptchaService {
                 .toUri();
     }
 
-    private boolean isPositivelyVerified(String action, ResponseEntity<RecaptchaResponse> exchange) {
-        return isRequestStatusSuccessful(exchange) && checkCaptchaResponse(Objects.requireNonNull(exchange.getBody()), action);
+    private boolean isPositivelyVerified(ResponseEntity<RecaptchaResponse> exchange) {
+        return isRequestStatusSuccessful(exchange) && checkCaptchaResponse(Objects.requireNonNull(exchange.getBody()));
     }
 
     private boolean isRequestStatusSuccessful(ResponseEntity<RecaptchaResponse> exchange) {
         return exchange.getStatusCode().is2xxSuccessful();
     }
 
-    private boolean checkCaptchaResponse(RecaptchaResponse recaptchaResponse, String action) {
+    private boolean checkCaptchaResponse(RecaptchaResponse recaptchaResponse) {
         return recaptchaResponse.isSuccess()
-                && isCorrectHostname(recaptchaResponse)
-                && isCorrectScore(recaptchaResponse)
-                && isCorrectAction(recaptchaResponse, action);
+                && isCorrectHostname(recaptchaResponse);
     }
 
     private boolean isCorrectHostname(RecaptchaResponse recaptchaResponse) {
         return recaptchaResponse.getHostname().equals(properties.getHostname());
-    }
-
-    private boolean isCorrectScore(RecaptchaResponse recaptchaResponse) {
-        return recaptchaResponse.getScore() > 0.5f;
-    }
-
-    private boolean isCorrectAction(RecaptchaResponse recaptchaResponse, String action) {
-        return recaptchaResponse.getAction().equalsIgnoreCase(action);
     }
 }

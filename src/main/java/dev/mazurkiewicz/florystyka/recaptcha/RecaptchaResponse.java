@@ -5,25 +5,23 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RecaptchaResponse {
     private final boolean success;
     private final String hostname;
-    private final float score;
-    private final String action;
+    private final List<String> errorCodes;
 
 
     @JsonCreator
     public RecaptchaResponse(
             @JsonProperty("success") boolean success,
             @JsonProperty("hostname") String hostname,
-            @JsonProperty("score") float score,
-            @JsonProperty("action") String action
-    ) {
+            @JsonProperty("error-codes") List<String> errorCodes) {
         this.success = success;
         this.hostname = hostname;
-        this.score = score;
-        this.action = action;
+        this.errorCodes = errorCodes;
     }
 }

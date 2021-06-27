@@ -3,7 +3,6 @@ package dev.mazurkiewicz.florystyka.user;
 import dev.mazurkiewicz.florystyka.exception.ErrorResponse;
 import dev.mazurkiewicz.florystyka.exception.validation.ErrorInfo;
 import dev.mazurkiewicz.florystyka.exception.validation.ErrorType;
-import dev.mazurkiewicz.florystyka.recaptcha.RecaptchaAction;
 import dev.mazurkiewicz.florystyka.recaptcha.RecaptchaService;
 import io.jsonwebtoken.lang.Maps;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +35,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> registerUser(@RequestBody @Valid NewUserRequest userRequest) {
-        boolean isValidCaptcha = recaptchaService.verifyCaptcha(userRequest.getCaptchaToken(), RecaptchaAction.REGISTER.name());
+        boolean isValidCaptcha = recaptchaService.verifyCaptcha(userRequest.getCaptchaToken());
         if (isValidCaptcha) {
             Long savedUserId = userService.registerUser(userRequest);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
