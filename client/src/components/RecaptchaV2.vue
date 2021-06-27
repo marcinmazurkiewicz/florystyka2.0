@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div class="flex flex-col justify-center">
+    <span class="py-2 text-center text-sm text-red" v-if="error">
+      {{ error }}
+    </span>
     <div
       id="g-recaptcha"
       class="w-full flex justify-center"
       :data-sitekey="recaptchaSiteKey"
     ></div>
-    <span class="inline-block w-1/2 text-right text-sm text-red" v-if="error">
-      {{ error }}
-    </span>
   </div>
 </template>
 
