@@ -1,12 +1,6 @@
 package dev.mazurkiewicz.florystyka.user;
 
-import dev.mazurkiewicz.florystyka.exception.ErrorResponse;
-import dev.mazurkiewicz.florystyka.exception.validation.ErrorInfo;
-import dev.mazurkiewicz.florystyka.exception.validation.ErrorType;
-import dev.mazurkiewicz.florystyka.recaptcha.RecaptchaService;
-import io.jsonwebtoken.lang.Maps;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -21,7 +15,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final RecaptchaService recaptchaService;
 
     @GetMapping
     public List<UserResponse> getUsers() {
