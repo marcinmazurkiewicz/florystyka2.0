@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class Solution {
 
     @Id
-    Integer id;
+    Long id;
     @Enumerated(EnumType.STRING)
     private AnswerType correct;
 }

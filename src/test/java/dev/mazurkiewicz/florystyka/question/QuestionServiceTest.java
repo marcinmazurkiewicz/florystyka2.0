@@ -41,7 +41,7 @@ class QuestionServiceTest {
         service = new QuestionService(repository, mapper, pdfGenerator, properties);
     }
 
-    private Question prepareQuestion(int questionNo) {
+    private Question prepareQuestion(long questionNo) {
         Question question = new Question();
         question.setId(questionNo);
         question.setAnswerA(String.format("answer A for question %d", questionNo));
@@ -197,7 +197,7 @@ class QuestionServiceTest {
         for (int i = 1; i < properties.getTestQuestionsNumber() + 1; i++) {
             questions.add(prepareQuestion(i));
         }
-        QuestionResponse response = new QuestionResponse(1, "mock content", new ArrayList<>(), "");
+        QuestionResponse response = new QuestionResponse(1L, "mock content", new ArrayList<>(), "");
         when(repository.getRandomQuestions(properties.getTestQuestionsNumber())).thenReturn(questions);
         when(mapper.mapEntityToResponse(ArgumentMatchers.any(Question.class))).thenReturn(response);
 

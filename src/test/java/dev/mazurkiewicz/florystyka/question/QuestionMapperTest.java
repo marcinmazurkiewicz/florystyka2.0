@@ -15,7 +15,7 @@ class QuestionMapperTest {
 
     private final QuestionMapper mapper = new QuestionMapper();
     private Question question;
-    private final int questionId = 1;
+    private final long questionId = 1L;
     private final String questionContent = "Content of question";
     private final String questionAnswerA = "Answer A";
     private final String questionAnswerB = "Answer B";
@@ -58,7 +58,7 @@ class QuestionMapperTest {
         expectedContent.put("imagePath", String.format("/resources/img/%s", questionImg));
     }
 
-    private void assertResponseFields(QuestionResponse response, Integer expectedId, Map<String, String> expectedContent) {
+    private void assertResponseFields(QuestionResponse response, Long expectedId, Map<String, String> expectedContent) {
         assertThat(response.getId()).isEqualTo(expectedId);
         assertThat(response.getContent()).isEqualTo(expectedContent.get("questionContent"));
         assertThat(response.getAnswers()).hasSize(4);

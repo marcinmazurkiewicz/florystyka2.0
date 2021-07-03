@@ -54,7 +54,7 @@ class QuestionControllerTest {
         }
     }
 
-    private static QuestionResponse prepareQuestion(int questionNo, boolean withImg) {
+    private static QuestionResponse prepareQuestion(long questionNo, boolean withImg) {
         return new QuestionResponse(questionNo, String.format("Question %d", questionNo),
                 Arrays.asList(
                         new Answer(AnswerType.A, String.format("answer A for question %d", questionNo)),

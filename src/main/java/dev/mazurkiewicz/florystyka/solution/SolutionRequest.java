@@ -9,7 +9,7 @@ import javax.validation.constraints.Min;
 public class SolutionRequest {
 
     @Min(1)
-    int questionId;
+    long questionId;
     AnswerType selectedAnswer;
 
 }

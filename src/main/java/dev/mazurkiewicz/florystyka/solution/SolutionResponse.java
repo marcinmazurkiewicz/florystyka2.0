@@ -12,15 +12,15 @@ public class SolutionResponse {
 
     Integer points;
     Integer total;
-    Map<Integer, AnswerType> solutions;
+    Map<Long, AnswerType> solutions;
 
-    public SolutionResponse(Integer points, Integer total, Map<Integer, AnswerType> solutions) {
+    public SolutionResponse(Integer points, Integer total, Map<Long, AnswerType> solutions) {
         this.points = points;
         this.total = total;
         this.solutions = solutions;
     }
 
-    public SolutionResponse(Map<Integer, AnswerType> solutions) {
+    public SolutionResponse(Map<Long, AnswerType> solutions) {
         this(null, null, solutions);
     }
 

@@ -7,7 +7,7 @@ import lombok.Value;
 @Value
 public class AdminQuestionResponse {
 
-    Integer id;
+    Long id;
     String content;
     String answerA;
     String answerB;

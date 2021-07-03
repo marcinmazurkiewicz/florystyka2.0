@@ -29,9 +29,9 @@ public class SolutionService {
     }
 
     public SolutionResponse checkTest(List<SolutionRequest> solutions) {
-        Set<Integer> questionIds = solutions.stream().map(SolutionRequest::getQuestionId).collect(Collectors.toSet());
+        Set<Long> questionIds = solutions.stream().map(SolutionRequest::getQuestionId).collect(Collectors.toSet());
 
-        Map<Integer, AnswerType> solutionMap = repository.findAllById(questionIds).stream()
+        Map<Long, AnswerType> solutionMap = repository.findAllById(questionIds).stream()
                 .collect(Collectors.toMap(Solution::getId, Solution::getCorrect));
 
         if (!solutionMap.keySet().containsAll(questionIds)) {

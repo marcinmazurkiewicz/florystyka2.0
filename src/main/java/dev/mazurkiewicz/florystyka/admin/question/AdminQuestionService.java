@@ -32,7 +32,7 @@ public class AdminQuestionService {
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Question with id %d doesn't exist", questionId)));
     }
 
-    public Integer saveQuestion(NewQuestionRequest newQuestionRequest) throws IOException, FileTypeException {
+    public Long saveQuestion(NewQuestionRequest newQuestionRequest) throws IOException, FileTypeException {
         Question question = mapper.mapRequestToEntity(newQuestionRequest);
         if (newQuestionRequest.getImage() != null) {
             question.setImg(resourceService.saveQuestionImage(newQuestionRequest.getImage()));

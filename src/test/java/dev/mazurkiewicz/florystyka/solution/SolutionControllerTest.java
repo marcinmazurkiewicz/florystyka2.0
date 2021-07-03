@@ -51,7 +51,7 @@ class SolutionControllerTest {
     @Test
     void shouldReturnSolutionResponseWhenCallCheckAnswer() throws Exception {
         SolutionRequest request = new SolutionRequest(1, AnswerType.C);
-        when(service.checkSingleAnswer(request)).thenReturn(new SolutionResponse(0, 1, Map.of(1, AnswerType.C)));
+        when(service.checkSingleAnswer(request)).thenReturn(new SolutionResponse(0, 1, Map.of(1L, AnswerType.C)));
 
         mvc.perform(post("/api/v3/solutions/single")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -64,7 +64,7 @@ class SolutionControllerTest {
 
     @Test
     void shouldReturnSolutionResponseWhenCallCheckAnswerWithEmptySelectedAnswer() throws Exception {
-        when(service.checkSingleAnswer(any(SolutionRequest.class))).thenReturn(new SolutionResponse(0, 1, Map.of(1, AnswerType.B)));
+        when(service.checkSingleAnswer(any(SolutionRequest.class))).thenReturn(new SolutionResponse(0, 1, Map.of(1L, AnswerType.B)));
 
         mvc.perform(post("/api/v3/solutions/single")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -78,7 +78,7 @@ class SolutionControllerTest {
     @Test
     void shouldReturnStatus400WhenCallCheckAnswerWithIllegalRequestBody() throws Exception {
         SolutionRequest request = new SolutionRequest(1, AnswerType.C);
-        when(service.checkSingleAnswer(request)).thenReturn(new SolutionResponse(0, 1, Map.of(1, AnswerType.C)));
+        when(service.checkSingleAnswer(request)).thenReturn(new SolutionResponse(0, 1, Map.of(1L, AnswerType.C)));
 
         mvc.perform(post("/api/v3/solutions/single")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -106,12 +106,12 @@ class SolutionControllerTest {
                 new SolutionRequest(4, AnswerType.D),
                 new SolutionRequest(5, AnswerType.EMPTY)
         );
-        Map<Integer, AnswerType> responseSolutions = new HashMap<>();
-        responseSolutions.put(1, AnswerType.B);
-        responseSolutions.put(2, AnswerType.B);
-        responseSolutions.put(3, AnswerType.B);
-        responseSolutions.put(4, AnswerType.B);
-        responseSolutions.put(5, AnswerType.B);
+        Map<Long, AnswerType> responseSolutions = new HashMap<>();
+        responseSolutions.put(1L, AnswerType.B);
+        responseSolutions.put(2L, AnswerType.B);
+        responseSolutions.put(3L, AnswerType.B);
+        responseSolutions.put(4L, AnswerType.B);
+        responseSolutions.put(5L, AnswerType.B);
         when(service.checkTest(request)).thenReturn(new SolutionResponse(1, 5, responseSolutions));
 
         mvc.perform(post("/api/v3/solutions/test")
@@ -130,7 +130,7 @@ class SolutionControllerTest {
     @Test
     void shouldReturnStatus400WhenCallCheckTestWithIllegalRequestBody() throws Exception {
         SolutionRequest request = new SolutionRequest(1, AnswerType.C);
-        when(service.checkSingleAnswer(request)).thenReturn(new SolutionResponse(0, 1, Map.of(1, AnswerType.C)));
+        when(service.checkSingleAnswer(request)).thenReturn(new SolutionResponse(0, 1, Map.of(1L, AnswerType.C)));
 
         mvc.perform(post("/api/v3/solutions/test")
                 .contentType(MediaType.APPLICATION_JSON)

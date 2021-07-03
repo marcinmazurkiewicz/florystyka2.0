@@ -38,7 +38,7 @@ public class AdminQuestionController {
 
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<?> saveNewQuestion(@Valid @ModelAttribute NewQuestionRequest questionRequest) {
-        Integer questionId;
+        Long questionId;
         try {
             questionId = questionService.saveQuestion(questionRequest);
         } catch (IOException e) {

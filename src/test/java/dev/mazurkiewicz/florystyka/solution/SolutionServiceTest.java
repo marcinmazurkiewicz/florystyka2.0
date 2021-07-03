@@ -89,7 +89,7 @@ class SolutionServiceTest {
         );
 
         List<Solution> solutions = new ArrayList<>();
-        for (int i = 1; i < 6; i++) {
+        for (long i = 1; i < 6; i++) {
             Solution solution = new Solution();
             solution.setId(i);
             solution.setCorrect(AnswerType.B);
@@ -123,7 +123,7 @@ class SolutionServiceTest {
         );
 
         List<Solution> solutions = new ArrayList<>();
-        for (int i = 1; i < 5; i++) {
+        for (long i = 1; i < 5; i++) {
             Solution solution = new Solution();
             solution.setId(i);
             solution.setCorrect(AnswerType.B);
