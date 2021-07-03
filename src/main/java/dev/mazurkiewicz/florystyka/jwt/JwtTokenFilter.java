@@ -7,6 +7,7 @@ import dev.mazurkiewicz.florystyka.exception.ErrorResponse;
 import dev.mazurkiewicz.florystyka.exception.TokenExpiredException;
 import dev.mazurkiewicz.florystyka.exception.UnauthorizedAccessException;
 import dev.mazurkiewicz.florystyka.exception.validation.ErrorType;
+import dev.mazurkiewicz.florystyka.user.LoggedUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -54,14 +53,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             Claims body = claimsJws.getBody();
             String username = body.getSubject();
             List<?> authList = (List<?>) body.get("authorities");
-            Map<String, Object> details = new HashMap<>();
-            details.put("userId", body.get("userId"));
             Set<SimpleGrantedAuthority> authorities = authList.stream()
                     .map(auth -> new SimpleGrantedAuthority(auth.toString()))
                     .collect(Collectors.toSet());
+            Long userId = ((Number) body.get("userId")).longValue();
+            LoggedUserDetails user = new LoggedUserDetails(userId, username, authorities);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken
-                    (username, null, authorities);
-            authentication.setDetails(details);
+                    (user, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             filterChain.doFilter(request, response);
