@@ -86,11 +86,27 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: "/dashboard",
-    name: "DashboardView",
-    component: () => import("@/views/logged/DashboardView.vue"),
+    name: "StudentDashboard",
+    component: () => import("@/views/logged/student/StudentDashboardView.vue"),
     meta: {
       requiresAuth: true,
-      allowedFor: ["ROLE_ADMIN", "ROLE_STUDENT"]
+      allowedFor: ["ROLE_STUDENT"]
+    }
+  },
+  {
+    path: "/student/random",
+    name: "StudentRandomQuestion",
+    component: () => import("@/views/RandomQuestionView.vue"),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/student/test",
+    name: "StudentTest",
+    component: () => import("@/views/TestView.vue"),
+    meta: {
+      requiresAuth: true
     }
   },
   {

@@ -69,7 +69,7 @@ export default defineComponent({
     const login = function() {
       tryLogin({ username: username.value, password: password.value })
         .then(() => {
-          router.push({ name: "DashboardView" });
+          router.push({ name: "StudentDashboard" });
         })
         .catch(error => {
           responseStatus.value = error.responseStatus;
