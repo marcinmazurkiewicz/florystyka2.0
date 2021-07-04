@@ -8,7 +8,9 @@ import {
 
 let memoryToken: MemoryToken;
 
-function decodeToken(token: string): { authorities: string[]; expiry: number } {
+function decodeToken(
+  token: string
+): { authorities: string[]; expiry: number; username: string } {
   const base64Url = token.split(".")[1];
   const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
   const jsonPayload = decodeURIComponent(
@@ -19,23 +21,29 @@ function decodeToken(token: string): { authorities: string[]; expiry: number } {
   );
 
   const decodedToken = JSON.parse(jsonPayload);
+  const username: string = decodedToken.sub;
   const authorities: string[] = decodedToken.authorities;
   const expiry: number = decodedToken.exp;
-  return { authorities, expiry };
+  return { authorities, expiry, username };
 }
 
 function login(token: string): void {
-  const { authorities, expiry } = decodeToken(token);
+  const { authorities, expiry, username } = decodeToken(token);
   memoryToken = {
     token,
     expiry,
-    authorities
+    authorities,
+    username
   };
   store.commit("setLogged", true);
 }
 
 function getToken(): string {
   return memoryToken ? memoryToken.token : "";
+}
+
+function getUsername(): string {
+  return memoryToken.username;
 }
 
 function isLoggedUser(): boolean {
@@ -81,7 +89,8 @@ function logout(): Promise<PreparedResponse<NoneResponse>> {
     memoryToken = {
       token: "",
       expiry: Date.now() / 1000,
-      authorities: []
+      authorities: [],
+      username: ""
     };
     store.commit("logout");
     return response;
@@ -91,6 +100,7 @@ function logout(): Promise<PreparedResponse<NoneResponse>> {
 export {
   login,
   getToken,
+  getUsername,
   isLoggedUser,
   hasRight,
   hasAnyRight,

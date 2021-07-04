@@ -22,4 +22,5 @@ export type MemoryToken = {
   token: string;
   expiry: number;
   authorities: string[];
+  username: string;
 };
