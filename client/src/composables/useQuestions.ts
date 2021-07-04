@@ -19,11 +19,12 @@ import {
   getTest,
   getPagedQuestions,
   getSingleQuestionPreview,
-  saveQuestion
+  saveQuestion,
+  checkAndSaveAnswer
 } from "@/services/questionApiService";
 import { ResponseStatus } from "@/types/ResponseStatus";
-import {  PreparedResponse } from "@/types/PreparedResponse";
-
+import { PreparedResponse } from "@/types/PreparedResponse";
+import { isLoggedUser } from "@/utils/authUtils";
 
 export function useQuestion() {
   const solved = ref(false);
@@ -89,12 +90,18 @@ export function useQuestion() {
       questionId: questionUnit.question.id,
       selectedAnswer: questionUnit.selectedAnswer
     };
-    checkAnswer(data)
+
+    const checkAnswerPromise = isLoggedUser()
+      ? checkAndSaveAnswer(data)
+      : checkAnswer(data);
+
+    checkAnswerPromise
       .then(response => {
         responseStatus.value = response.responseStatus;
         if (response.data) {
           questionUnit.correctAnswer =
             response.data.solutions[questionUnit.question.id];
+          solved.value = true;
         }
       })
       .catch(errorStatus => {

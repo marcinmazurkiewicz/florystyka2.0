@@ -74,7 +74,6 @@ export default defineComponent({
     const checkAnswer = () => {
       if (question.value != null) {
         submitAnswer(question.value);
-        solved.value = true;
       }
     };
 

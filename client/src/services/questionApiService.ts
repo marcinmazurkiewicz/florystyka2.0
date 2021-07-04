@@ -46,6 +46,17 @@ export async function checkAnswer(answer: {
   );
 }
 
+export async function checkAndSaveAnswer(answer: {
+  questionId: number;
+  selectedAnswer: UserChoice;
+}): Promise<PreparedResponse<SingleSolutionResponse>> {
+  return postRequest<SingleSolutionResponse>(
+    "/api/v3/logged/solutions/single",
+    answer,
+    true
+  );
+}
+
 export async function getPagedQuestions(
   pageNo: number
 ): Promise<PreparedResponse<AdminPagedQuestions>> {
