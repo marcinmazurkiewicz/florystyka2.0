@@ -2,11 +2,9 @@ package dev.mazurkiewicz.florystyka.student;
 
 import dev.mazurkiewicz.florystyka.solution.SolutionRequest;
 import dev.mazurkiewicz.florystyka.solution.SolutionResponse;
+import dev.mazurkiewicz.florystyka.solution.SolutionStatsResponse;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -19,6 +17,11 @@ public class StudentSolutionController {
 
     public StudentSolutionController(StudentSolutionService service) {
         this.service = service;
+    }
+
+    @GetMapping("/stats/single")
+    public SolutionStatsResponse getSolutionsStatsForLoggedUser() {
+        return service.getSingleSolutionsStatsForLoggedStudent();
     }
 
     @PostMapping("/single")
