@@ -10,44 +10,94 @@
       </header>
 
       <div class="py-6 w-full grid grid-col-1 md:grid-cols-2">
-        <div class="text-center py-6 mx-12 border rounded-lg border-dark-green">
+        <div class="text-center py-6 mx-12">
           <h5 class="text-red text-2xl">Rozwiązane testy</h5>
-          <i class="material-icons text-7xl text-light-green py-6">receipt</i>
-          <p class="text-center">
-            Historia rozwiązywanych testów.
-          </p>
+          <div class="flex justify-center my-4"></div>
         </div>
         <div class="text-center p-6">
           <h5 class="text-red text-2xl">Rozwiązane szybkie pytania</h5>
-          <i class="material-icons text-7xl text-light-green py-6">av_timer</i>
-          <p class="text-center">
-            Historia szybkich pytań.
-          </p>
+          <h6 class="text-center text-xl pt-4 tracking-wider leading-relaxed">
+            Statystyki
+          </h6>
+          <div class="flex justify-center my-4">
+            <chart
+              chart-type="doughnut"
+              :chart-data="chartData"
+              chart-id="single-question-chart"
+              :status="responseStatus"
+            />
+          </div>
         </div>
       </div>
     </section>
   </main>
 </template>
 <script lang="ts">
-import { defineComponent, ref, Ref } from "vue";
+import {
+  computed,
+  defineComponent,
+  onBeforeMount,
+  ref,
+  Ref,
+  watchEffect
+} from "vue";
 import { getUsername } from "@/utils/authUtils";
+import { useSolutionsStats } from "@/composables/useSolutionsStats";
+import Chart from "@/components/Chart.vue";
+import { ComputedRef } from "@vue/reactivity";
 
 export default defineComponent({
   name: "Dashboard",
-
+  components: {
+    Chart
+  },
   setup() {
-    const isDataReturned: Ref<boolean> = ref(true);
-    const questionNumber: Ref<number> = ref(0);
-    const earliestQuestionYear: Ref<number> = ref(0);
-    const latestQuestionYear: Ref<number> = ref(0);
     const username: Ref<string> = ref(getUsername());
+    const {
+      singleStats,
+      responseStatus,
+      getStatsForSingleSolutions
+    } = useSolutionsStats();
+
+    const correctPercent: ComputedRef<number> = computed(
+      () =>
+        Math.round(
+          (singleStats.value.correct / singleStats.value.total) * 100 * 100
+        ) / 100
+    );
+
+    const incorrectPercent: ComputedRef<number> = computed(
+      () => 100 - correctPercent.value
+    );
+
+    function prepareDataset() {
+      return {
+        labels: ["Zaliczone", "Niezaliczone"],
+        datasets: [
+          {
+            data: [correctPercent.value, incorrectPercent.value],
+            backgroundColor: ["#8bc34a", "#b23939"],
+            borderWidth: [0, 0]
+          }
+        ]
+      };
+    }
+
+    const chartData = ref(prepareDataset());
+
+    onBeforeMount(() => getStatsForSingleSolutions());
+
+    watchEffect(() => {
+      chartData.value = prepareDataset();
+    });
 
     return {
-      isDataReturned,
-      questionNumber,
-      earliestQuestionYear,
-      latestQuestionYear,
-      username
+      responseStatus,
+      singleStats,
+      username,
+      correctPercent,
+      incorrectPercent,
+      chartData
     };
   }
 });
