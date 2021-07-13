@@ -31,7 +31,7 @@ export default defineComponent({
       required: true
     },
     chartType: {
-      type: Object as PropType<ChartType>,
+      type: String as PropType<ChartType>,
       required: true
     },
     chartData: {
