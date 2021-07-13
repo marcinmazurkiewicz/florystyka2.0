@@ -30,9 +30,7 @@ public class SolutionService {
 
     public SolutionResponse checkTest(List<SolutionRequest> solutions) {
         Set<Long> questionIds = solutions.stream().map(SolutionRequest::getQuestionId).collect(Collectors.toSet());
-
-        Map<Long, AnswerType> solutionMap = repository.findAllById(questionIds).stream()
-                .collect(Collectors.toMap(Solution::getId, Solution::getCorrect));
+        Map<Long, AnswerType> solutionMap = getSolutionsMap(questionIds);
 
         if (!solutionMap.keySet().containsAll(questionIds)) {
             throw new IncorrectResultSizeDataAccessException("Some answers are missing", questionIds.size(), solutionMap.size());
@@ -44,6 +42,11 @@ public class SolutionService {
                 .count();
 
         return new SolutionResponse(Long.valueOf(points).intValue(), solutionMap.size(), solutionMap);
+    }
+
+    public Map<Long, AnswerType> getSolutionsMap(Set<Long> questionIds) {
+        return repository.findAllById(questionIds).stream()
+                .collect(Collectors.toMap(Solution::getId, Solution::getCorrect));
     }
 
 }
