@@ -1,6 +1,9 @@
 package dev.mazurkiewicz.florystyka.question;
 
 import dev.mazurkiewicz.florystyka.exception.PdfRenderException;
+import io.jsonwebtoken.lang.Maps;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.List;
 
 @RestController
@@ -19,9 +23,11 @@ import java.util.List;
 public class QuestionController {
 
     private final QuestionService service;
+    private final MeterRegistry registry;
 
-    public QuestionController(QuestionService service) {
+    public QuestionController(QuestionService service, MeterRegistry registry) {
         this.service = service;
+        this.registry = registry;
     }
 
     @GetMapping("/random")
@@ -55,11 +61,16 @@ public class QuestionController {
     @GetMapping("/test/pdf")
     public ResponseEntity<ByteArrayResource> generatePdf() {
         String filename = "r26.pdf";
-        byte[] pdfBytes;
+        byte[] pdfBytes = new byte[0];
+        Timer.Sample timerSample = Timer.start();
         try {
             pdfBytes = service.getPdfTest();
         } catch (PdfRenderException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        } finally {
+            boolean successfulGeneration = pdfBytes.length > 0;
+            Timer timer = buildTimer(filename, successfulGeneration);
+            timerSample.stop(timer);
         }
         ByteArrayResource resource = new ByteArrayResource(pdfBytes);
         HttpHeaders headers = new HttpHeaders();
@@ -74,6 +85,17 @@ public class QuestionController {
         return new ResponseEntity<>(resource,
                 headers,
                 HttpStatus.OK);
+    }
+
+    private Timer buildTimer(String filename, Boolean success) {
+        return Timer.builder("generate_file")
+                .tag("type", "pdf")
+                .tag("name", filename)
+                .tag("success",success.toString())
+                .publishPercentileHistogram(true)
+                .minimumExpectedValue(Duration.ofMillis(1L))
+                .maximumExpectedValue(Duration.ofSeconds(30L))
+                .register(registry);
     }
 }
 

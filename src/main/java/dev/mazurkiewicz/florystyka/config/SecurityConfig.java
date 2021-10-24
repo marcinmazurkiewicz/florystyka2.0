@@ -58,6 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/v3/auth/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v3/auth/refresh").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v3/users").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v3/users/infiniteToken").permitAll()
+                .antMatchers("/actuator/**").hasIpAddress("127.0.0.1")
                 .anyRequest().authenticated();
     }
 
