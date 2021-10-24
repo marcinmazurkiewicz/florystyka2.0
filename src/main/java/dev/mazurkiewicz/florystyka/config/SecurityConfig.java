@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import dev.mazurkiewicz.florystyka.jwt.JwtProperties;
 import dev.mazurkiewicz.florystyka.recaptcha.RecaptchaProperties;
 import dev.mazurkiewicz.florystyka.user.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,13 +29,24 @@ import java.util.Arrays;
         prePostEnabled = true,
         securedEnabled = true)
 @EnableConfigurationProperties({JwtProperties.class, SecurityProperties.class, RecaptchaProperties.class, ApplicationProperties.class})
-@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final SecurityProperties securityProperties;
-    @Qualifier("jwtTokenFilter")
     private final OncePerRequestFilter jwtTokenFilter;
     private final UserService userService;
+    private final String metricsBaseEndpoint;
+
+    public SecurityConfig(SecurityProperties securityProperties,
+                          @Qualifier("jwtTokenFilter") OncePerRequestFilter jwtTokenFilter,
+                          UserService userService,
+                          @Value("${management.endpoints.web.base-path}") String metricsBaseEndpoint) {
+
+        this.securityProperties = securityProperties;
+        this.jwtTokenFilter = jwtTokenFilter;
+        this.userService = userService;
+        this.metricsBaseEndpoint = metricsBaseEndpoint;
+    }
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -58,8 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/v3/auth/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v3/auth/refresh").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v3/users").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v3/users/infiniteToken").permitAll()
-                .antMatchers("/actuator/**").hasIpAddress("127.0.0.1")
+                .antMatchers(String.format("%s/**", metricsBaseEndpoint)).hasIpAddress(securityProperties.getPrometheusIPAddress())
                 .anyRequest().authenticated();
     }
 
