@@ -16,6 +16,7 @@ public class SecurityProperties {
     private String refreshTokenHeader;
     private Long refreshTokenExpirationAfterSeconds;
     private String prometheusIPAddress;
+    private Boolean userAccess;
 
     public ZoneId getTimezoneId() {
         return ZoneId.of("Europe/Warsaw");

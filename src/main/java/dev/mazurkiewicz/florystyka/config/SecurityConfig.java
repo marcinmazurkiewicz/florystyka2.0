@@ -36,14 +36,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userService;
     private final String metricsBaseEndpoint;
 
-    public SecurityConfig(SecurityProperties securityProperties,
+    public SecurityConfig(UserService userService,
+                          SecurityProperties securityProperties,
                           @Qualifier("jwtTokenFilter") OncePerRequestFilter jwtTokenFilter,
-                          UserService userService,
                           @Value("${management.endpoints.web.base-path}") String metricsBaseEndpoint) {
 
-        this.securityProperties = securityProperties;
-        this.jwtTokenFilter = jwtTokenFilter;
         this.userService = userService;
+        this.jwtTokenFilter = jwtTokenFilter;
+        this.securityProperties = securityProperties;
         this.metricsBaseEndpoint = metricsBaseEndpoint;
     }
 
@@ -55,14 +55,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .cors().configurationSource(request -> getCorsConfiguration())
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests()
+        http.csrf().disable();
+        http.cors().configurationSource(request -> getCorsConfiguration());
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/v3/questions/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v3/solutions/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/resources/**").permitAll()

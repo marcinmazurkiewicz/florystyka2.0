@@ -1,10 +1,10 @@
 <template>
   <main
-    class="w-full max-w-screen-lg m-auto my-6 text-white border rounded-lg border-gray-700 bg-dark-gray"
+      class="w-full max-w-screen-lg m-auto my-6 text-white border rounded-lg border-gray-700 bg-dark-gray"
   >
     <section>
       <header
-        class="text-center text-4xl text-red pt-16 pb-8 px-3 md:px-6 tracking-wider leading-relaxed"
+          class="text-center text-4xl text-red pt-16 pb-8 px-3 md:px-6 tracking-wider leading-relaxed"
       >
         Witaj {{ username }}
       </header>
@@ -12,19 +12,38 @@
       <div class="py-6 w-full grid grid-col-1 md:grid-cols-2">
         <div class="text-center py-6 mx-12">
           <h5 class="text-red text-2xl">Rozwiązane testy</h5>
-          <div class="flex justify-center my-4"></div>
+          <h6 class="text-center text-xl pt-4 tracking-wider leading-relaxed">
+            Statystyki
+          </h6>
+          <div class="my-4">
+            <p>Rozwiązanych testów: {{ testStats.total }}</p>
+            <p>Poprawnych odpowiedzi: {{testStats.correct}}</p>
+          </div>
+          <div class="flex justify-center my-4">
+            <chart
+                chart-type="doughnut"
+                :chart-data="testChartData"
+                chart-id="test-question-chart"
+                :status="testResponseStatus"
+            />
+          </div>
         </div>
+
         <div class="text-center p-6">
           <h5 class="text-red text-2xl">Rozwiązane szybkie pytania</h5>
           <h6 class="text-center text-xl pt-4 tracking-wider leading-relaxed">
             Statystyki
           </h6>
+          <div class="my-4">
+            <p>Rozwiązanych pytań: {{ singleStats.total }}</p>
+            <p>Poprawnych odpowiedzi: {{singleStats.correct}}</p>
+          </div>
           <div class="flex justify-center my-4">
             <chart
-              chart-type="doughnut"
-              :chart-data="chartData"
-              chart-id="single-question-chart"
-              :status="responseStatus"
+                chart-type="doughnut"
+                :chart-data="singleChartData"
+                chart-id="single-question-chart"
+                :status="singleResponseStatus"
             />
           </div>
         </div>
@@ -41,10 +60,10 @@ import {
   Ref,
   watchEffect
 } from "vue";
-import { getUsername } from "@/utils/authUtils";
-import { useSolutionsStats } from "@/composables/useSolutionsStats";
+import {getUsername} from "@/utils/authUtils";
+import {useSolutionsStats} from "@/composables/useSolutionsStats";
 import Chart from "@/components/Chart.vue";
-import { ComputedRef } from "@vue/reactivity";
+import {ComputedRef} from "@vue/reactivity";
 
 export default defineComponent({
   name: "Dashboard",
@@ -55,27 +74,48 @@ export default defineComponent({
     const username: Ref<string> = ref(getUsername());
     const {
       singleStats,
-      responseStatus,
-      getStatsForSingleSolutions
+      testStats,
+      singleResponseStatus,
+      testResponseStatus,
+      getStatsForSingleSolutions,
+      getStatsForTestSolutions
     } = useSolutionsStats();
 
-    const correctPercent: ComputedRef<number> = computed(
-      () =>
-        Math.round(
-          (singleStats.value.correct / singleStats.value.total) * 100 * 100
-        ) / 100
+    const correctSinglePercent: ComputedRef<number> = computed(
+        () =>
+            Math.round(
+                (singleStats.value.correct / singleStats.value.total) * 100 * 100
+            ) / 100
     );
 
-    const incorrectPercent: ComputedRef<number> = computed(
-      () => 100 - correctPercent.value
+    const incorrectSinglePercent: ComputedRef<number> = computed(
+        () => Math.round(
+            ((singleStats.value.total - singleStats.value.correct) / singleStats.value.total) * 100 * 100) / 100
     );
 
-    function prepareDataset() {
+    const correctTestPercent: ComputedRef<number> = computed(
+        () => {
+          if (testStats.value.correct > 0) {
+            return Math.round(
+                (testStats.value.correct / testStats.value.total) * 100 * 100
+            ) / 100
+          } else {
+            return 0;
+          }
+        }
+    );
+
+    const incorrectTestPercent: ComputedRef<number> = computed(
+        () => Math.round(
+            ((testStats.value.total - testStats.value.correct) / testStats.value.total) * 100 * 100) / 100
+    );
+
+    function prepareSingleDataset() {
       return {
         labels: ["Zaliczone", "Niezaliczone"],
         datasets: [
           {
-            data: [correctPercent.value, incorrectPercent.value],
+            data: [correctSinglePercent.value, incorrectSinglePercent.value],
             backgroundColor: ["#8bc34a", "#b23939"],
             borderWidth: [0, 0]
           }
@@ -83,21 +123,43 @@ export default defineComponent({
       };
     }
 
-    const chartData = ref(prepareDataset());
+    function prepareTestDataset() {
+      return {
+        labels: ["Zaliczone", "Niezaliczone"],
+        datasets: [
+          {
+            data: [correctTestPercent.value, incorrectTestPercent.value],
+            backgroundColor: ["#8bc34a", "#b23939"],
+            borderWidth: [0, 0]
+          }
+        ]
+      };
+    }
 
-    onBeforeMount(() => getStatsForSingleSolutions());
+    const singleChartData = ref(prepareSingleDataset());
+    const testChartData = ref(prepareTestDataset());
+
+    onBeforeMount(() => {
+      getStatsForSingleSolutions();
+      getStatsForTestSolutions();
+    });
 
     watchEffect(() => {
-      chartData.value = prepareDataset();
+      singleChartData.value = prepareSingleDataset();
+    });
+
+    watchEffect(() => {
+      testChartData.value = prepareTestDataset();
     });
 
     return {
-      responseStatus,
+      singleResponseStatus,
+      testResponseStatus,
       singleStats,
+      testStats,
       username,
-      correctPercent,
-      incorrectPercent,
-      chartData
+      singleChartData,
+      testChartData
     };
   }
 });

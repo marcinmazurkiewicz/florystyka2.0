@@ -20,7 +20,7 @@ import {
   getPagedQuestions,
   getSingleQuestionPreview,
   saveQuestion,
-  checkAndSaveAnswer
+  checkAndSaveAnswer, checkAndSaveTest
 } from "@/services/questionApiService";
 import { ResponseStatus } from "@/types/ResponseStatus";
 import { PreparedResponse } from "@/types/PreparedResponse";
@@ -150,7 +150,12 @@ export function useTest() {
         selectedAnswer: question.selectedAnswer
       })
     );
-    await checkTest(answers)
+
+    const checkAnswersPromise = isLoggedUser()
+        ? checkAndSaveTest(answers)
+        : checkTest(answers);
+
+    checkAnswersPromise
       .then(response => {
         if (response.data) {
           points.value = response.data.points;

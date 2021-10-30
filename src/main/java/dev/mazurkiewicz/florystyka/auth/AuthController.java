@@ -9,6 +9,7 @@ import dev.mazurkiewicz.florystyka.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +36,9 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequest request) {
+        if(!securityProperties.getUserAccess()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
@@ -46,6 +50,9 @@ public class AuthController {
 
     @GetMapping("/refresh")
     public ResponseEntity<?> refreshToken(@CookieValue(name = "refresh-token") String refreshTokenCookie) {
+        if(!securityProperties.getUserAccess()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         RefreshToken refreshToken = refreshTokenService.getToken(refreshTokenCookie);
         if (refreshToken.getExpiredAt().isBefore(Instant.now())) {
             refreshTokenService.removeRefreshToken(refreshToken);

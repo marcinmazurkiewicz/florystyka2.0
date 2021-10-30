@@ -1,6 +1,8 @@
 package dev.mazurkiewicz.florystyka.user;
 
+import dev.mazurkiewicz.florystyka.config.SecurityProperties;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,6 +17,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final SecurityProperties securityProperties;
 
     @GetMapping
     public List<UserResponse> getUsers() {
@@ -28,6 +31,9 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> registerUser(@RequestBody @Valid NewUserRequest userRequest) {
+        if(!securityProperties.getUserAccess()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         Long savedUserId = userService.registerUser(userRequest);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedUserId).toUri();

@@ -72,7 +72,7 @@ export function getDefaultPercentChart(): ChartOptions {
           weight: "bold"
         },
         formatter: function(value) {
-          return value + "%";
+          return (value > 0) ? value + "%"  : "";
         }
       },
       legend: {
