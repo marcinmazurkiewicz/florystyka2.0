@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-questions
+      author: m2
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            tableExists:
+              tableName: questions
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: false
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: user_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: content
+                  type: VARCHAR(250)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: answerA
+                  type: VARCHAR(250)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: answerB
+                  type: VARCHAR(250)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: answerC
+                  type: VARCHAR(250)
+              - column:
+                 constraints:
+                   nullable: false
+                 name: answerD
+                 type: VARCHAR(250)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: correct
+                  type: VARCHAR(1)
+              - column:
+                  name: img
+                  type: VARCHAR(250)
+              - column:
+                  name: year
+                  type: INT
+              - column:
+                  name: month
+                  type: INT
+            tableName: questions
