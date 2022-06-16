@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: solution-view
+      author: m2
+      changes:
+        - createView:
+            encoding: UTF-8
+            fullDefinition: false
+            relativeToChangelogFile: true
+            replaceIfExists: false
+            schemaName: public
+            selectQuery: SELECT questions.id AS question_id, questions.correct FROM questions
+            viewName: correct_answers
