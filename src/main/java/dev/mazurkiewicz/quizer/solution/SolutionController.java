@@ -17,12 +17,12 @@ public class SolutionController {
     private final SolutionService service;
 
     @PostMapping("/single")
-    public SolutionResponse checkAnswer(@Valid @RequestBody SolutionRequest solution) {
-        return service.checkSingleAnswer(solution);
+    public AnswerResponse checkAnswer(@Valid @RequestBody AnswerRequest solution) {
+        return service.checkSingle(solution);
     }
 
     @PostMapping("/test")
-    public TestSolutionResponse checkTest(@Valid @RequestBody List<SolutionRequest> solutions) {
+    public AnswerResponse checkTest(@Valid @RequestBody List<AnswerRequest> solutions) {
         return service.checkTest(solutions);
     }
 
