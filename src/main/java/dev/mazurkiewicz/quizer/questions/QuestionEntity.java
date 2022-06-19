@@ -11,12 +11,16 @@ import lombok.NoArgsConstructor;
 public class QuestionEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "question_id")
     private Integer id;
     private String content;
+    @Column(name = "answer_a")
     private String answerA;
+    @Column(name = "answer_b")
     private String answerB;
+    @Column(name = "answer_c")
     private String answerC;
+    @Column(name = "answer_d")
     private String answerD;
     @Enumerated(EnumType.STRING)
     private AnswerType correct;

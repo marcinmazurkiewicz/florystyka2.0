@@ -3,6 +3,10 @@ package dev.mazurkiewicz.quizer.pdf;
 import com.lowagie.text.Image;
 import dev.mazurkiewicz.quizer.exception.PdfRenderException;
 import dev.mazurkiewicz.quizer.resource.ResourceService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Element;
 import org.xhtmlrenderer.extend.FSImage;
 import org.xhtmlrenderer.extend.ReplacedElement;
@@ -14,19 +18,20 @@ import org.xhtmlrenderer.pdf.ITextImageElement;
 import org.xhtmlrenderer.render.BlockBox;
 import org.xhtmlrenderer.simple.extend.FormSubmissionListener;
 
+@Slf4j
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ImageReplacedElementFactory implements ReplacedElementFactory {
 
-    private final ReplacedElementFactory superFactory;
-    private final ResourceService resourceService;
-
-    public ImageReplacedElementFactory(ReplacedElementFactory superFactory, ResourceService resourceService) {
-        this.superFactory = superFactory;
-        this.resourceService = resourceService;
-    }
+    ReplacedElementFactory superFactory;
+    ResourceService resourceService;
 
     @Override
-    public ReplacedElement createReplacedElement(LayoutContext layoutContext, BlockBox blockBox,
-                                                 UserAgentCallback userAgentCallback, int cssWidth, int cssHeight) {
+    public ReplacedElement createReplacedElement(LayoutContext layoutContext,
+                                                 BlockBox blockBox,
+                                                 UserAgentCallback userAgentCallback,
+                                                 int cssWidth,
+                                                 int cssHeight) {
         Element element = blockBox.getElement();
         if (element == null) {
             return null;
@@ -34,10 +39,15 @@ public class ImageReplacedElementFactory implements ReplacedElementFactory {
         String nodeName = element.getNodeName();
         if ("img".equals(nodeName)) {
             if (!element.hasAttribute("src")) {
+                log.error("Image {} without source", nodeName);
                 throw new PdfRenderException("Image has missing a `src` attribute.");
             }
             try {
-                final byte[] bytes = resourceService.getImage(element.getAttribute("src"));
+                String imgSrc = element.getAttribute("src");
+                if (imgSrc.isEmpty()) {
+                    return null;
+                }
+                final byte[] bytes = resourceService.getImage(imgSrc);
                 final Image image = Image.getInstance(bytes);
                 final FSImage fsImage = new ITextFSImage(image);
                 if ((cssWidth != -1) || (cssHeight != -1)) {
@@ -45,6 +55,7 @@ public class ImageReplacedElementFactory implements ReplacedElementFactory {
                 }
                 return new ITextImageElement(fsImage);
             } catch (Exception e) {
+                log.error(e.getMessage(), e);
                 throw new PdfRenderException(String.format("There was a problem with the handling of the image: %s", e.getMessage()));
             }
         }

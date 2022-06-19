@@ -1,5 +1,6 @@
 package dev.mazurkiewicz.quizer.questions;
 
+import dev.mazurkiewicz.quizer.config.EndpointProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -7,8 +8,6 @@ import java.util.List;
 
 @Component
 public class QuestionMapper {
-
-    private final static String RESOURCE_SERVER_URL = "/resources/img";
 
     public QuestionResponse mapEntityToResponse(QuestionEntity entity) {
         if (entity == null)
@@ -21,7 +20,7 @@ public class QuestionMapper {
         answers.add(new Answer(AnswerType.D, entity.getAnswerD()));
         String img = null;
         if (entity.getImg() != null && !entity.getImg().isEmpty()) {
-            img = String.format("%s/%s", RESOURCE_SERVER_URL, entity.getImg());
+            img = String.format("%s/%s", EndpointProperties.RESOURCE_IMG_PREFIX, entity.getImg());
         }
         return new QuestionResponse(entity.getId(), entity.getContent(), answers, img);
     }

@@ -6,6 +6,10 @@ import dev.mazurkiewicz.quizer.config.QuizerProperties;
 import dev.mazurkiewicz.quizer.exception.PdfRenderException;
 import dev.mazurkiewicz.quizer.questions.QuestionEntity;
 import dev.mazurkiewicz.quizer.resource.ResourceService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -23,17 +27,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @Component
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PdfGenerator {
 
-    private final ResourceService resourceService;
-    private final QuizerProperties properties;
-
-    public PdfGenerator(ResourceService resourceService,
-                        QuizerProperties properties) {
-        this.resourceService = resourceService;
-        this.properties = properties;
-    }
+    ResourceService resourceService;
+    QuizerProperties properties;
 
     protected String parseThymeleafTemplate(List<QuestionEntity> questions) {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
@@ -71,7 +72,7 @@ public class PdfGenerator {
         try {
             resolver.addFont(fontResource.getURL().getPath(), BaseFont.IDENTITY_H, true);
         } catch (DocumentException | IOException e) {
-            System.err.println("Failed to set font: " + e.getMessage());
+            log.error("Failed to set font: {}", e.getMessage());
         }
         renderer.setDocumentFromString(html);
         renderer.layout();
@@ -80,6 +81,7 @@ public class PdfGenerator {
             renderer.createPDF(out);
             return out.toByteArray();
         } catch (DocumentException | IOException e) {
+            log.error(e.getMessage(), e);
             throw new PdfRenderException(String.format("PDF file rendering failed: %s", e.getMessage()));
         }
     }

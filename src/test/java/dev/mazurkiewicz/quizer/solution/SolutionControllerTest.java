@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static dev.mazurkiewicz.quizer.config.EndpointProperties.*;
 import static org.hamcrest.Matchers.aMapWithSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -45,7 +46,7 @@ class SolutionControllerTest {
         AnswerRequest request = new AnswerRequest(1, "C");
         when(service.checkSingle(request)).thenReturn(new AnswerResponse(0, 1, Map.of(1, AnswerType.B)));
 
-        mvc.perform(post("/api/v3/solutions/single")
+        mvc.perform(post(SOLUTIONS_ENDPOINT_MAIN + SOLUTIONS_ENDPOINT_SINGLE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 .andExpect(status().isOk())
@@ -60,7 +61,7 @@ class SolutionControllerTest {
         AnswerRequest request = new AnswerRequest(1, "");
         when(service.checkSingle(request)).thenReturn(new AnswerResponse(0, 1, Map.of(1, AnswerType.B)));
 
-        mvc.perform(post("/api/v3/solutions/single")
+        mvc.perform(post(SOLUTIONS_ENDPOINT_MAIN + SOLUTIONS_ENDPOINT_SINGLE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 .andExpect(status().isOk())
@@ -74,7 +75,7 @@ class SolutionControllerTest {
         AnswerRequest request = new AnswerRequest(1, "C");
         when(service.checkSingle(request)).thenReturn(new AnswerResponse(0, 1, Map.of(1, AnswerType.B)));
 
-        mvc.perform(post("/api/v3/solutions/single")
+        mvc.perform(post(SOLUTIONS_ENDPOINT_MAIN + SOLUTIONS_ENDPOINT_SINGLE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("\"selectedAnswer\":\"C\""))
                 .andExpect(status().isBadRequest());
@@ -86,7 +87,7 @@ class SolutionControllerTest {
         AnswerRequest request = new AnswerRequest(1, "f");
         when(service.checkSingle(request)).thenReturn(new AnswerResponse(0, 1, Map.of(1, AnswerType.B)));
 
-        mvc.perform(post("/api/v3/solutions/single")
+        mvc.perform(post(SOLUTIONS_ENDPOINT_MAIN + SOLUTIONS_ENDPOINT_SINGLE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 .andExpect(status().isBadRequest());
@@ -97,7 +98,7 @@ class SolutionControllerTest {
         AnswerRequest request = new AnswerRequest(11, "C");
         when(service.checkSingle(request)).thenThrow(ResourceNotFoundException.class);
 
-        mvc.perform(post("/api/v3/solutions/single")
+        mvc.perform(post(SOLUTIONS_ENDPOINT_MAIN + SOLUTIONS_ENDPOINT_SINGLE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 .andExpect(status().isNotFound());
@@ -120,7 +121,7 @@ class SolutionControllerTest {
         responseSolutions.put(5, AnswerType.B);
         when(service.checkTest(request)).thenReturn(new AnswerResponse(1, 5, responseSolutions));
 
-        mvc.perform(post("/api/v3/solutions/test")
+        mvc.perform(post(SOLUTIONS_ENDPOINT_MAIN + SOLUTIONS_ENDPOINT_EXAM)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 .andExpect(status().isOk())
@@ -138,7 +139,7 @@ class SolutionControllerTest {
         AnswerRequest request = new AnswerRequest(1, "C");
         when(service.checkSingle(request)).thenReturn(new AnswerResponse(0, 1, Map.of(1, AnswerType.B)));
 
-        mvc.perform(post("/api/v3/solutions/test")
+        mvc.perform(post(SOLUTIONS_ENDPOINT_MAIN + SOLUTIONS_ENDPOINT_EXAM)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("[{\"selectedAnswer\":\"C\"},{\\questionId\": 1, \"selectedAnswer\":\"B\"}]"))
                 .andExpect(status().isBadRequest());
@@ -155,7 +156,7 @@ class SolutionControllerTest {
         );
         when(service.checkTest(request)).thenThrow(ResourceNotFoundException.class);
 
-        mvc.perform(post("/api/v3/solutions/test")
+        mvc.perform(post(SOLUTIONS_ENDPOINT_MAIN + SOLUTIONS_ENDPOINT_EXAM)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(request)))
                 .andExpect(status().isNotFound());

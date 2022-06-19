@@ -1,5 +1,6 @@
 package dev.mazurkiewicz.quizer.resource;
 
+import dev.mazurkiewicz.quizer.config.EndpointProperties;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/resources")
+@RequestMapping(EndpointProperties.RESOURCES_ENDPOINT_MAIN)
 public class ResourceController {
 
     private final ResourceService service;
@@ -20,7 +21,7 @@ public class ResourceController {
         this.service = service;
     }
 
-    @GetMapping(value = "/img/{filename}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    @GetMapping(value = EndpointProperties.RESOURCES_ENDPOINT_IMG, produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     public ResponseEntity<ByteArrayResource> getImage(@PathVariable("filename") String filename) {
         ByteArrayResource resource = new ByteArrayResource(service.getImage(filename));
         HttpHeaders headers = new HttpHeaders();

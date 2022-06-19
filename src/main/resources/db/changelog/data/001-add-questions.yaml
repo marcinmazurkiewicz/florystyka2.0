@@ -12,19 +12,19 @@ databaseChangeLog:
                   type: NUMERIC
               - column:
                   header: answerA
-                  name: answerA
+                  name: answer_a
                   type: STRING
               - column:
                   header: answerB
-                  name: answerB
+                  name: answer_b
                   type: STRING
               - column:
                   header: answerC
-                  name: answerC
+                  name: answer_c
                   type: STRING
               - column:
                   header: answerD
-                  name: answerD
+                  name: answer_d
                   type: STRING
               - column:
                   header: content

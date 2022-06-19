@@ -1,5 +1,6 @@
 package dev.mazurkiewicz.quizer.questions;
 
+import dev.mazurkiewicz.quizer.config.EndpointProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -53,7 +54,7 @@ class QuestionMapperTest {
         expectedContent.put("answerB", questionAnswerB);
         expectedContent.put("answerC", questionAnswerC);
         expectedContent.put("answerD", questionAnswerD);
-        expectedContent.put("imagePath", String.format("/resources/img/%s", questionImg));
+        expectedContent.put("imagePath", String.format("%s/%s", EndpointProperties.RESOURCE_IMG_PREFIX, questionImg));
     }
 
     private void assertResponseFields(QuestionResponse response, Integer expectedId, Map<String, String> expectedContent) {

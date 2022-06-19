@@ -1,5 +1,6 @@
 package dev.mazurkiewicz.quizer.questions;
 
+import dev.mazurkiewicz.quizer.TestBeanConfig;
 import dev.mazurkiewicz.quizer.config.QuizerProperties;
 import dev.mazurkiewicz.quizer.exception.PdfRenderException;
 import dev.mazurkiewicz.quizer.exception.ResourceNotFoundException;
@@ -16,13 +17,14 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class QuestionServiceTest {
 
-    private final QuizerProperties properties = new QuizerProperties(10, "", "");
+    private final QuizerProperties properties = TestBeanConfig.quizerProperties();
     @Mock
     private QuestionRepository repository;
     @Mock
@@ -134,10 +136,10 @@ class QuestionServiceTest {
         when(repository.count()).thenReturn(countResult);
         when(repository.getEarliestYear()).thenReturn(earliestYearResult);
         when(repository.getLatestYear()).thenReturn(latestYearResult);
-        QuestionNumberResponse expected = new QuestionNumberResponse(countResult, earliestYearResult, latestYearResult);
+        QuestionInfoResponse expected = new QuestionInfoResponse(countResult, earliestYearResult, latestYearResult);
 
         //when
-        QuestionNumberResponse result = service.countQuestions();
+        QuestionInfoResponse result = service.getQuestionsInfo();
 
         //then
         verify(repository, times(1)).count();
@@ -155,10 +157,10 @@ class QuestionServiceTest {
         when(repository.count()).thenReturn(countResult);
         when(repository.getEarliestYear()).thenReturn(earliestYearResult);
         when(repository.getLatestYear()).thenReturn(latestYearResult);
-        QuestionNumberResponse expected = new QuestionNumberResponse(countResult, earliestYearResult, latestYearResult);
+        QuestionInfoResponse expected = new QuestionInfoResponse(countResult, earliestYearResult, latestYearResult);
 
         //when
-        QuestionNumberResponse result = service.countQuestions();
+        QuestionInfoResponse result = service.getQuestionsInfo();
 
         //then
         verify(repository, times(1)).count();
@@ -197,12 +199,14 @@ class QuestionServiceTest {
         when(mapper.mapEntityToResponse(ArgumentMatchers.any(QuestionEntity.class))).thenReturn(response);
 
         //when
-        List<QuestionResponse> result = service.getQuestionsToTest();
+        ExamResponse result = service.getExamData();
 
         //then
         verify(repository, times(1)).getRandomQuestions(properties.testQuestionsNumber());
         verify(mapper, times(properties.testQuestionsNumber())).mapEntityToResponse(ArgumentMatchers.any(QuestionEntity.class));
-        assertThat(result).hasSize(properties.testQuestionsNumber());
+        assertEquals(10, result.timer().minutes());
+        assertEquals(0, result.timer().seconds());
+        assertThat(result.questions()).hasSize(properties.testQuestionsNumber());
     }
 
     @Test
@@ -217,7 +221,7 @@ class QuestionServiceTest {
 
         //when
         //then
-        assertThrows(IncorrectResultSizeDataAccessException.class, () -> service.getQuestionsToTest());
+        assertThrows(IncorrectResultSizeDataAccessException.class, () -> service.getExamData());
         verify(repository, times(1)).getRandomQuestions(properties.testQuestionsNumber());
         verify(mapper, never()).mapEntityToResponse(ArgumentMatchers.any(QuestionEntity.class));
     }
