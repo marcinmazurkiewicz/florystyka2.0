@@ -172,18 +172,18 @@ class QuestionServiceTest {
     @Test
     void shouldReturnByteArrayWhenGetPdfTest() throws PdfRenderException {
         Set<QuestionEntity> questions = new HashSet<>();
-        for (int i = 1; i < properties.testQuestionsNumber() + 1; i++) {
+        for (int i = 1; i < properties.getTestQuestionsNumber() + 1; i++) {
             questions.add(prepareQuestion(i));
         }
         byte[] expected = "mock result".getBytes();
-        when(repository.getRandomQuestions(properties.testQuestionsNumber())).thenReturn(questions);
+        when(repository.getRandomQuestions(properties.getTestQuestionsNumber())).thenReturn(questions);
         when(pdfGenerator.generateTest(questions)).thenReturn(expected);
 
         //when
         byte[] result = service.getPdfTest();
 
         //then
-        verify(repository, times(1)).getRandomQuestions(properties.testQuestionsNumber());
+        verify(repository, times(1)).getRandomQuestions(properties.getTestQuestionsNumber());
         assertThat(result).isEqualTo(expected);
     }
 
@@ -191,38 +191,38 @@ class QuestionServiceTest {
     void shouldReturnQuestionResponseListWhenGetQuestionsToTest() {
         //given
         Set<QuestionEntity> questions = new HashSet<>();
-        for (int i = 1; i < properties.testQuestionsNumber() + 1; i++) {
+        for (int i = 1; i < properties.getTestQuestionsNumber() + 1; i++) {
             questions.add(prepareQuestion(i));
         }
         QuestionResponse response = new QuestionResponse(1, "mock content", new ArrayList<>(), "");
-        when(repository.getRandomQuestions(properties.testQuestionsNumber())).thenReturn(questions);
+        when(repository.getRandomQuestions(properties.getTestQuestionsNumber())).thenReturn(questions);
         when(mapper.mapEntityToResponse(ArgumentMatchers.any(QuestionEntity.class))).thenReturn(response);
 
         //when
         ExamResponse result = service.getExamData();
 
         //then
-        verify(repository, times(1)).getRandomQuestions(properties.testQuestionsNumber());
-        verify(mapper, times(properties.testQuestionsNumber())).mapEntityToResponse(ArgumentMatchers.any(QuestionEntity.class));
+        verify(repository, times(1)).getRandomQuestions(properties.getTestQuestionsNumber());
+        verify(mapper, times(properties.getTestQuestionsNumber())).mapEntityToResponse(ArgumentMatchers.any(QuestionEntity.class));
         assertEquals(10, result.timer().minutes());
         assertEquals(0, result.timer().seconds());
-        assertThat(result.questions()).hasSize(properties.testQuestionsNumber());
+        assertThat(result.questions()).hasSize(properties.getTestQuestionsNumber());
     }
 
     @Test
     void shouldThrowIncorrectResultSizeDataAccessExceptionWhenRepositoryReturnNotEnoughQuestions() {
         //given
         Set<QuestionEntity> questions = new HashSet<>();
-        for (int i = 1; i < properties.testQuestionsNumber(); i++) {
+        for (int i = 1; i < properties.getTestQuestionsNumber(); i++) {
             questions.add(prepareQuestion(i));
         }
         QuestionResponse response = new QuestionResponse(1, "mock content", new ArrayList<>(), "");
-        when(repository.getRandomQuestions(properties.testQuestionsNumber())).thenReturn(questions);
+        when(repository.getRandomQuestions(properties.getTestQuestionsNumber())).thenReturn(questions);
 
         //when
         //then
         assertThrows(IncorrectResultSizeDataAccessException.class, () -> service.getExamData());
-        verify(repository, times(1)).getRandomQuestions(properties.testQuestionsNumber());
+        verify(repository, times(1)).getRandomQuestions(properties.getTestQuestionsNumber());
         verify(mapper, never()).mapEntityToResponse(ArgumentMatchers.any(QuestionEntity.class));
     }
 

@@ -65,7 +65,7 @@ public class QuestionController {
 
     @GetMapping(EndpointProperties.QUESTIONS_ENDPOINT_PDF)
     public ResponseEntity<ByteArrayResource> generatePdf() {
-        String filename = properties.pdfName();
+        String filename = properties.getPdfName();
         byte[] pdfBytes = new byte[0];
         Timer.Sample timerSample = Timer.start();
 

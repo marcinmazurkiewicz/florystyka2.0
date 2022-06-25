@@ -1,12 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create-table-questions
       author: m2
-      preConditions:
-        - onFail: MARK_RAN
-          not:
-            tableExists:
-              tableName: questions
       changes:
         - createTable:
             columns:
@@ -42,7 +36,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: answer_d
-                 type: VARCHAR(250)
+                  type: VARCHAR(250)
               - column:
                   constraints:
                     nullable: false
@@ -58,3 +52,9 @@ databaseChangeLog:
                   name: month
                   type: INT
             tableName: questions
+      id: create-table-questions
+      preConditions:
+        - not:
+            tableExists:
+              tableName: questions
+          onFail: MARK_RAN

@@ -104,7 +104,7 @@ class SolutionServiceTest {
             solutions.add(solution);
         }
         when(repository.findAllById(ArgumentMatchers.anyCollection())).thenReturn(solutions);
-        when(properties.testQuestionsNumber()).thenReturn(5);
+        when(properties.getTestQuestionsNumber()).thenReturn(5);
 
         //when
         AnswerResponse response = service.checkTest(request);
@@ -135,7 +135,7 @@ class SolutionServiceTest {
         );
 
         when(repository.findAllById(ArgumentMatchers.anyCollection())).thenReturn(correctAnswerEntities);
-        when(properties.testQuestionsNumber()).thenReturn(5);
+        when(properties.getTestQuestionsNumber()).thenReturn(5);
 
         //when
         Exception exception = assertThrows(ResourceNotFoundException.class, () -> service.checkTest(request));

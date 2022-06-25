@@ -19,10 +19,10 @@ public class ResourceService {
 
     public byte[] getImage(String filename) {
         StringBuilder fullPath = new StringBuilder();
-        fullPath.append(properties.resourcesFolder());
-        if (!properties.resourcesFolder().endsWith(File.separator) && !properties.questionsImgFolder().startsWith(File.separator))
+        fullPath.append(properties.getResourcesFolder());
+        if (!properties.getResourcesFolder().endsWith(File.separator) && !properties.getQuestionsImgFolder().startsWith(File.separator))
             fullPath.append(File.separator);
-        fullPath.append(properties.questionsImgFolder());
+        fullPath.append(properties.getQuestionsImgFolder());
         fullPath.append(File.separator);
         fullPath.append(filename);
 

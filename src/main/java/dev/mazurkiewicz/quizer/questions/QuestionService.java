@@ -41,16 +41,16 @@ public class QuestionService {
     }
 
     public ExamResponse getExamData() {
-        Set<QuestionEntity> result = repository.getRandomQuestions(properties.testQuestionsNumber());
-        if (result.size() != properties.testQuestionsNumber()) {
+        Set<QuestionEntity> result = repository.getRandomQuestions(properties.getTestQuestionsNumber());
+        if (result.size() != properties.getTestQuestionsNumber()) {
             log.error("Problem with getting questions from database. Needed: {}, received: {}",
-                    properties.testQuestionsNumber(), result.size());
-            throw new IncorrectResultSizeDataAccessException("Incorrect questions number", properties.testQuestionsNumber());
+                    properties.getTestQuestionsNumber(), result.size());
+            throw new IncorrectResultSizeDataAccessException("Incorrect questions number", properties.getTestQuestionsNumber());
         }
         List<QuestionResponse> questions = result.stream()
                 .map(mapper::mapEntityToResponse)
                 .toList();
-        return new ExamResponse(ExamTimer.fromSeconds(properties.examTimeInSeconds()), questions);
+        return new ExamResponse(ExamTimer.fromSeconds(properties.getExamTimeInSeconds()), questions);
     }
 
     public QuestionInfoResponse getQuestionsInfo() {
@@ -61,7 +61,7 @@ public class QuestionService {
     }
 
     public byte[] getPdfTest() throws PdfRenderException {
-        Set<QuestionEntity> questions = repository.getRandomQuestions(properties.testQuestionsNumber());
+        Set<QuestionEntity> questions = repository.getRandomQuestions(properties.getTestQuestionsNumber());
         return pdfGenerator.generateTest(questions);
     }
 

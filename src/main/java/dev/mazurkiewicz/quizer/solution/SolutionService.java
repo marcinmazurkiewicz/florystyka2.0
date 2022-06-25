@@ -32,8 +32,8 @@ public class SolutionService {
 
     public AnswerResponse checkTest(List<AnswerRequest> answerRequests) {
         Set<Integer> questionIds = getQuestionsIdSet(answerRequests);
-        if (questionIds.size() != properties.testQuestionsNumber()) {
-            throw new IncorrectResultSizeDataAccessException("Some answers are missing", questionIds.size(), properties.testQuestionsNumber());
+        if (questionIds.size() != properties.getTestQuestionsNumber()) {
+            throw new IncorrectResultSizeDataAccessException("Some answers are missing", questionIds.size(), properties.getTestQuestionsNumber());
         }
 
         Map<Integer, AnswerType> correctAnswers = getCorrectAnswersForQuestions(questionIds);

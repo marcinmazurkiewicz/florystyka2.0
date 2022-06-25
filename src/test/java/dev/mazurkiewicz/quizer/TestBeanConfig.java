@@ -13,11 +13,11 @@ public class TestBeanConfig {
     @Bean
     @Primary
     public static QuizerProperties quizerProperties() {
-        return new QuizerProperties(3,
-                "src/test/resources",
-                "/img",
+        return new QuizerProperties(600,
                 "exam.pdf",
-                600);
+                "/img",
+                "src/test/resources",
+                3);
     }
 
     @Bean

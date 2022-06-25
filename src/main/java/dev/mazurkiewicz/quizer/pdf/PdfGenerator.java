@@ -59,8 +59,8 @@ public class PdfGenerator {
     public byte[] generatePdfFromHtml(String html)
             throws PdfRenderException {
         StringBuilder fontPath = new StringBuilder();
-        fontPath.append(properties.resourcesFolder());
-        if (!properties.resourcesFolder().endsWith(File.separator))
+        fontPath.append(properties.getResourcesFolder());
+        if (!properties.getResourcesFolder().endsWith(File.separator))
             fontPath.append(File.separator);
         fontPath.append("fonts/arial.ttf");
 

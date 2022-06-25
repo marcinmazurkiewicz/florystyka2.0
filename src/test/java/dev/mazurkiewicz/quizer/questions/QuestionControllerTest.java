@@ -231,7 +231,7 @@ class QuestionControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(header().string("Content-Type", MediaType.APPLICATION_PDF_VALUE))
                 .andExpect(header().string("Content-Length", String.valueOf(returnedBytesArray.length)))
-                .andExpect(header().string("Content-Disposition", "attachment; filename*=UTF-8''" + properties.pdfName()))
+                .andExpect(header().string("Content-Disposition", "attachment; filename*=UTF-8''" + properties.getPdfName()))
                 .andExpect(content().bytes(returnedBytesArray));
     }
 
