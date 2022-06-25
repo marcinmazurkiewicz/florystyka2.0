@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
 @RequestMapping(EndpointProperties.SOLUTIONS_ENDPOINT_MAIN)
 @RequiredArgsConstructor
+@RestController
 public class SolutionController {
 
     private final SolutionService service;

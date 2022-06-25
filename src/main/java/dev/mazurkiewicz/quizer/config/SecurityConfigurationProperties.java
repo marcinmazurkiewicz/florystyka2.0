@@ -6,15 +6,15 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.List;
 
-@ConfigurationProperties(prefix = "dev.mazurkiewicz.quizer")
+@ConfigurationProperties(prefix = "application.security")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-class QuizerConfigurationProperties implements QuizerProperties {
-    Integer examTimeInSeconds;
-    String pdfName;
-    String questionsImgFolder;
-    String resourcesFolder;
-    Integer testQuestionsNumber;
+class SecurityConfigurationProperties implements SecurityProperties {
+    List<String> allowedOrigins;
+    List<String> allowedMethods;
+    List<String> allowedHeaders;
+    List<String> exposedHeaders;
 }

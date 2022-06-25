@@ -16,11 +16,11 @@ import org.springframework.web.cors.CorsConfiguration;
 @EnableGlobalMethodSecurity(
         prePostEnabled = true,
         securedEnabled = true)
-@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class SecurityConfig {
+@RequiredArgsConstructor
+public class SecurityBeanConfiguration {
 
-    SecurityProperties properties;
+    SecurityConfiguration securityConfiguration;
 
     @Bean
     public DefaultSecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -28,11 +28,11 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().configurationSource(request -> {
                             CorsConfiguration cors = new CorsConfiguration();
-                            cors.setAllowedOrigins(properties.allowedOrigins());
-                            cors.setAllowedMethods(properties.allowedMethods());
-                            cors.setAllowedHeaders(properties.allowedHeaders());
-                            cors.setExposedHeaders(properties.exposedHeaders());
-                    cors.setAllowCredentials(true);
+                            cors.setAllowedOrigins(securityConfiguration.allowedOrigins());
+                            cors.setAllowedMethods(securityConfiguration.allowedMethods());
+                            cors.setAllowedHeaders(securityConfiguration.allowedHeaders());
+                            cors.setExposedHeaders(securityConfiguration.exposedHeaders());
+                            cors.setAllowCredentials(true);
                             return cors;
                         }
                 )

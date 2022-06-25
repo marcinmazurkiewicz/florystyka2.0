@@ -1,6 +1,8 @@
 package dev.mazurkiewicz.quizer.resource;
 
 import dev.mazurkiewicz.quizer.config.EndpointProperties;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,11 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping(EndpointProperties.RESOURCES_ENDPOINT_MAIN)
+@RestController
 public class ResourceController {
 
-    private final ResourceService service;
+    ResourceService service;
 
     public ResourceController(ResourceService service) {
         this.service = service;

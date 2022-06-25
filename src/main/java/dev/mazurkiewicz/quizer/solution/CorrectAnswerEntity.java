@@ -6,10 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Entity
+@NoArgsConstructor
 @Table(name = "correct_answers")
 public class CorrectAnswerEntity {
 

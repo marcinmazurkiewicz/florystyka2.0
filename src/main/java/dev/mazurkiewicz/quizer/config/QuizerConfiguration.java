@@ -1,16 +1,19 @@
 package dev.mazurkiewicz.quizer.config;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 
 @Component
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class QuizerConfiguration {
-    private final QuizerProperties properties;
+
+    QuizerProperties properties;
 
     public Integer examTimeInSeconds() {
         return properties.getExamTimeInSeconds();
-
     }
 
     public String pdfName() {
