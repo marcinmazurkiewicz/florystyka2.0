@@ -1,6 +1,6 @@
 package dev.mazurkiewicz.quizer.solution;
 
-import dev.mazurkiewicz.quizer.config.QuizerProperties;
+import dev.mazurkiewicz.quizer.config.QuizerConfiguration;
 import dev.mazurkiewicz.quizer.exception.ResourceNotFoundException;
 import dev.mazurkiewicz.quizer.questions.AnswerType;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +13,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class SolutionService {
 
     private final AnswerRepository repository;
-    private final QuizerProperties properties;
+    private final QuizerConfiguration quizerConfiguration;
 
     public AnswerResponse checkSingle(AnswerRequest answerRequest) {
         Map<Integer, AnswerType> correctAnswer = repository
@@ -32,8 +32,8 @@ public class SolutionService {
 
     public AnswerResponse checkTest(List<AnswerRequest> answerRequests) {
         Set<Integer> questionIds = getQuestionsIdSet(answerRequests);
-        if (questionIds.size() != properties.getTestQuestionsNumber()) {
-            throw new IncorrectResultSizeDataAccessException("Some answers are missing", questionIds.size(), properties.getTestQuestionsNumber());
+        if (questionIds.size() != quizerConfiguration.examQuestionsNumber()) {
+            throw new IncorrectResultSizeDataAccessException("Some answers are missing", questionIds.size(), quizerConfiguration.examTimeInSeconds());
         }
 
         Map<Integer, AnswerType> correctAnswers = getCorrectAnswersForQuestions(questionIds);

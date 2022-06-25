@@ -1,6 +1,6 @@
 package dev.mazurkiewicz.quizer;
 
-import dev.mazurkiewicz.quizer.config.QuizerProperties;
+import dev.mazurkiewicz.quizer.config.QuizerConfiguration;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -12,12 +12,15 @@ public class TestBeanConfig {
 
     @Bean
     @Primary
-    public static QuizerProperties quizerProperties() {
-        return new QuizerProperties(600,
-                "exam.pdf",
-                "/img",
-                "src/test/resources",
-                3);
+    public static QuizerConfiguration quizerProperties() {
+        TestQuizerProperties properties = TestQuizerProperties.builder()
+                .testQuestionsNumber(3)
+                .examTimeInSeconds(600)
+                .pdfName("exam.pdf")
+                .questionsImgFolder("/img")
+                .resourcesFolder("src/test/resources")
+                .build();
+        return new QuizerConfiguration(properties);
     }
 
     @Bean

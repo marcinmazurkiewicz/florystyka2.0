@@ -1,7 +1,7 @@
 package dev.mazurkiewicz.quizer.resource;
 
 import dev.mazurkiewicz.quizer.TestBeanConfig;
-import dev.mazurkiewicz.quizer.config.QuizerProperties;
+import dev.mazurkiewicz.quizer.config.QuizerConfiguration;
 import dev.mazurkiewicz.quizer.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,8 +16,8 @@ class ResourceServiceTest {
 
     private static byte[] expectedPngFileByteArray;
     private static byte[] expectedJpgFileByteArray;
-    private final QuizerProperties properties = TestBeanConfig.quizerProperties();
-    private final ResourceService service = new ResourceService(properties);
+    private final QuizerConfiguration configuration = TestBeanConfig.quizerProperties();
+    private final ResourceService service = new ResourceService(configuration);
 
     @BeforeAll
     private static void prepareExpectedImages() {

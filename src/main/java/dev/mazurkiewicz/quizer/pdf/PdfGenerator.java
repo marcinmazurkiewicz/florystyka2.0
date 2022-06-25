@@ -2,7 +2,7 @@ package dev.mazurkiewicz.quizer.pdf;
 
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
-import dev.mazurkiewicz.quizer.config.QuizerProperties;
+import dev.mazurkiewicz.quizer.config.QuizerConfiguration;
 import dev.mazurkiewicz.quizer.exception.PdfRenderException;
 import dev.mazurkiewicz.quizer.questions.QuestionEntity;
 import dev.mazurkiewicz.quizer.resource.ResourceService;
@@ -27,14 +27,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Slf4j
 @Component
-@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
+@Slf4j
 public class PdfGenerator {
 
     ResourceService resourceService;
-    QuizerProperties properties;
+    QuizerConfiguration quizerConfiguration;
 
     protected String parseThymeleafTemplate(List<QuestionEntity> questions) {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
@@ -59,8 +59,8 @@ public class PdfGenerator {
     public byte[] generatePdfFromHtml(String html)
             throws PdfRenderException {
         StringBuilder fontPath = new StringBuilder();
-        fontPath.append(properties.getResourcesFolder());
-        if (!properties.getResourcesFolder().endsWith(File.separator))
+        fontPath.append(quizerConfiguration.resourcesFolder());
+        if (!quizerConfiguration.resourcesFolder().endsWith(File.separator))
             fontPath.append(File.separator);
         fontPath.append("fonts/arial.ttf");
 

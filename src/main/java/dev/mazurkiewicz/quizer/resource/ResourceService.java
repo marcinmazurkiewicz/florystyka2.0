@@ -1,28 +1,29 @@
 package dev.mazurkiewicz.quizer.resource;
 
-import dev.mazurkiewicz.quizer.config.QuizerProperties;
+import dev.mazurkiewicz.quizer.config.QuizerConfiguration;
 import dev.mazurkiewicz.quizer.exception.ResourceNotFoundException;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.*;
 
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 @Service
 public class ResourceService {
 
-    private final QuizerProperties properties;
-
-    public ResourceService(QuizerProperties properties) {
-        this.properties = properties;
-    }
+    QuizerConfiguration quizerConfiguration;
 
     public byte[] getImage(String filename) {
         StringBuilder fullPath = new StringBuilder();
-        fullPath.append(properties.getResourcesFolder());
-        if (!properties.getResourcesFolder().endsWith(File.separator) && !properties.getQuestionsImgFolder().startsWith(File.separator))
+        fullPath.append(quizerConfiguration.resourcesFolder());
+        if (!quizerConfiguration.resourcesFolder().endsWith(File.separator) && !quizerConfiguration.questionsImgFolder().startsWith(File.separator))
             fullPath.append(File.separator);
-        fullPath.append(properties.getQuestionsImgFolder());
+        fullPath.append(quizerConfiguration.questionsImgFolder());
         fullPath.append(File.separator);
         fullPath.append(filename);
 

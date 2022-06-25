@@ -1,6 +1,6 @@
 package dev.mazurkiewicz.quizer.questions;
 
-import dev.mazurkiewicz.quizer.config.QuizerProperties;
+import dev.mazurkiewicz.quizer.config.QuizerConfiguration;
 import dev.mazurkiewicz.quizer.exception.PdfRenderException;
 import dev.mazurkiewicz.quizer.exception.ResourceNotFoundException;
 import dev.mazurkiewicz.quizer.pdf.PdfGenerator;
@@ -13,15 +13,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 
-@Slf4j
-@Service
 @RequiredArgsConstructor
+@Service
+@Slf4j
 public class QuestionService {
 
     private final QuestionRepository repository;
     private final QuestionMapper mapper;
     private final PdfGenerator pdfGenerator;
-    private final QuizerProperties properties;
+    private final QuizerConfiguration quizerConfiguration;
 
     public QuestionResponse getRandomQuestion() {
         Set<QuestionEntity> questionSet = repository.getRandomQuestions(1);
@@ -41,16 +41,16 @@ public class QuestionService {
     }
 
     public ExamResponse getExamData() {
-        Set<QuestionEntity> result = repository.getRandomQuestions(properties.getTestQuestionsNumber());
-        if (result.size() != properties.getTestQuestionsNumber()) {
+        Set<QuestionEntity> result = repository.getRandomQuestions(quizerConfiguration.examQuestionsNumber());
+        if (result.size() != quizerConfiguration.examQuestionsNumber()) {
             log.error("Problem with getting questions from database. Needed: {}, received: {}",
-                    properties.getTestQuestionsNumber(), result.size());
-            throw new IncorrectResultSizeDataAccessException("Incorrect questions number", properties.getTestQuestionsNumber());
+                    quizerConfiguration.examQuestionsNumber(), result.size());
+            throw new IncorrectResultSizeDataAccessException("Incorrect questions number", quizerConfiguration.examQuestionsNumber());
         }
         List<QuestionResponse> questions = result.stream()
                 .map(mapper::mapEntityToResponse)
                 .toList();
-        return new ExamResponse(ExamTimer.fromSeconds(properties.getExamTimeInSeconds()), questions);
+        return new ExamResponse(ExamTimer.fromSeconds(quizerConfiguration.examTimeInSeconds()), questions);
     }
 
     public QuestionInfoResponse getQuestionsInfo() {
@@ -61,7 +61,7 @@ public class QuestionService {
     }
 
     public byte[] getPdfTest() throws PdfRenderException {
-        Set<QuestionEntity> questions = repository.getRandomQuestions(properties.getTestQuestionsNumber());
+        Set<QuestionEntity> questions = repository.getRandomQuestions(quizerConfiguration.examQuestionsNumber());
         return pdfGenerator.generateTest(questions);
     }
 

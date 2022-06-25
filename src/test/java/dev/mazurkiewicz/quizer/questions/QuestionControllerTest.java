@@ -1,7 +1,7 @@
 package dev.mazurkiewicz.quizer.questions;
 
 import dev.mazurkiewicz.quizer.TestBeanConfig;
-import dev.mazurkiewicz.quizer.config.QuizerProperties;
+import dev.mazurkiewicz.quizer.config.QuizerConfiguration;
 import dev.mazurkiewicz.quizer.exception.PdfRenderException;
 import dev.mazurkiewicz.quizer.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
@@ -36,7 +36,7 @@ class QuestionControllerTest {
     @Autowired
     private MockMvc mvc;
     @Autowired
-    private QuizerProperties properties;
+    private QuizerConfiguration properties;
     @MockBean
     private QuestionService service;
 
@@ -231,7 +231,7 @@ class QuestionControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(header().string("Content-Type", MediaType.APPLICATION_PDF_VALUE))
                 .andExpect(header().string("Content-Length", String.valueOf(returnedBytesArray.length)))
-                .andExpect(header().string("Content-Disposition", "attachment; filename*=UTF-8''" + properties.getPdfName()))
+                .andExpect(header().string("Content-Disposition", "attachment; filename*=UTF-8''" + properties.pdfName()))
                 .andExpect(content().bytes(returnedBytesArray));
     }
 

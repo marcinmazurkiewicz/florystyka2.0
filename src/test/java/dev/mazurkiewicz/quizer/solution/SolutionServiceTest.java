@@ -1,6 +1,6 @@
 package dev.mazurkiewicz.quizer.solution;
 
-import dev.mazurkiewicz.quizer.config.QuizerProperties;
+import dev.mazurkiewicz.quizer.config.QuizerConfiguration;
 import dev.mazurkiewicz.quizer.exception.ResourceNotFoundException;
 import dev.mazurkiewicz.quizer.questions.AnswerType;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class SolutionServiceTest {
     private AnswerRepository repository;
 
     @Mock
-    private QuizerProperties properties;
+    private QuizerConfiguration quizerConfiguration;
 
     @InjectMocks
     private SolutionService service;
@@ -104,7 +104,7 @@ class SolutionServiceTest {
             solutions.add(solution);
         }
         when(repository.findAllById(ArgumentMatchers.anyCollection())).thenReturn(solutions);
-        when(properties.getTestQuestionsNumber()).thenReturn(5);
+        when(quizerConfiguration.examQuestionsNumber()).thenReturn(5);
 
         //when
         AnswerResponse response = service.checkTest(request);
@@ -135,7 +135,7 @@ class SolutionServiceTest {
         );
 
         when(repository.findAllById(ArgumentMatchers.anyCollection())).thenReturn(correctAnswerEntities);
-        when(properties.getTestQuestionsNumber()).thenReturn(5);
+        when(quizerConfiguration.examQuestionsNumber()).thenReturn(5);
 
         //when
         Exception exception = assertThrows(ResourceNotFoundException.class, () -> service.checkTest(request));

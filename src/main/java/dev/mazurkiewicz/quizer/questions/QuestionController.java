@@ -2,7 +2,7 @@ package dev.mazurkiewicz.quizer.questions;
 
 import dev.mazurkiewicz.quizer.config.EndpointProperties;
 import dev.mazurkiewicz.quizer.config.MicrometerProperties;
-import dev.mazurkiewicz.quizer.config.QuizerProperties;
+import dev.mazurkiewicz.quizer.config.QuizerConfiguration;
 import dev.mazurkiewicz.quizer.exception.PdfRenderException;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
@@ -24,16 +24,16 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-@Slf4j
-@RestController
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping(EndpointProperties.QUESTIONS_ENDPOINT_MAIN)
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RestController
+@Slf4j
 public class QuestionController {
 
     QuestionService service;
     MeterRegistry registry;
-    QuizerProperties properties;
+    QuizerConfiguration quizerConfiguration;
 
     @GetMapping(EndpointProperties.QUESTIONS_ENDPOINT_RANDOM)
     public QuestionResponse getRandomQuestion() {
@@ -65,7 +65,7 @@ public class QuestionController {
 
     @GetMapping(EndpointProperties.QUESTIONS_ENDPOINT_PDF)
     public ResponseEntity<ByteArrayResource> generatePdf() {
-        String filename = properties.getPdfName();
+        String filename = quizerConfiguration.pdfName();
         byte[] pdfBytes = new byte[0];
         Timer.Sample timerSample = Timer.start();
 
