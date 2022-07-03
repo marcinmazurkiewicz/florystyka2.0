@@ -1,6 +1,6 @@
 package dev.mazurkiewicz.quizer.solution;
 
-import dev.mazurkiewicz.quizer.questions.AnswerType;
+import dev.mazurkiewicz.quizer.question.domain.model.AnswerType;
 
 import java.util.Map;
 

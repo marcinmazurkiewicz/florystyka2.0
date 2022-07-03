@@ -1,4 +1,4 @@
-package dev.mazurkiewicz.quizer.questions;
+package dev.mazurkiewicz.quizer.question.domain.model;
 
 import java.util.Arrays;
 

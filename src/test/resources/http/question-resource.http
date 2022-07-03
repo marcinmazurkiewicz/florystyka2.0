@@ -1,0 +1,7 @@
+### get single question
+GET http://localhost:8088/api/questions/5
+Accept: application/json
+
+### get random question
+GET http://localhost:8088/api/questions/random
+Accept: application/json

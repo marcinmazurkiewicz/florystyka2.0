@@ -4,7 +4,7 @@ public class EndpointProperties {
     public static final String QUESTIONS_ENDPOINT_MAIN = "/api/questions";
     public static final String QUESTIONS_ENDPOINT_RANDOM = "/random";
     public static final String QUESTIONS_ENDPOINT_EXAM = "/exam";
-    public static final String QUESTIONS_ENDPOINT_INFO = "/info";
+    public static final String QUESTIONS_INFO_ENDPOINT_MAIN = "/api/info/questions";
     public static final String QUESTIONS_ENDPOINT_PDF = "/exam/pdf";
     public static final String SOLUTIONS_ENDPOINT_MAIN = "/api/solutions";
     public static final String SOLUTIONS_ENDPOINT_SINGLE = "/single";

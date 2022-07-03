@@ -1,5 +1,8 @@
-package dev.mazurkiewicz.quizer.questions;
+package dev.mazurkiewicz.quizer.question.infrastructure;
 
+import dev.mazurkiewicz.quizer.question.domain.model.AnswerType;
+import dev.mazurkiewicz.quizer.question.infrastructure.db.JpaQuestionRepository;
+import dev.mazurkiewicz.quizer.question.infrastructure.db.QuestionDBEntity;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,12 +17,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class QuestionRepositoryTest {
+class JpaQuestionRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
     @Autowired
-    private QuestionRepository repository;
+    private JpaQuestionRepository repository;
 
     @BeforeEach
     public void prepareEntityManager() {
@@ -33,8 +36,8 @@ class QuestionRepositoryTest {
         entityManager.clear();
     }
 
-    private QuestionEntity prepareQuestion(int questionNumber) {
-        QuestionEntity question = new QuestionEntity();
+    private QuestionDBEntity prepareQuestion(int questionNumber) {
+        QuestionDBEntity question = new QuestionDBEntity();
         question.setAnswerA(String.format("answer A for question %d", questionNumber));
         question.setAnswerB(String.format("answer B for question %d", questionNumber));
         question.setAnswerC(String.format("answer C for question %d", questionNumber));
@@ -51,7 +54,7 @@ class QuestionRepositoryTest {
     void shouldReturnQuestionSetWhenCallGetRandomQuestion() {
         //given
         //when
-        Set<QuestionEntity> result = repository.getRandomQuestions(5);
+        Set<QuestionDBEntity> result = repository.getRandomQuestions(5);
 
         //then
         assertThat(result).hasSize(5);
@@ -62,7 +65,7 @@ class QuestionRepositoryTest {
         //given
         long count = repository.count();
         //when
-        Set<QuestionEntity> result = repository.getRandomQuestions((int) count * 2);
+        Set<QuestionDBEntity> result = repository.getRandomQuestions((int) count * 2);
         //then
         assertThat(result).hasSize((int) count);
     }
@@ -70,7 +73,7 @@ class QuestionRepositoryTest {
     @Test
     void shouldReturnEarliestQuestionYear() {
         //given
-        QuestionEntity question = prepareQuestion(20);
+        QuestionDBEntity question = prepareQuestion(20);
         question.setYear(1990);
         entityManager.persist(question);
 
@@ -84,10 +87,10 @@ class QuestionRepositoryTest {
     @Test
     void shouldReturnEarliestQuestionYearWhenIsQuestionWithNullYearInDb() {
         //given
-        QuestionEntity question = prepareQuestion(19);
+        QuestionDBEntity question = prepareQuestion(19);
         question.setYear(1990);
         entityManager.persist(question);
-        QuestionEntity question2 = prepareQuestion(20);
+        QuestionDBEntity question2 = prepareQuestion(20);
         question2.setYear(null);
         entityManager.persist(question2);
 
@@ -113,7 +116,7 @@ class QuestionRepositoryTest {
     @Test
     void shouldReturnLatestQuestionYear() {
         //given
-        QuestionEntity question = prepareQuestion(20);
+        QuestionDBEntity question = prepareQuestion(20);
         question.setYear(2077);
         entityManager.persist(question);
 
@@ -127,10 +130,10 @@ class QuestionRepositoryTest {
     @Test
     void shouldReturnLatestQuestionYearWhenIsQuestionWithNullYearInDb() {
         //given
-        QuestionEntity question = prepareQuestion(19);
+        QuestionDBEntity question = prepareQuestion(19);
         question.setYear(2077);
         entityManager.persist(question);
-        QuestionEntity question2 = prepareQuestion(20);
+        QuestionDBEntity question2 = prepareQuestion(20);
         question2.setYear(null);
         entityManager.persist(question2);
 
