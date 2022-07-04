@@ -1,0 +1,3 @@
+### get exam
+GET http://localhost:8088/api/exams/generate
+Accept: application/json

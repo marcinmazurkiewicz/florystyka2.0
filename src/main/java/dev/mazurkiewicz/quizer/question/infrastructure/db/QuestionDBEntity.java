@@ -1,5 +1,6 @@
 package dev.mazurkiewicz.quizer.question.infrastructure.db;
 
+import dev.mazurkiewicz.quizer.question.application.AnswerStatus;
 import dev.mazurkiewicz.quizer.question.domain.model.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -55,10 +56,10 @@ public class QuestionDBEntity {
     public Question toDomain() {
         return new Question(new QuestionId(id),
                 new QuestionContent(content),
-                List.of(new Answer(AnswerType.A, new AnswerContent(answerA), correct == AnswerType.A),
-                        new Answer(AnswerType.B, new AnswerContent(answerB), correct == AnswerType.B),
-                        new Answer(AnswerType.C, new AnswerContent(answerC), correct == AnswerType.C),
-                        new Answer(AnswerType.D, new AnswerContent(answerD), correct == AnswerType.D)),
+                List.of(new Answer(AnswerType.A, new AnswerContent(answerA), AnswerStatus.of(correct == AnswerType.A)),
+                        new Answer(AnswerType.B, new AnswerContent(answerB), AnswerStatus.of(correct == AnswerType.B)),
+                        new Answer(AnswerType.C, new AnswerContent(answerC), AnswerStatus.of(correct == AnswerType.C)),
+                        new Answer(AnswerType.D, new AnswerContent(answerD), AnswerStatus.of(correct == AnswerType.D))),
                 new QuestionImage(img),
                 new QuestionSourceExamDate(month, year));
     }

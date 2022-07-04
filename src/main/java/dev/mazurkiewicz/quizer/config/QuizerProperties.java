@@ -10,4 +10,6 @@ public interface QuizerProperties {
     String getResourcesFolder();
 
     Integer getTestQuestionsNumber();
+
+    Integer getExamPassThreshold();
 }

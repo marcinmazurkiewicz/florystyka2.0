@@ -1,6 +1,6 @@
-package dev.mazurkiewicz.quizer.solution;
+package dev.mazurkiewicz.quizer.question.application;
 
-import dev.mazurkiewicz.quizer.questions.AnswerType;
+import dev.mazurkiewicz.quizer.question.domain.model.AnswerType;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;

@@ -5,3 +5,12 @@ Accept: application/json
 ### get random question
 GET http://localhost:8088/api/questions/random
 Accept: application/json
+
+### check answer
+POST http://localhost:8088/api/questions/5/answer
+Content-Type: application/json
+
+{
+  "questionId": 5,
+  "selected": "B"
+}

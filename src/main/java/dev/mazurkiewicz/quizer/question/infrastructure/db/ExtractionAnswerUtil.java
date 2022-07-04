@@ -1,5 +1,6 @@
 package dev.mazurkiewicz.quizer.question.infrastructure.db;
 
+import dev.mazurkiewicz.quizer.question.application.AnswerStatus;
 import dev.mazurkiewicz.quizer.question.domain.model.Answer;
 import dev.mazurkiewicz.quizer.question.domain.model.AnswerContent;
 import dev.mazurkiewicz.quizer.question.domain.model.AnswerType;
@@ -19,7 +20,7 @@ public class ExtractionAnswerUtil {
 
     public static AnswerType extractCorrectAnswerTypeFromList(List<Answer> answers) {
         return answers.stream()
-                .filter(Answer::isCorrect)
+                .filter(answer -> answer.status() == AnswerStatus.CORRECT)
                 .findFirst()
                 .map(Answer::type)
                 .orElse(AnswerType.EMPTY);

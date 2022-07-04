@@ -17,4 +17,5 @@ class QuizerConfigurationProperties implements QuizerProperties {
     String questionsImgFolder;
     String resourcesFolder;
     Integer testQuestionsNumber;
+    Integer examPassThreshold;
 }

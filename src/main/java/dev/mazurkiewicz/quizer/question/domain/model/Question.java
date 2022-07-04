@@ -1,5 +1,6 @@
 package dev.mazurkiewicz.quizer.question.domain.model;
 
+import dev.mazurkiewicz.quizer.question.application.AnswerStatus;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,12 +18,20 @@ public class Question {
     private QuestionImage image;
     private QuestionSourceExamDate sourceExamDate;
 
-    public boolean checkAnswer(AnswerType chosenAnswer) {
-        return answers.stream()
-                .filter(answer -> answer.type() == chosenAnswer)
+    public AnswerResult checkAnswer(SelectedAnswer selectedAnswer) {
+        AnswerStatus answerStatus = answers.stream()
+                .filter(answer -> answer.type() == selectedAnswer.value())
                 .findAny()
-                .map(Answer::isCorrect)
-                .orElse(false);
+                .map(Answer::status)
+                .orElse(AnswerStatus.INCORRECT);
+        return new AnswerResult(answerStatus, correctAnswer().type());
+    }
+
+    public Answer correctAnswer() {
+        return answers.stream()
+                .filter(answer -> answer.status() == AnswerStatus.CORRECT)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException(String.format("Question %d without correct answer!", id.value())));
     }
 }
 

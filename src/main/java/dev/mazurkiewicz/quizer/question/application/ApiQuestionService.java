@@ -1,8 +1,6 @@
 package dev.mazurkiewicz.quizer.question.application;
 
-import dev.mazurkiewicz.quizer.question.domain.model.Question;
-import dev.mazurkiewicz.quizer.question.domain.model.QuestionId;
-import dev.mazurkiewicz.quizer.question.domain.model.QuestionInfo;
+import dev.mazurkiewicz.quizer.question.domain.model.*;
 import dev.mazurkiewicz.quizer.question.domain.port.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -27,5 +25,12 @@ class ApiQuestionService {
     public QuestionInfoResponse getQuestionsInfo() {
         QuestionInfo questionInfo = service.getQuestionInfo();
         return QuestionInfoResponse.of(questionInfo);
+    }
+
+    public AnswerStatusResponse checkAnswer(SelectedAnswerRequest selectedAnswerRequest) {
+        QuestionId questionId = QuestionId.of(selectedAnswerRequest.questionId());
+        SelectedAnswer selectedAnswer = SelectedAnswer.of(selectedAnswerRequest.selectedAnswer());
+        AnswerResult answerResult = service.checkAnswer(questionId, selectedAnswer);
+        return new AnswerStatusResponse(questionId.value(), answerResult.status(), answerResult.correctAnswer());
     }
 }

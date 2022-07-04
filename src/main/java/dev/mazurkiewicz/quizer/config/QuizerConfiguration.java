@@ -31,4 +31,8 @@ public class QuizerConfiguration {
     public Integer examQuestionsNumber() {
         return properties.getTestQuestionsNumber();
     }
+
+    public Integer examPassThreshold() {
+        return properties.getExamPassThreshold();
+    }
 }

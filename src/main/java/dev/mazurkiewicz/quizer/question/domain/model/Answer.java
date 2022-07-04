@@ -1,5 +1,7 @@
 package dev.mazurkiewicz.quizer.question.domain.model;
 
-public record Answer(AnswerType type, AnswerContent content, boolean isCorrect) {
+import dev.mazurkiewicz.quizer.question.application.AnswerStatus;
+
+public record Answer(AnswerType type, AnswerContent content, AnswerStatus status) {
 
 }

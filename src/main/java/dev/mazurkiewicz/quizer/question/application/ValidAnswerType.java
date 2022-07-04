@@ -1,4 +1,4 @@
-package dev.mazurkiewicz.quizer.solution;
+package dev.mazurkiewicz.quizer.question.application;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

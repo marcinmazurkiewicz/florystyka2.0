@@ -1,7 +1,7 @@
 package dev.mazurkiewicz.quizer.pdf;
 
-import dev.mazurkiewicz.quizer.questions.AnswerType;
-import dev.mazurkiewicz.quizer.questions.QuestionEntity;
+import dev.mazurkiewicz.quizer.question.domain.model.AnswerType;
+import dev.mazurkiewicz.quizer.question.infrastructure.db.QuestionDBEntity;
 import dev.mazurkiewicz.quizer.resource.ResourceService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class PdfGeneratorTest {
 
-    private final List<QuestionEntity> questions = new ArrayList<>();
+    private final List<QuestionDBEntity> questions = new ArrayList<>();
 
     @Mock
     private ResourceService resourceService;
@@ -26,8 +26,8 @@ class PdfGeneratorTest {
     @InjectMocks
     private PdfGenerator pdfGenerator;
 
-    private QuestionEntity prepareQuestion(int questionNumber) {
-        QuestionEntity question = new QuestionEntity();
+    private QuestionDBEntity prepareQuestion(int questionNumber) {
+        QuestionDBEntity question = new QuestionDBEntity();
         question.setAnswerA(String.format("Answer A for question %d", questionNumber));
         question.setAnswerB(String.format("Answer B for question %d", questionNumber));
         question.setAnswerC(String.format("Answer C for question %d", questionNumber));

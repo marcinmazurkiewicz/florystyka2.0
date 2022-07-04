@@ -4,7 +4,7 @@ import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
 import dev.mazurkiewicz.quizer.config.QuizerConfiguration;
 import dev.mazurkiewicz.quizer.exception.PdfRenderException;
-import dev.mazurkiewicz.quizer.questions.QuestionEntity;
+import dev.mazurkiewicz.quizer.question.infrastructure.db.QuestionDBEntity;
 import dev.mazurkiewicz.quizer.resource.ResourceService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class PdfGenerator {
     ResourceService resourceService;
     QuizerConfiguration quizerConfiguration;
 
-    protected String parseThymeleafTemplate(List<QuestionEntity> questions) {
+    protected String parseThymeleafTemplate(List<QuestionDBEntity> questions) {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
@@ -86,8 +86,8 @@ public class PdfGenerator {
         }
     }
 
-    public byte[] generateTest(Set<QuestionEntity> questions) throws PdfRenderException {
-        ArrayList<QuestionEntity> questionArrayList = new ArrayList<>(questions);
+    public byte[] generateTest(Set<QuestionDBEntity> questions) throws PdfRenderException {
+        ArrayList<QuestionDBEntity> questionArrayList = new ArrayList<>(questions);
         String html = parseThymeleafTemplate(questionArrayList);
         return generatePdfFromHtml(html);
     }
