@@ -2,8 +2,6 @@ package dev.mazurkiewicz.quizer.exam.domain.model;
 
 import dev.mazurkiewicz.quizer.question.domain.model.Question;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,17 +20,15 @@ public class Exam {
         this.examId = prepareExamId();
     }
 
+    public static Exam recreate(ExamDuration examDuration, ExamPassThreshold passThreshold, List<Question> questions) {
+        return new Exam(questions, examDuration, passThreshold);
+    }
+
     private ExamId prepareExamId() {
         String joinedQuestionIds = questions.stream()
                 .map(question -> question.getId().value().toString())
-                .collect(Collectors.joining("-"));
-        String encodedQuestionIds = encodeQuestionIds(joinedQuestionIds);
-        return ExamId.of(encodedQuestionIds);
-    }
-
-    private String encodeQuestionIds(String joinedQuestionIds) {
-        byte[] encodedQuestionIds = Base64.getEncoder().encode(joinedQuestionIds.getBytes(StandardCharsets.UTF_8));
-        return new String(encodedQuestionIds);
+                .collect(Collectors.joining(ExamId.QUESTION_SPLITTER));
+        return ExamId.encode(joinedQuestionIds, duration.toSeconds(), passThreshold.neededPoints());
     }
 
     public ExamResult checkExamSolution(ExamSolution solution) {
@@ -42,6 +38,13 @@ public class Exam {
                 : ExamStatus.PASSED;
 
         return new ExamResult(new Points(achievedPoints, availablePoints), status);
+    }
+
+    public ExamCorrectAnswers getCorrectAnswers() {
+        List<ExamCorrectAnswer> examCorrectAnswers = questions.stream()
+                .map(question -> new ExamCorrectAnswer(question.getId(), question.correctAnswer()))
+                .toList();
+        return new ExamCorrectAnswers(examCorrectAnswers);
     }
 
     public ExamId examId() {
@@ -56,7 +59,7 @@ public class Exam {
         return duration;
     }
 
-    public ExamPassThreshold getPassThreshold() {
+    public ExamPassThreshold passThreshold() {
         return passThreshold;
     }
 }

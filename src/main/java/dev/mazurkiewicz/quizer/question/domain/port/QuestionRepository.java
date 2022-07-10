@@ -16,4 +16,6 @@ public interface QuestionRepository {
     Question getRandomQuestion();
 
     QuestionInfo getQuestionInfo();
+
+    List<Question> getQuestionList(List<QuestionId> questionIds);
 }

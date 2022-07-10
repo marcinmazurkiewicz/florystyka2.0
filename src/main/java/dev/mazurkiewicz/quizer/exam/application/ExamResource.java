@@ -1,12 +1,11 @@
 package dev.mazurkiewicz.quizer.exam.application;
 
 import dev.mazurkiewicz.quizer.config.EndpointProperties;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -23,6 +22,11 @@ class ExamResource {
         } catch (IncorrectResultSizeDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
         }
+    }
+
+    @PostMapping(EndpointProperties.SOLUTIONS_ENDPOINT_EXAM)
+    public ExamAnswerResponse checkExam(@Valid @RequestBody ExamSolutionRequest examSolutionRequest) {
+        return service.checkExam(examSolutionRequest);
     }
 
 //    @GetMapping(EndpointProperties.QUESTIONS_ENDPOINT_PDF)

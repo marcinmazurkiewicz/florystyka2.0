@@ -4,10 +4,19 @@ import dev.mazurkiewicz.quizer.question.domain.model.AnswerResult;
 import dev.mazurkiewicz.quizer.question.domain.model.AnswerType;
 import dev.mazurkiewicz.quizer.question.domain.model.Question;
 import dev.mazurkiewicz.quizer.question.domain.model.SelectedAnswer;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
 
-public record ExamSelectedAnswers(Map<Question, AnswerType> answers) {
+@RequiredArgsConstructor
+public class ExamSelectedAnswers {
+
+    private final Map<Question, AnswerType> answers;
+
+    public static ExamSelectedAnswers of(Map<Question, AnswerType> examSelectedAnswerMap) {
+        return new ExamSelectedAnswers(examSelectedAnswerMap);
+    }
+
     public AchievedPoints countCorrectAnswers() {
         int achievedPoints = (int) answers.entrySet()
                 .stream()

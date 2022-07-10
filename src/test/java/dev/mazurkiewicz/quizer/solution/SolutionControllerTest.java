@@ -77,7 +77,7 @@
 //
 //        mvc.perform(post(SOLUTIONS_ENDPOINT_MAIN + SOLUTIONS_ENDPOINT_SINGLE)
 //                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("\"selectedAnswer\":\"C\""))
+//                        .content("\"selectedAnswers\":\"C\""))
 //                .andExpect(status().isBadRequest());
 //    }
 //
@@ -141,7 +141,7 @@
 //
 //        mvc.perform(post(SOLUTIONS_ENDPOINT_MAIN + SOLUTIONS_ENDPOINT_EXAM)
 //                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("[{\"selectedAnswer\":\"C\"},{\\questionId\": 1, \"selectedAnswer\":\"B\"}]"))
+//                        .content("[{\"selectedAnswers\":\"C\"},{\\questionId\": 1, \"selectedAnswers\":\"B\"}]"))
 //                .andExpect(status().isBadRequest());
 //    }
 //

@@ -1,8 +1,6 @@
 package dev.mazurkiewicz.quizer.exam.domain.port;
 
-import dev.mazurkiewicz.quizer.exam.domain.model.Exam;
-import dev.mazurkiewicz.quizer.exam.domain.model.ExamDuration;
-import dev.mazurkiewicz.quizer.exam.domain.model.ExamPassThreshold;
+import dev.mazurkiewicz.quizer.exam.domain.model.*;
 import dev.mazurkiewicz.quizer.question.domain.model.Question;
 import dev.mazurkiewicz.quizer.question.domain.port.QuestionRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,5 +15,11 @@ public class ExamService {
     public Exam generateExam(QuestionNumber questionNumber, ExamDuration duration, ExamPassThreshold passThreshold) {
         List<Question> randomQuestions = questionRepository.getRandomQuestions(questionNumber);
         return new Exam(randomQuestions, duration, passThreshold);
+    }
+
+    public Exam recreateExam(ExamId examId) {
+        ExamParams examParams = examId.decode();
+        List<Question> questions = questionRepository.getQuestionList(examParams.questionIds());
+        return Exam.recreate(examParams.examDuration(), examParams.passThreshold(), questions);
     }
 }

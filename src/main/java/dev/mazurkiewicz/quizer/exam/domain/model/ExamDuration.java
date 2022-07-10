@@ -32,6 +32,10 @@ public class ExamDuration {
         return seconds;
     }
 
+    public Integer toSeconds() {
+        return hours.value() * 3600 + minutes().value() * 60 + seconds.value();
+    }
+
     public record ExamDurationHour(int value) {
     }
 

@@ -13,6 +13,8 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -60,6 +62,17 @@ public class QuestionDBRepository implements QuestionRepository {
         Integer earliestQuestionYear = repository.getEarliestYear();
         Integer latestQuestionYear = repository.getLatestYear();
         return new QuestionInfo(questionNumber, earliestQuestionYear, latestQuestionYear);
+    }
+
+    @Override
+    public List<Question> getQuestionList(List<QuestionId> questionIds) {
+        Set<Integer> ids = questionIds.stream()
+                .map(QuestionId::value)
+                .collect(Collectors.toSet());
+        return repository.findAllById(ids)
+                .stream()
+                .map(QuestionDBEntity::toDomain)
+                .toList();
     }
 
 }

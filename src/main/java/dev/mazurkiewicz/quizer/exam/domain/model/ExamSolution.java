@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ExamSolution {
-    private ExamSelectedAnswers selectedAnswers;
+    private final ExamSelectedAnswers selectedAnswers;
 
     public AchievedPoints calculatePoints() {
         return selectedAnswers.countCorrectAnswers();

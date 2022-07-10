@@ -34,7 +34,7 @@ class QuestionResource {
         return service.getQuestionById(id);
     }
 
-    @PostMapping("/{id}" + EndpointProperties.SOLUTIONS_ENDPOINT_SINGLE)
+    @PostMapping(EndpointProperties.SOLUTIONS_ENDPOINT_SINGLE)
     public AnswerStatusResponse checkAnswer(@Valid @RequestBody SelectedAnswerRequest selectedAnswerRequest) {
         return service.checkAnswer(selectedAnswerRequest);
     }

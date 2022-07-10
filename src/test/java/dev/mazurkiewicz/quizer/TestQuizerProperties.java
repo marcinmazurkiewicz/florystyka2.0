@@ -14,4 +14,5 @@ public class TestQuizerProperties implements QuizerProperties {
     private String questionsImgFolder;
     private String resourcesFolder;
     private Integer testQuestionsNumber;
+    private Integer examPassThreshold;
 }
