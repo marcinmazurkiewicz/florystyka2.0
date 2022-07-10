@@ -1,10 +1,11 @@
-package dev.mazurkiewicz.quizer.pdf;
+package dev.mazurkiewicz.quizer.exam.application.pdf;
 
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
+import dev.mazurkiewicz.quizer.config.PdfTemplateProperties;
 import dev.mazurkiewicz.quizer.config.QuizerConfiguration;
 import dev.mazurkiewicz.quizer.exception.PdfRenderException;
-import dev.mazurkiewicz.quizer.question.infrastructure.db.QuestionDBEntity;
+import dev.mazurkiewicz.quizer.question.domain.model.Question;
 import dev.mazurkiewicz.quizer.resource.ResourceService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,8 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Set;
 
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -36,24 +36,25 @@ public class PdfGenerator {
     ResourceService resourceService;
     QuizerConfiguration quizerConfiguration;
 
-    protected String parseThymeleafTemplate(List<QuestionDBEntity> questions) {
+
+    protected String parseThymeleafTemplate(List<Question> questions) {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setSuffix(".html");
+        templateResolver.setSuffix(PdfTemplateProperties.TEMPLATE_SUFFIX);
         templateResolver.setTemplateMode(TemplateMode.HTML);
-        templateResolver.setCharacterEncoding("UTF-8");
+        templateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
         TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver);
         Context context = new Context();
-        context.setVariable("questions", questions);
+        context.setVariable(PdfTemplateProperties.QUESTIONS_TEMPLATE_PARAM, questions);
         boolean isQuestionNumberEven = questions.size() % 2 == 0;
         int answerTableOffset = questions.size() / 2;
         if (!isQuestionNumberEven) {
             answerTableOffset++;
         }
         int answerTableRows = answerTableOffset;
-        context.setVariable("answerOffset", answerTableOffset);
-        context.setVariable("answersTableRows", answerTableRows);
-        return templateEngine.process("templates/pdf_template", context);
+        context.setVariable(PdfTemplateProperties.OFFSET_TEMPLATE_PARAM, answerTableOffset);
+        context.setVariable(PdfTemplateProperties.ROWS_TEMPLATE_PARAM, answerTableRows);
+        return templateEngine.process(PdfTemplateProperties.TEMPLATE_PATH, context);
     }
 
     public byte[] generatePdfFromHtml(String html)
@@ -62,7 +63,7 @@ public class PdfGenerator {
         fontPath.append(quizerConfiguration.resourcesFolder());
         if (!quizerConfiguration.resourcesFolder().endsWith(File.separator))
             fontPath.append(File.separator);
-        fontPath.append("fonts/arial.ttf");
+        fontPath.append(PdfTemplateProperties.FONT_PATH);
 
         Resource fontResource = new FileSystemResource(fontPath.toString());
         ITextRenderer renderer = new ITextRenderer();
@@ -86,9 +87,8 @@ public class PdfGenerator {
         }
     }
 
-    public byte[] generateTest(Set<QuestionDBEntity> questions) throws PdfRenderException {
-        ArrayList<QuestionDBEntity> questionArrayList = new ArrayList<>(questions);
-        String html = parseThymeleafTemplate(questionArrayList);
+    public byte[] generateTest(List<Question> questions) throws PdfRenderException {
+        String html = parseThymeleafTemplate(questions);
         return generatePdfFromHtml(html);
     }
 }

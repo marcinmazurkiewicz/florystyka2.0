@@ -1,6 +1,7 @@
 package dev.mazurkiewicz.quizer.exam.application;
 
 import dev.mazurkiewicz.quizer.config.QuizerConfiguration;
+import dev.mazurkiewicz.quizer.exam.application.pdf.PdfGenerator;
 import dev.mazurkiewicz.quizer.exam.domain.model.*;
 import dev.mazurkiewicz.quizer.exam.domain.port.ExamService;
 import dev.mazurkiewicz.quizer.exam.domain.port.QuestionNumber;
@@ -24,6 +25,7 @@ class ApiExamService {
     private final ExamService examService;
     private final QuestionService questionService;
     private final QuizerConfiguration configuration;
+    private final PdfGenerator pdfGenerator;
 
 
     ExamResponse getExam() {
@@ -44,6 +46,13 @@ class ApiExamService {
         ExamSolution examSolution = prepareExamSolution(examSolutionRequest.selectedAnswers());
         ExamResult examResult = exam.checkExamSolution(examSolution);
         return ExamAnswerResponse.of(examResult, exam.getCorrectAnswers());
+    }
+
+    public byte[] getExamPdf() {
+        Exam exam = examService.generateExam(QuestionNumber.of(configuration.examQuestionsNumber()),
+                ExamDuration.fromSeconds(configuration.examTimeInSeconds()),
+                ExamPassThreshold.of(configuration.examPassThreshold()));
+        return pdfGenerator.generateTest(exam.questions());
     }
 
     private Exam recreateExam(ExamSolutionRequest examSolutionRequest) {

@@ -1,4 +1,4 @@
-package dev.mazurkiewicz.quizer.pdf;
+package dev.mazurkiewicz.quizer.exam.application.pdf;
 
 public class PdfGeneratorExpectedTemplate {
 

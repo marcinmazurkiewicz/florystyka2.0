@@ -1,4 +1,4 @@
-package dev.mazurkiewicz.quizer.pdf;
+package dev.mazurkiewicz.quizer.exam.application.pdf;
 
 import com.lowagie.text.Image;
 import dev.mazurkiewicz.quizer.exception.PdfRenderException;

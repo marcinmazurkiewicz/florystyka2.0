@@ -1,19 +1,16 @@
 package dev.mazurkiewicz.quizer.exam.domain.model;
 
 import dev.mazurkiewicz.quizer.question.domain.model.QuestionId;
-import lombok.RequiredArgsConstructor;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
-@RequiredArgsConstructor
-public class ExamId {
+public record ExamId(String value) {
 
     public final static String QUESTION_SPLITTER = "-";
     private final static String SPLITTER = "/";
-    private final String value;
 
     public static ExamId of(String encodedQuestionIds) {
         return new ExamId(encodedQuestionIds);
@@ -21,14 +18,14 @@ public class ExamId {
 
     public static ExamId encode(String joinedQuestionIds, Integer duration, Integer passThreshold) {
         String valueToEncoded = String.format("%d%s%d%s%s", duration, SPLITTER, passThreshold, SPLITTER, joinedQuestionIds);
-        byte[] encodedQuestionIds = Base64.getEncoder().encode(valueToEncoded.getBytes(StandardCharsets.UTF_8));
-        return new ExamId(new String(encodedQuestionIds));
+        byte[] encodedValue = Base64.getEncoder().encode(valueToEncoded.getBytes(StandardCharsets.UTF_8));
+        return new ExamId(new String(encodedValue));
     }
 
     public ExamParams decode() {
-        byte[] decoded = Base64.getDecoder().decode(value.getBytes(StandardCharsets.UTF_8));
-        String decodedId = new String(decoded);
-        String[] idParts = decodedId.split("/");
+        byte[] decodedValue = Base64.getDecoder().decode(value.getBytes(StandardCharsets.UTF_8));
+        String decodedString = new String(decodedValue);
+        String[] idParts = decodedString.split("/");
         int durationPart = Integer.parseInt(idParts[0]);
         ExamDuration examDuration = ExamDuration.fromSeconds(durationPart);
         Integer passThresholdPart = Integer.valueOf(idParts[1]);
@@ -38,9 +35,5 @@ public class ExamId {
                 .map(QuestionId::of)
                 .toList();
         return new ExamParams(examDuration, passThreshold, questionIds);
-    }
-
-    public String value() {
-        return value;
     }
 }

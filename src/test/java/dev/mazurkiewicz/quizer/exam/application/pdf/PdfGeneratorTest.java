@@ -1,13 +1,11 @@
-package dev.mazurkiewicz.quizer.pdf;
+package dev.mazurkiewicz.quizer.exam.application.pdf;
 
-import dev.mazurkiewicz.quizer.question.domain.model.AnswerType;
-import dev.mazurkiewicz.quizer.question.infrastructure.db.QuestionDBEntity;
-import dev.mazurkiewicz.quizer.resource.ResourceService;
+import dev.mazurkiewicz.quizer.question.application.AnswerStatus;
+import dev.mazurkiewicz.quizer.question.domain.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -18,21 +16,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class PdfGeneratorTest {
 
-    private final List<QuestionDBEntity> questions = new ArrayList<>();
-
-    @Mock
-    private ResourceService resourceService;
+    private final List<Question> questions = new ArrayList<>();
 
     @InjectMocks
     private PdfGenerator pdfGenerator;
 
-    private QuestionDBEntity prepareQuestion(int questionNumber) {
-        QuestionDBEntity question = new QuestionDBEntity();
-        question.setAnswerA(String.format("Answer A for question %d", questionNumber));
-        question.setAnswerB(String.format("Answer B for question %d", questionNumber));
-        question.setAnswerC(String.format("Answer C for question %d", questionNumber));
-        question.setAnswerD(String.format("Answer D for question %d", questionNumber));
-        question.setContent(String.format("Question %d", questionNumber));
+    private Question prepareQuestion(int questionNumber) {
+        List<Answer> answerList = new ArrayList<>();
         AnswerType correct;
         switch (questionNumber % 4) {
             case 0 -> correct = AnswerType.A;
@@ -41,12 +31,28 @@ class PdfGeneratorTest {
             case 3 -> correct = AnswerType.D;
             default -> correct = AnswerType.EMPTY;
         }
-        question.setCorrect(correct);
+        answerList.add(new Answer(AnswerType.A,
+                new AnswerContent(String.format("Answer A for question %d", questionNumber)),
+                AnswerStatus.of(correct == AnswerType.A)));
+        answerList.add(new Answer(AnswerType.B,
+                new AnswerContent(String.format("Answer B for question %d", questionNumber)),
+                AnswerStatus.of(correct == AnswerType.B)));
+        answerList.add(new Answer(AnswerType.C,
+                new AnswerContent(String.format("Answer C for question %d", questionNumber)),
+                AnswerStatus.of(correct == AnswerType.C)));
+        answerList.add(new Answer(AnswerType.D,
+                new AnswerContent(String.format("Answer D for question %d", questionNumber)),
+                AnswerStatus.of(correct == AnswerType.D)));
+
+        QuestionImage questionImage = null;
         if (questionNumber == 7 || questionNumber == 9)
-            question.setImg(String.format("quest_%d.png", questionNumber));
-        question.setMonth(1);
-        question.setYear(2010);
-        return question;
+            questionImage = new QuestionImage(String.format("quest_%d.png", questionNumber));
+
+        return new Question(QuestionId.of(questionNumber),
+                new QuestionContent(String.format("Question %d", questionNumber)),
+                answerList,
+                questionImage,
+                new QuestionSourceExamDate(1, 2010));
     }
 
     @BeforeEach
@@ -55,15 +61,6 @@ class PdfGeneratorTest {
         for (int i = 1; i < 11; i++) {
             questions.add(prepareQuestion(i));
         }
-    }
-
-    @Test
-    void generatePdfFromHtml() {
-
-    }
-
-    @Test
-    void generateTest() {
     }
 
     @Test
