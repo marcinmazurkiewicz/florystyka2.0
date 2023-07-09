@@ -1,3 +1,0 @@
-### get question info
-GET http://localhost:8088/api/v2/info/questions
-Accept: application/json

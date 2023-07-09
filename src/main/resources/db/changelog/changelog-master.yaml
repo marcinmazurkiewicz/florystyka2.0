@@ -1,7 +1,0 @@
-databaseChangeLog:
-  - includeAll:
-      path: "classpath:db/changelog/entity"
-  - includeAll:
-      path: "classpath:db/changelog/data"
-  - includeAll:
-      path: "classpath:db/changelog/seq"
