@@ -32,11 +32,24 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("com.google.guava:guava:31.1-jre")
+	implementation("org.thymeleaf:thymeleaf:3.0.15.RELEASE")
+	implementation("org.xhtmlrenderer:flying-saucer-pdf:9.1.22")
+	implementation("commons-beanutils:commons-beanutils:1.9.4")
+	implementation("org.liquibase:liquibase-core")
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.testcontainers:postgresql")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom("org.testcontainers:testcontainers-bom:1.17.2")
+	}
 }
 
 tasks.withType<KotlinCompile> {
