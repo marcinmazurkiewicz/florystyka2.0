@@ -1,0 +1,38 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="2023-07-27_create_questions_table" author="mmazurkiewicz">
+        <createTable tableName="questions">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="pk_questions"/>
+            </column>
+            <column name="question_public_id" type="UUID">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="content" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="answer_a" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="answer_b" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="answer_c" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="answer_d" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="correct" type="VARCHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="img" type="VARCHAR(250)"/>
+            <column name="comment" type="VARCHAR(250)"/>
+        </createTable>
+
+        <createSequence sequenceName="questions_id_seq"/>
+    </changeSet>
+</databaseChangeLog>

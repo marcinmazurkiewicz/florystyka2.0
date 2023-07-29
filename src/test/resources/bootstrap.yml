@@ -1,0 +1,6 @@
+embedded:
+  postgresql:
+    docker-image: 'postgres:15-alpine'
+    database: quizer
+    user: test
+    password: test

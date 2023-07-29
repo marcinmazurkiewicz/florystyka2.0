@@ -1,0 +1,11 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="2023-07-27_create_solution_view" author="mmazurkiewicz">
+        <createView viewName="correct_answers">
+            SELECT questions.id AS question_id, questions.correct FROM questions
+        </createView>
+    </changeSet>
+</databaseChangeLog>

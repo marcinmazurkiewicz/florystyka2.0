@@ -1,0 +1,26 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="2023-07-27_003_add_questions" author="mmazurkiewicz">
+        <loadUpdateData file="data/${data-file-prefix}-add-questions.csv"
+                        relativeToChangelogFile="true"
+                        primaryKey="id"
+                        tableName="questions"
+        encoding="UTF-8"
+        separator=";"
+        quotchar="''''">
+            <column header="id" name="id" type="NUMERIC"/>
+            <column header="questionPublicId" name="question_public_id" type="UUID"/>
+            <column header="content" name="content" type="STRING"/>
+            <column header="answerA" name="answer_a" type="STRING"/>
+            <column header="answerB" name="answer_b" type="STRING"/>
+            <column header="answerC" name="answer_c" type="STRING"/>
+            <column header="answerD" name="answer_d" type="STRING"/>
+            <column header="correct" name="correct" type="STRING"/>
+            <column header="img" name="img" type="STRING"/>
+            <column header="comment" name="comment" type="STRING"/>
+        </loadUpdateData>
+    </changeSet>
+</databaseChangeLog>

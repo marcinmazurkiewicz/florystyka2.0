@@ -1,0 +1,22 @@
+application:
+  security:
+    allowedOrigins:
+      - http://localhost:8080
+      - https://localhost:8080
+    allowedMethods:
+      - GET
+    allowedHeaders: '*'
+quizer:
+  testQuestionsNumber: 3
+  resourcesFolder: ~/resources/florystyka
+  questionsImgFolder: /questions_images
+  pdfName: exam.pdf
+  examTimeInSeconds: 3600
+  examPassThreshold: 70
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+  liquibase:
+    change-log: classpath:/db/changelog.xml
+    enabled: true
