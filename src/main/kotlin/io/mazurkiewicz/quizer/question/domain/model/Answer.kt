@@ -4,7 +4,11 @@ data class Answer(val type: AnswerType, val content: AnswerContent, val status: 
 
 data class AnswerContent(val value: String)
 
-data class AnswerResult(val status: AnswerStatus, val correctAnswer: AnswerType)
+data class AnswerResult(val status: AnswerStatus, val correctAnswer: AnswerType) {
+    fun isCorrect(): Boolean {
+        return status == AnswerStatus.CORRECT
+    }
+}
 
 data class SelectedAnswer(val value: AnswerType)
 

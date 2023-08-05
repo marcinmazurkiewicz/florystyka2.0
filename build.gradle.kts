@@ -8,6 +8,7 @@ plugins {
 	kotlin("plugin.spring") version "1.8.22"
 	kotlin("plugin.jpa") version "1.8.22"
 	kotlin("plugin.allopen") version "1.8.22"
+	kotlin("kapt") version "1.8.22"
 }
 
 group = "io.mazurkiewicz"
@@ -36,6 +37,7 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.cloud:spring-cloud-starter-bootstrap:4.0.3")
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -53,6 +55,7 @@ dependencies {
 	testImplementation("org.spockframework:spock-core:2.4-M1-groovy-4.0")
 	testImplementation("org.spockframework:spock-spring:2.4-M1-groovy-4.0")
 	testImplementation("com.playtika.testcontainers:embedded-postgresql:3.0.0-RC8")
+	kapt("org.springframework.boot:spring-boot-configuration-processor")
 }
 
 dependencyManagement {
@@ -71,4 +74,8 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 	environment("SPRING_PROFILES_ACTIVE", "test")
+}
+
+tasks.compileGroovy {
+	dependsOn(tasks.getByPath("compileKotlin"))
 }

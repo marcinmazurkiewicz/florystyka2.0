@@ -12,10 +12,10 @@ data class Question(
     fun checkAnswer(selectedAnswer: SelectedAnswer): AnswerResult {
         val answerFromCafeteria = answers.find { it.type == selectedAnswer.value }
         val selectedAnswerStatus = answerFromCafeteria?.status ?: AnswerStatus.INCORRECT
-        return AnswerResult(selectedAnswerStatus, getCorrectAnswer().type)
+        return AnswerResult(selectedAnswerStatus, correctAnswer().type)
     }
 
-    private fun getCorrectAnswer(): Answer {
+    fun correctAnswer(): Answer {
         return answers.find { it.status == AnswerStatus.CORRECT }
             ?: throw IllegalStateException("Question ${id.value} without correct answer!")
 

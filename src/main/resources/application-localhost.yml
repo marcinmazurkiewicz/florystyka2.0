@@ -1,4 +1,13 @@
 spring:
+  data:
+    mongodb:
+      authentication-database: admin
+      username: quizer
+      password: quizer
+      port: 27017
+      host: localhost
+      database: quizer
+      uuid-representation: standard
   datasource:
     url: jdbc:postgresql://localhost:5432/quizer
     username: postgres
