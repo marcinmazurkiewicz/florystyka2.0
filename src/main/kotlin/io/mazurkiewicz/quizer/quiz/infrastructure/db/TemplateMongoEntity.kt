@@ -1,8 +1,8 @@
-package io.mazurkiewicz.quizer.quiz.infrastructure
+package io.mazurkiewicz.quizer.quiz.infrastructure.db
 
 import io.mazurkiewicz.quizer.question.domain.model.AnswerType
 import io.mazurkiewicz.quizer.quiz.domain.model.TemplateAccessType
-import jakarta.persistence.Id
+import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.Instant
 import java.util.*

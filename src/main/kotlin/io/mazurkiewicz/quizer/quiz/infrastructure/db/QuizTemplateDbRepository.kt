@@ -1,7 +1,8 @@
-package io.mazurkiewicz.quizer.quiz.infrastructure
+package io.mazurkiewicz.quizer.quiz.infrastructure.db
 
 import io.mazurkiewicz.quizer.quiz.domain.model.*
 import io.mazurkiewicz.quizer.quiz.domain.port.QuizTemplateRepository
+import io.mazurkiewicz.quizer.quiz.infrastructure.QuizTemplateNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 

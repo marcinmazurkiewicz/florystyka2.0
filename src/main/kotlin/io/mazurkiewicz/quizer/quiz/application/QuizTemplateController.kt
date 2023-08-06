@@ -2,6 +2,8 @@ package io.mazurkiewicz.quizer.quiz.application
 
 import io.mazurkiewicz.quizer.quiz.domain.model.DrawType
 import io.mazurkiewicz.quizer.quiz.domain.model.TemplateAccessType
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotBlank
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -14,25 +16,25 @@ import java.util.*
 class QuizTemplateController(private val apiService: ApiQuizTemplateService) {
 
     @PostMapping
-    fun createNewTemplate(@RequestBody templateRequest: CreateQuizTemplateRequest): ResponseEntity<CreateQuizTemplateResponse> {
+    fun createNewTemplate(@RequestBody @Valid templateRequest: CreateQuizTemplateRequest): ResponseEntity<CreateQuizTemplateResponse> {
         val templateId = apiService.createNewQuizTemplate(
             templateRequest.name,
             templateRequest.accessType,
-            templateRequest.shuffle,
+            templateRequest.drawParams,
             templateRequest.defaultPassPercentThreshold
-         )
+        )
         return ResponseEntity.ok(CreateQuizTemplateResponse(templateId))
     }
 }
 
 data class CreateQuizTemplateRequest(
-    val name: String,
+    @field:NotBlank val name: String,
     val accessType: TemplateAccessType,
-    val shuffle: DefaultDrawParams,
+    val drawParams: DefaultDrawParams,
     val defaultPassPercentThreshold: Int
 )
 
 data class DefaultDrawParams(val type: DrawType, val questionsNumber: Int = 0)
 
-data class CreateQuizTemplateResponse(val quizId: UUID)
+data class CreateQuizTemplateResponse(val templateId: UUID)
 

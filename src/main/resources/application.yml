@@ -14,9 +14,6 @@ quizer:
   quizTimeInSeconds: 3600
   quizPassThreshold: 70
 spring:
-  jpa:
-    hibernate:
-      ddl-auto: none
-  liquibase:
-    change-log: classpath:/db/changelog.xml
-    enabled: true
+  data:
+    mongodb:
+      uuid-representation: standard
