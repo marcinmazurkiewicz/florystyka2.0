@@ -9,3 +9,19 @@ spring:
       username: quizer
       password: quizer
       database: quizer
+  datasource:
+    url: jdbc:postgresql://localhost:5432/quizer
+    username: postgres
+    password: postgres
+  liquibase:
+    enabled: true
+    parameters:
+      data-file-prefix: dev
+
+auth:
+  jwt:
+    expiration-in-seconds: 3600
+    secret-key: D/kpEUDfIFm3fbZf3j6x1SXHCCexWZWz0c+o0R5As540cYbltdpFFGjwp81+ppluGIr7Q+wIk8GDSIUWeYgXRTbK60YQWCOKRcshVJ0J3WqoP6uHH4/YCxurXI/tE3XywycX4W7zzRiaEJ8J5JTd/clYl5GtpbvQ6ZfCFeNQ81s2uhZwvXSI3OAHL1o6v6/e3EDUCUs1hs8QF3+OpT02Gu5wuuLVvbvkFmwVzJNy9A9y1TK31SV0bEqXhp5GWi+QXMVMvUVuDdwwgMZ1ji6xsPp56NAOoCqMX/a2yqTUMBQRVGMdmcAZsMw/zjNWJhGpIuuUG6EmKP0dEivQ7mFKFmXPlJ9MP11oBP+aRfq2vko=
+    refresh-expiration-in-seconds: 259200
+    token-algorithm: HS256
+    key-algorithm: HmacSHA256
