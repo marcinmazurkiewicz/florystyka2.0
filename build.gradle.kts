@@ -57,6 +57,7 @@ dependencies {
 	testImplementation("org.junit.jupiter:junit-jupiter-api")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 	testImplementation("com.ninja-squad:springmockk:4.0.0")
+	testImplementation("org.springframework.security:spring-security-test")
 	kapt("org.springframework.boot:spring-boot-configuration-processor")
 }
 

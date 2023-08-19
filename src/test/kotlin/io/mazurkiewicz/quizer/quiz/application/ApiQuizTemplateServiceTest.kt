@@ -31,7 +31,7 @@ class ApiQuizTemplateServiceTest {
         } returns TemplateId(expectedTemplateId)
 
         //when
-        val templateId = apiService.createNewQuizTemplate(name, accessType, drawParams, threshold)
+        val templateId = apiService.createNewQuizTemplate(name, accessType, drawParams, threshold, UUID.randomUUID())
 
         //then
         verify(exactly = 1) { service.createTemplate(TemplateName(name),

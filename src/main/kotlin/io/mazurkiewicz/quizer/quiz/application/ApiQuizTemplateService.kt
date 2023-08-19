@@ -7,10 +7,14 @@ import java.util.*
 
 @Service
 class ApiQuizTemplateService(private val templateService: QuizTemplateService) {
-    fun createNewQuizTemplate(name: String, accessType: TemplateAccessType, drawParams: DefaultDrawParams, defaultPassPercentageThreshold: Int): UUID {
+    fun createNewQuizTemplate(name: String,
+                              accessType: TemplateAccessType,
+                              drawParams: DefaultDrawParams,
+                              defaultPassPercentageThreshold: Int,
+                              userId: UUID): UUID {
         val quizTemplateId = templateService.createTemplate(
             TemplateName(name),
-            TemplateAuthor(UUID.randomUUID()),
+            TemplateAuthor(userId),
             accessType,
             TemplateDrawSettings(drawParams.type, drawParams.questionsNumber),
             TemplatePassThreshold(defaultPassPercentageThreshold)

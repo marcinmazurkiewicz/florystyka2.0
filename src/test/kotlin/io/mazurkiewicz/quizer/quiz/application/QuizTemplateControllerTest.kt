@@ -1,6 +1,7 @@
 package io.mazurkiewicz.quizer.quiz.application
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import io.mazurkiewicz.quizer.auth.prepareAuthentication
 import io.mazurkiewicz.quizer.quiz.domain.model.DrawType
 import io.mazurkiewicz.quizer.quiz.domain.model.TemplateAccessType
 import io.mockk.every
@@ -17,7 +18,9 @@ class QuizTemplateControllerTest {
     private val apiQuizTemplateService = mockk<ApiQuizTemplateService>()
     private val quizTemplateController = QuizTemplateController(apiQuizTemplateService)
     private val objectMapper = jacksonObjectMapper()
-    private val mockMvc = standaloneSetup(quizTemplateController).build()
+    private val mockMvc = standaloneSetup(quizTemplateController)
+        .setCustomArgumentResolvers(prepareAuthentication())
+        .build()
 
     @Test
     fun `should return template id when create template request is valid`() {
@@ -25,12 +28,12 @@ class QuizTemplateControllerTest {
         val request = CreateQuizTemplateRequest(
             "test request",
             TemplateAccessType.PUBLIC,
-            DefaultDrawParams(DrawType.SHUFFLE, 5),
+            DefaultDrawParams(DrawType.DRAW, 5),
             51
         )
         val templateId = UUID.randomUUID()
 
-        every { apiQuizTemplateService.createNewQuizTemplate(any(), any(), any(), any()) } returns templateId
+        every { apiQuizTemplateService.createNewQuizTemplate(any(), any(), any(), any(), any()) } returns templateId
 
         //when
         val response = mockMvc.perform(
@@ -43,7 +46,7 @@ class QuizTemplateControllerTest {
             .response
 
         //then
-        verify(exactly = 1) { apiQuizTemplateService.createNewQuizTemplate(any(), any(), any(), any()) }
+        verify(exactly = 1) { apiQuizTemplateService.createNewQuizTemplate(any(), any(), any(), any(), any()) }
         val createQuizTemplateResponse =
             objectMapper.readValue(response.contentAsString, CreateQuizTemplateResponse::class.java)
         assertThat(createQuizTemplateResponse.templateId).isEqualTo(templateId)
