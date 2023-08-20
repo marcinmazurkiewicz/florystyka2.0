@@ -1,7 +1,7 @@
 package io.mazurkiewicz.quizer.quiz.domain.model
 
 enum class DrawType {
-    NONE, SHUFFLE
+    NONE, DRAW
 }
 
 enum class TemplateQuizMode {

@@ -16,3 +16,6 @@ open class NotValidApiException(override val message: String, override val error
 
 open class UnauthorizedApiException(override val message: String, override val errorCode: String) :
     ApiException(HttpStatus.UNAUTHORIZED, message, errorCode)
+
+open class ForbiddenApiException(override val message: String, override val errorCode: String) :
+    ApiException(HttpStatus.FORBIDDEN, message, errorCode)

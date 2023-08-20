@@ -2,7 +2,7 @@ package io.mazurkiewicz.quizer.quiz.infrastructure.db
 
 import io.mazurkiewicz.quizer.quiz.domain.model.*
 import io.mazurkiewicz.quizer.quiz.infrastructure.QuizTemplateNotFoundException
-import org.assertj.core.api.Assertions.*
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,9 +12,9 @@ import java.time.Instant
 import java.util.*
 
 @SpringBootTest
-class QuizTemplateDbRepositoryTest(
-    @Autowired private val mongoRepository: QuizTemplateMongoRepository,
-    @Autowired private val quizTemplateDbRepository: QuizTemplateDbRepository
+class TemplateDbRepositoryTest(
+    @Autowired private val templateMongoRepository: TemplateMongoRepository,
+    @Autowired private val templateDbRepository: TemplateDbRepository
 ) {
 
     @Test
@@ -30,19 +30,19 @@ class QuizTemplateDbRepositoryTest(
             TemplateName(templateName),
             TemplateAuthor(authorId),
             TemplateAccessType.PUBLIC,
-            TemplateDrawSettings(DrawType.SHUFFLE, numberOfQuestionsToDraw),
+            TemplateDrawSettings(DrawType.DRAW, numberOfQuestionsToDraw),
             TemplatePassThreshold(defaultThreshold),
             TemplateId(templateId)
         )
 
         //when
-        quizTemplateDbRepository.saveTemplate(template)
+        templateDbRepository.saveTemplate(template)
 
         //then
-        val savedTemplate = mongoRepository.findByIdOrNull(templateId)
+        val savedTemplate = templateMongoRepository.findByIdOrNull(templateId)
         assertThat(savedTemplate).isNotNull
         assertThat(savedTemplate?.name).isEqualTo(templateName)
-        assertThat(savedTemplate?.author).isEqualTo(authorId)
+        assertThat(savedTemplate?.authorId).isEqualTo(authorId)
         assertThat(savedTemplate?.accessType).isEqualTo(TemplateAccessType.PUBLIC)
         assertThat(savedTemplate?.defaultDrawSettings?.drawEnabled).isTrue()
         assertThat(savedTemplate?.defaultDrawSettings?.numberOfQuestionsToDraw).isEqualTo(numberOfQuestionsToDraw)
@@ -65,19 +65,18 @@ class QuizTemplateDbRepositoryTest(
             TemplateAccessType.PUBLIC,
             DefaultDrawSettings(true, numberOfQuestionsToDraw),
             defaultThreshold,
-            listOf(),
             Instant.now()
         )
-        mongoRepository.insert(entity)
+        templateMongoRepository.insert(entity)
 
         //when
-        val savedTemplate = quizTemplateDbRepository.findTemplateById(TemplateId(templateId))
+        val savedTemplate = templateDbRepository.findTemplateById(TemplateId(templateId))
 
         //then
         assertThat(savedTemplate.name.value).isEqualTo(templateName)
-        assertThat(savedTemplate.author.authorId).isEqualTo(authorId)
+        assertThat(savedTemplate.author.id).isEqualTo(authorId)
         assertThat(savedTemplate.accessType).isEqualTo(TemplateAccessType.PUBLIC)
-        assertThat(savedTemplate.defaultDrawSettings.type).isEqualTo(DrawType.SHUFFLE)
+        assertThat(savedTemplate.defaultDrawSettings.type).isEqualTo(DrawType.DRAW)
         assertThat(savedTemplate.defaultDrawSettings.questionNumber).isEqualTo(numberOfQuestionsToDraw)
         assertThat(savedTemplate.templatePassThreshold.percentage).isEqualTo(defaultThreshold)
     }
@@ -85,7 +84,7 @@ class QuizTemplateDbRepositoryTest(
     @Test
     fun `should throw exception when quiz template with id does not exist`() {
         //when
-        val block: () -> Unit = {  quizTemplateDbRepository.findTemplateById(TemplateId(UUID.randomUUID())) }
+        val block: () -> Unit = { templateDbRepository.findTemplateById(TemplateId(UUID.randomUUID())) }
 
         //then
         assertThrows<QuizTemplateNotFoundException>(block)

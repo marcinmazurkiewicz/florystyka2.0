@@ -1,6 +1,8 @@
 package io.mazurkiewicz.quizer.quiz.domain.port
 
+import io.mazurkiewicz.quizer.question.domain.model.QuestionAuthor
 import io.mazurkiewicz.quizer.quiz.domain.model.*
+import io.mazurkiewicz.quizer.quiz.infrastructure.IllegalTemplateAccessException
 
 class QuizTemplateService(private val quizTemplateRepository: QuizTemplateRepository) {
 
@@ -18,5 +20,12 @@ class QuizTemplateService(private val quizTemplateRepository: QuizTemplateReposi
 
     fun findTemplate(templateId: TemplateId): QuizTemplate {
         return quizTemplateRepository.findTemplateById(templateId)
+    }
+
+    fun validateAccessToTemplate(templateId: TemplateId, author: QuestionAuthor) {
+        val template = findTemplate(templateId)
+        if (template.author.id != author.id) {
+            throw IllegalTemplateAccessException(author.id, template.author.id)
+        }
     }
 }
