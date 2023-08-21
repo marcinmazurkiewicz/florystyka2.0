@@ -4,20 +4,12 @@ data class Answer(val type: AnswerType, val content: AnswerContent, val status: 
 
 data class AnswerContent(val value: String)
 
-data class AnswerResult(val status: AnswerStatus, val correctAnswer: AnswerType) {
-    fun isCorrect(): Boolean {
-        return status == AnswerStatus.CORRECT
-    }
-}
+data class AnswerResult(val status: AnswerStatus, val correctAnswer: AnswerType)
 
 data class SelectedAnswer(val value: AnswerType)
 
 enum class AnswerStatus {
-    CORRECT, INCORRECT;
-
-    companion object {
-        fun of(isCorrect: Boolean) = if (isCorrect) CORRECT else INCORRECT
-    }
+    CORRECT, INCORRECT
 }
 
 enum class AnswerType {

@@ -7,12 +7,6 @@ interface QuestionRepository {
 
     fun findQuestionById(id: QuestionId): Question
 
-    fun findRandomQuestions(questionNumber: QuestionNumber): List<Question>
-
-    fun findRandomQuestion(): Question
-
-    fun findQuestions(questionIds: List<QuestionId>): List<Question>
+    fun saveQuestion(question: Question)
 
 }
-
-data class QuestionNumber(val value: Int)

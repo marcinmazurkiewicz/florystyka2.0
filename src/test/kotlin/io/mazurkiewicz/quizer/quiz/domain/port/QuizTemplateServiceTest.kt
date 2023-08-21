@@ -70,7 +70,7 @@ class QuizTemplateServiceTest {
         )
 
         val question = Question(
-            templateId,
+            QuestionTemplate(templateId.id),
             QuestionAuthor(authorId),
             QuestionContent("Test question 1"),
             listOf(
@@ -82,7 +82,7 @@ class QuizTemplateServiceTest {
         )
 
         //when
-        quizTemplateService.validateAccessToTemplate(templateId, question.author)
+        quizTemplateService.validateAccessToTemplate(QuestionTemplate(templateId.id), question.author)
 
         //then
         assertThatNoException()
@@ -101,7 +101,7 @@ class QuizTemplateServiceTest {
         )
 
         val question = Question(
-            templateId,
+            QuestionTemplate(templateId.id),
             QuestionAuthor(UUID.randomUUID()),
             QuestionContent("Test question 1"),
             listOf(
@@ -113,7 +113,7 @@ class QuizTemplateServiceTest {
         )
 
         //when
-        val block: () -> Unit = { quizTemplateService.validateAccessToTemplate(templateId, question.author) }
+        val block: () -> Unit = { quizTemplateService.validateAccessToTemplate(QuestionTemplate(templateId.id), question.author) }
 
         //then
         assertThrows<IllegalTemplateAccessException>(block)
@@ -123,7 +123,7 @@ class QuizTemplateServiceTest {
     fun `should throw exception when question is assigned to not existing template`() {
         //given
         val question = Question(
-            TemplateId(UUID.randomUUID()),
+            QuestionTemplate(UUID.randomUUID()),
             QuestionAuthor(UUID.randomUUID()),
             QuestionContent("Test question 1"),
             listOf(
@@ -135,7 +135,7 @@ class QuizTemplateServiceTest {
         )
 
         //when
-        val block: () -> Unit = { quizTemplateService.validateAccessToTemplate(question.templateId, question.author) }
+        val block: () -> Unit = { quizTemplateService.validateAccessToTemplate(question.template, question.author) }
 
         //then
         assertThrows<QuizTemplateNotFoundException>(block)

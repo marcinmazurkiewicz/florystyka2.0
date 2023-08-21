@@ -1,8 +1,12 @@
 package io.mazurkiewicz.quizer.question.application
 
-import io.mazurkiewicz.quizer.question.domain.model.*
+import io.mazurkiewicz.quizer.auth.user.UserRepresentation
+import io.mazurkiewicz.quizer.question.domain.model.Answer
+import io.mazurkiewicz.quizer.question.domain.model.AnswerType
+import io.mazurkiewicz.quizer.question.domain.model.Question
 import jakarta.validation.Valid
-import jakarta.validation.constraints.NotBlank
+import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -10,15 +14,25 @@ import java.util.*
 @RequestMapping("/api/questions")
 class QuestionController(private val service: ApiQuestionService) {
 
-    @GetMapping("/random")
-    fun getRandomQuestion() = service.getRandomQuestion()
-
     @GetMapping("/{questionId}")
-    fun getQuestionById(@PathVariable questionId: UUID) = service.getQuestionById(questionId)
+    fun getQuestionById(@PathVariable questionId: UUID): ResponseEntity<QuestionResponse> {
+        val question = service.getQuestionById(questionId)
+        return ResponseEntity.ok(question)
+    }
 
-    @PostMapping("/{questionId}/answer")
-    fun checkAnswer(@PathVariable questionId: UUID, @Valid @RequestBody selectedAnswerRequest: SelectedAnswerRequest) =
-        service.checkAnswer(questionId, selectedAnswerRequest.selectedAnswer)
+    @PostMapping
+    fun saveQuestion(
+        @AuthenticationPrincipal user: UserRepresentation,
+        @Valid @RequestBody newQuestionRequest: NewQuestionRequest
+    ): ResponseEntity<NewQuestionResponse> {
+        val questionId = service.saveQuestion(
+            newQuestionRequest.templateId,
+            newQuestionRequest.content,
+            newQuestionRequest.answers,
+            user.id
+        )
+        return ResponseEntity.ok(NewQuestionResponse(questionId))
+    }
 }
 
 data class QuestionResponse(
@@ -31,7 +45,7 @@ data class QuestionResponse(
         question.id.value,
         question.content.value,
         question.answers.map { AnswerResponse(it) },
-        question.image?.path
+        if (question.image.exist()) question.image.path else null
     )
 }
 
@@ -42,12 +56,12 @@ data class AnswerResponse(
     constructor(answer: Answer) : this(answer.type, answer.content.value)
 }
 
-data class SelectedAnswerRequest(
-    @NotBlank @ValidAnswerType val selectedAnswer: String
+data class NewQuestionRequest(
+    val templateId: UUID,
+    val content: String,
+    val answers: List<QuestionAnswer>
 )
 
-data class AnswerStatusResponse(
-    val questionId: UUID,
-    val status: AnswerStatus,
-    val correctAnswer: AnswerType
-)
+data class NewQuestionResponse(val questionId: UUID)
+
+data class QuestionAnswer(val type: AnswerType, val content: String, val isCorrect: Boolean)

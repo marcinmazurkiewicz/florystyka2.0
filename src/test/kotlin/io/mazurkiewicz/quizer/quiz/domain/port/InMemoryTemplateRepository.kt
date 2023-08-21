@@ -3,7 +3,7 @@ package io.mazurkiewicz.quizer.quiz.domain.port
 import io.mazurkiewicz.quizer.quiz.domain.model.QuizTemplate
 import io.mazurkiewicz.quizer.quiz.domain.model.TemplateId
 import io.mazurkiewicz.quizer.quiz.infrastructure.QuizTemplateNotFoundException
-import java.util.UUID
+import java.util.*
 
 class InMemoryTemplateRepository : QuizTemplateRepository {
 

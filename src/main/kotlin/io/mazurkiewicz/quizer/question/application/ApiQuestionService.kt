@@ -1,19 +1,12 @@
 package io.mazurkiewicz.quizer.question.application
 
-import io.mazurkiewicz.quizer.question.domain.model.AnswerType
-import io.mazurkiewicz.quizer.question.domain.model.QuestionId
-import io.mazurkiewicz.quizer.question.domain.model.SelectedAnswer
+import io.mazurkiewicz.quizer.question.domain.model.*
 import io.mazurkiewicz.quizer.question.domain.port.QuestionService
 import org.springframework.stereotype.Service
-import java.util.UUID
+import java.util.*
 
 @Service
 class ApiQuestionService(private val questionService: QuestionService) {
-
-    fun getRandomQuestion(): QuestionResponse {
-        val randomQuestion = questionService.getRandomQuestion()
-        return QuestionResponse(randomQuestion)
-    }
 
     fun getQuestionById(id: UUID): QuestionResponse {
         val questionId = QuestionId(id)
@@ -21,10 +14,23 @@ class ApiQuestionService(private val questionService: QuestionService) {
         return QuestionResponse(question)
     }
 
-    fun checkAnswer(requestQuestionId: UUID, requestSelectedAnswer: String): AnswerStatusResponse {
-        val questionId = QuestionId(requestQuestionId)
-        val selectedAnswer = SelectedAnswer(AnswerType.of(requestSelectedAnswer))
-        val answerResult = questionService.checkAnswer(questionId, selectedAnswer)
-        return AnswerStatusResponse(questionId.value, answerResult.status, answerResult.correctAnswer)
+    fun saveQuestion(templateId: UUID, content: String, answers: List<QuestionAnswer>, authorId: UUID): UUID {
+        val question = Question(
+            QuestionTemplate(templateId),
+            QuestionAuthor(authorId),
+            QuestionContent(content),
+            mapToAnswers(answers)
+        )
+        questionService.saveQuestion(question)
+        return question.id.value
     }
+
+    private fun mapToAnswers(answers: List<QuestionAnswer>) =
+        answers.map {
+            Answer(
+                it.type,
+                AnswerContent(it.content),
+                if (it.isCorrect) AnswerStatus.CORRECT else AnswerStatus.INCORRECT
+            )
+        }
 }
