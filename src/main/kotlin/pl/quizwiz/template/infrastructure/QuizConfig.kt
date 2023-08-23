@@ -1,9 +1,9 @@
-package pl.quizwiz.quiz.infrastructure
+package pl.quizwiz.template.infrastructure
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import pl.quizwiz.quiz.domain.port.QuizTemplateRepository
-import pl.quizwiz.quiz.domain.port.QuizTemplateService
+import pl.quizwiz.template.domain.port.QuizTemplateRepository
+import pl.quizwiz.template.domain.port.QuizTemplateService
 
 @Configuration
 class QuizConfig {

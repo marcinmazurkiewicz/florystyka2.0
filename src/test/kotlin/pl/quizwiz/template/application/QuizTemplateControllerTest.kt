@@ -1,4 +1,4 @@
-package pl.quizwiz.quiz.application
+package pl.quizwiz.template.application
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.mockk.every
@@ -10,8 +10,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup
 import pl.quizwiz.auth.prepareAuthentication
-import pl.quizwiz.quiz.domain.model.DrawType
-import pl.quizwiz.quiz.domain.model.TemplateAccessType
+import pl.quizwiz.template.domain.model.DrawType
+import pl.quizwiz.template.domain.model.TemplateAccessType
 import java.util.*
 
 class QuizTemplateControllerTest {

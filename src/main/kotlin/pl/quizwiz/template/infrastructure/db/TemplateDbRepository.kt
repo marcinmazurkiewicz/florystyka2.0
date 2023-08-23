@@ -1,10 +1,10 @@
-package pl.quizwiz.quiz.infrastructure.db
+package pl.quizwiz.template.infrastructure.db
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
-import pl.quizwiz.quiz.domain.model.*
-import pl.quizwiz.quiz.domain.port.QuizTemplateRepository
-import pl.quizwiz.quiz.infrastructure.QuizTemplateNotFoundException
+import pl.quizwiz.template.domain.model.*
+import pl.quizwiz.template.domain.port.QuizTemplateRepository
+import pl.quizwiz.template.infrastructure.QuizTemplateNotFoundException
 
 @Repository
 class TemplateDbRepository(private val mongoRepository: TemplateMongoRepository) : QuizTemplateRepository {

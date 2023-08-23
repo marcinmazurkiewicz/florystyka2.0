@@ -82,7 +82,7 @@ class UserServiceTest {
 
         //then
         assertThrows<EmailAlreadyExistException>(call)
-            .apply { assertThat(message).isEqualTo("Name already exists") }
+            .apply { assertThat(message).isEqualTo("Email test@mail.local is already registered") }
         verify(exactly = 1) { userRepository.findByEmail(email) }
     }
 
@@ -116,7 +116,7 @@ class UserServiceTest {
 
         //then
         assertThrows<CredentialsNotValidException>(call)
-            .apply { assertThat(message).isEqualTo("Login failed") }
+            .apply { assertThat(message).isEqualTo("Incorrect email or password") }
         verify(exactly = 1) { userRepository.findByEmail(email) }
     }
 
@@ -132,7 +132,7 @@ class UserServiceTest {
 
         //then
         assertThrows<CredentialsNotValidException>(call)
-            .apply { assertThat(message).isEqualTo("Login failed") }
+            .apply { assertThat(message).isEqualTo("Incorrect email or password") }
         verify(exactly = 1) { userRepository.findByEmail(email) }
     }
 }

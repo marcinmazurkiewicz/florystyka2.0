@@ -1,4 +1,4 @@
-package pl.quizwiz.quiz.application
+package pl.quizwiz.template.application
 
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import pl.quizwiz.auth.user.UserRepresentation
-import pl.quizwiz.quiz.domain.model.DrawType
-import pl.quizwiz.quiz.domain.model.TemplateAccessType
+import pl.quizwiz.template.domain.model.DrawType
+import pl.quizwiz.template.domain.model.TemplateAccessType
 import java.util.*
 
 @RestController

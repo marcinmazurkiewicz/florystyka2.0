@@ -1,8 +1,8 @@
-package pl.quizwiz.quiz.application
+package pl.quizwiz.template.application
 
 import org.springframework.stereotype.Service
-import pl.quizwiz.quiz.domain.model.*
-import pl.quizwiz.quiz.domain.port.QuizTemplateService
+import pl.quizwiz.template.domain.model.*
+import pl.quizwiz.template.domain.port.QuizTemplateService
 import java.util.*
 
 @Service

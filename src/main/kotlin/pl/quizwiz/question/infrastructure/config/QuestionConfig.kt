@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import pl.quizwiz.question.domain.port.QuestionRepository
 import pl.quizwiz.question.domain.port.QuestionService
-import pl.quizwiz.quiz.domain.port.QuizTemplateService
+import pl.quizwiz.template.domain.port.QuizTemplateService
 
 @Configuration
 class QuestionConfig {

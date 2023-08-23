@@ -1,12 +1,12 @@
-package pl.quizwiz.quiz.application
+package pl.quizwiz.template.application
 
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import pl.quizwiz.quiz.domain.model.*
-import pl.quizwiz.quiz.domain.port.QuizTemplateService
+import pl.quizwiz.template.domain.model.*
+import pl.quizwiz.template.domain.port.QuizTemplateService
 import java.util.*
 
 class ApiQuizTemplateServiceTest {

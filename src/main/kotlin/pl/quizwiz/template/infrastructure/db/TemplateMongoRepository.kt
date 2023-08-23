@@ -1,4 +1,4 @@
-package pl.quizwiz.quiz.infrastructure.db
+package pl.quizwiz.template.infrastructure.db
 
 import org.springframework.data.mongodb.repository.MongoRepository
 import java.util.UUID

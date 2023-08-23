@@ -1,8 +1,8 @@
-package pl.quizwiz.quiz.infrastructure.db
+package pl.quizwiz.template.infrastructure.db
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
-import pl.quizwiz.quiz.domain.model.TemplateAccessType
+import pl.quizwiz.template.domain.model.TemplateAccessType
 import java.time.Instant
 import java.util.*
 

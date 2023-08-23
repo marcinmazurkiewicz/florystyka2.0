@@ -1,4 +1,4 @@
-package pl.quizwiz.quiz.infrastructure.db
+package pl.quizwiz.template.infrastructure.db
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -6,8 +6,8 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.repository.findByIdOrNull
-import pl.quizwiz.quiz.domain.model.*
-import pl.quizwiz.quiz.infrastructure.QuizTemplateNotFoundException
+import pl.quizwiz.template.domain.model.*
+import pl.quizwiz.template.infrastructure.QuizTemplateNotFoundException
 import java.time.Instant
 import java.util.*
 

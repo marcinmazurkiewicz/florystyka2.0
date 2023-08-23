@@ -1,13 +1,13 @@
-package pl.quizwiz.quiz.domain.port
+package pl.quizwiz.template.domain.port
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatNoException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import pl.quizwiz.question.domain.model.*
-import pl.quizwiz.quiz.domain.model.*
-import pl.quizwiz.quiz.infrastructure.IllegalTemplateAccessException
-import pl.quizwiz.quiz.infrastructure.QuizTemplateNotFoundException
+import pl.quizwiz.template.domain.model.*
+import pl.quizwiz.template.infrastructure.IllegalTemplateAccessException
+import pl.quizwiz.template.infrastructure.QuizTemplateNotFoundException
 import java.util.*
 
 class QuizTemplateServiceTest {

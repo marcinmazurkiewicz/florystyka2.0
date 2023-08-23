@@ -16,7 +16,7 @@ import pl.quizwiz.question.domain.model.AnswerType
 import pl.quizwiz.question.infrastructure.QuestionInvalidAnswersStateException
 import pl.quizwiz.question.infrastructure.QuestionNotFoundException
 import pl.quizwiz.question.infrastructure.QuestionWithoutCorrectAnswerException
-import pl.quizwiz.quiz.infrastructure.IllegalTemplateAccessException
+import pl.quizwiz.template.infrastructure.IllegalTemplateAccessException
 import java.util.*
 
 class QuestionControllerTest {

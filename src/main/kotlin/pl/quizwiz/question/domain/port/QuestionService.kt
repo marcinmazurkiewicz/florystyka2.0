@@ -2,7 +2,7 @@ package pl.quizwiz.question.domain.port
 
 import pl.quizwiz.question.domain.model.Question
 import pl.quizwiz.question.domain.model.QuestionId
-import pl.quizwiz.quiz.domain.port.QuizTemplateService
+import pl.quizwiz.template.domain.port.QuizTemplateService
 
 class QuestionService(
     private val questionRepository: QuestionRepository,

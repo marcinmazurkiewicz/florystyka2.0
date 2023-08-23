@@ -1,4 +1,4 @@
-package pl.quizwiz.quiz.domain.model
+package pl.quizwiz.template.domain.model
 
 enum class DrawType {
     NONE, DRAW

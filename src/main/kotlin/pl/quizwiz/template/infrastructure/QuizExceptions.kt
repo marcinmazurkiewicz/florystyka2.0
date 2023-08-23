@@ -1,4 +1,4 @@
-package pl.quizwiz.quiz.infrastructure
+package pl.quizwiz.template.infrastructure
 
 import pl.quizwiz.exception.ForbiddenApiException
 import pl.quizwiz.exception.NotFoundApiException

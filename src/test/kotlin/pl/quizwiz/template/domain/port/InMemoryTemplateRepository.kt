@@ -1,8 +1,8 @@
-package pl.quizwiz.quiz.domain.port
+package pl.quizwiz.template.domain.port
 
-import pl.quizwiz.quiz.domain.model.QuizTemplate
-import pl.quizwiz.quiz.domain.model.TemplateId
-import pl.quizwiz.quiz.infrastructure.QuizTemplateNotFoundException
+import pl.quizwiz.template.domain.model.QuizTemplate
+import pl.quizwiz.template.domain.model.TemplateId
+import pl.quizwiz.template.infrastructure.QuizTemplateNotFoundException
 import java.util.*
 
 class InMemoryTemplateRepository : QuizTemplateRepository {

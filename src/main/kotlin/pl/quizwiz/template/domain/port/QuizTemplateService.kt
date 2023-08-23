@@ -1,9 +1,9 @@
-package pl.quizwiz.quiz.domain.port
+package pl.quizwiz.template.domain.port
 
 import pl.quizwiz.question.domain.model.QuestionAuthor
 import pl.quizwiz.question.domain.model.QuestionTemplate
-import pl.quizwiz.quiz.domain.model.*
-import pl.quizwiz.quiz.infrastructure.IllegalTemplateAccessException
+import pl.quizwiz.template.domain.model.*
+import pl.quizwiz.template.infrastructure.IllegalTemplateAccessException
 
 class QuizTemplateService(private val quizTemplateRepository: QuizTemplateRepository) {
 

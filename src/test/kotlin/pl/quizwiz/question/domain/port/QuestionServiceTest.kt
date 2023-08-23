@@ -8,7 +8,7 @@ import pl.quizwiz.question.domain.model.*
 import pl.quizwiz.question.domain.model.Answer
 import pl.quizwiz.question.infrastructure.QuestionInvalidAnswersStateException
 import pl.quizwiz.question.infrastructure.QuestionWithoutCorrectAnswerException
-import pl.quizwiz.quiz.domain.port.QuizTemplateService
+import pl.quizwiz.template.domain.port.QuizTemplateService
 import java.util.*
 
 class QuestionServiceTest {
